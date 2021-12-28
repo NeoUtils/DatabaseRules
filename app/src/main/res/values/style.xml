@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="ModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_modal</item>
+    </style>
+
+    <style name="Theme.NeoFirebase.BottomSheet" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+
+        <item name="bottomSheetStyle">@style/ModalStyle</item>
+
+    </style>
+
+    <style name="DrawerArrowStyle" parent="@style/Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">true</item>
+        <item name="color">@color/white</item>
+    </style>
+
+</resources>

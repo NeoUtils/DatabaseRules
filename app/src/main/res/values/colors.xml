@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="teal_700">#018786</color>
+    <color name="black">#000000</color>
+    <color name="black_light">#181818</color>
+    <color name="white">#FFFFFF</color>
+    <color name="gray_light">#E3E3E3</color>
+    <color name="gray_dark">#656565</color>
+
+    <!-- Day Night-->
+
+    <color name="colorOnPrimary">@color/black</color>
+
+    <!-- Editor -->
+    <color name="others">#FF00190A</color>
+    <color name="string">#FF007613</color>
+    <color name="bool">#FFC30000</color>
+    <color name="bg_editor">@color/gray_light</color>
+    <color name="comment">@color/gray_dark</color>
+
+</resources>

@@ -1,0 +1,14 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        //jcenter() // Warning: this repository is going to shut down soon
+    }
+}
+
+//nome do projeto
+rootProject.name = "Firebase Rules Project"
+
+//módulos
+include ':app'
