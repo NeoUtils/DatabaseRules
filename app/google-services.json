@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "883298988094",
+    "project_id": "fbrules333",
+    "storage_bucket": "fbrules333.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:883298988094:android:d708344cb9fa3f75a5216f",
+        "android_client_info": {
+          "package_name": "com.neo.fbrules"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "883298988094-vnrglb8tc2hbuh5an8en66iveskah0p1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.neo.fbrules",
+            "certificate_hash": "f4c55227b596437058d76090992f70e66b460181"
+          }
+        },
+        {
+          "client_id": "883298988094-n81d26v04dbo34d02n7h31pfitln31lf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9nHPhOFQwI2nEMb0JgTC_QSjnnJHq5js"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "883298988094-n81d26v04dbo34d02n7h31pfitln31lf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

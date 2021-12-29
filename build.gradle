@@ -2,6 +2,7 @@
 buildscript {
 
     ext.hilt_version = '2.40'
+    ext.kotlin_version = '1.6.10'
 
     repositories {
         google()
@@ -10,13 +11,15 @@ buildscript {
     dependencies {
 
         //gradle android plugin
-        classpath "com.android.tools.build:gradle:7.0.3"
+        classpath "com.android.tools.build:gradle:7.0.4"
 
         //gradle kotlin plugin
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         //gradle hilt plugin
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
+
+        classpath 'com.google.gms:google-services:4.3.10'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
