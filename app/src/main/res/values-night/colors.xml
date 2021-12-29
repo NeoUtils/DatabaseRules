@@ -8,5 +8,6 @@
     <color name="string">#00B11E</color>
     <color name="bool">#CD0000</color>
     <color name="bg_editor">#181818</color>
+    <color name="bg_drawer">@color/black</color>
 
 </resources>

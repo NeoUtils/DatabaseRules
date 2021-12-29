@@ -1,5 +1,8 @@
 package com.neo.fbrules.main.presenter
 
+import android.content.Intent
+import android.graphics.Color.green
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.neo.fbrules.core.BaseActivity
@@ -11,7 +14,17 @@ import com.neo.fbrules.main.presenter.viewModel.MainViewModel
 import com.neo.fbrules.util.showAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.appcompat.app.ActionBarDrawerToggle
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
+import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
+import com.neo.fbrules.main.presenter.model.Update
+import com.neo.fbrules.util.color
+import com.neo.fbrules.util.goToUrl
+import com.neo.fbrules.util.visibility
 
 private typealias MainActivityView = ActivityMainBinding
 
@@ -34,6 +47,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
         setupObservers()
         setupViews()
         setupListeners()
+
+        viewModel.checkUpdate()
     }
 
     private fun setupListeners() {
@@ -110,6 +125,69 @@ class MainActivity : BaseActivity<MainActivityView>() {
         viewModel.decryptBottomSheet.singleObserve(this) {
             showDecryptDialog()
         }
+
+        viewModel.update.observe(this) { update ->
+            changeUpdateNotice(update)
+        }
+    }
+
+    private fun changeUpdateNotice(update: Update) = with(binding.navBar) {
+        val visible = update.hasUpdate != null
+
+        if (visible) {
+
+            val hasUpdate = update.hasUpdate == true
+
+            if (hasUpdate) {
+                ivIcon.setImageResource(R.drawable.ic_has_update)
+
+                color(R.color.yellow).let { color ->
+                    ivIcon.setColorFilter(color)
+                    tvLastVersion.setTextColor(color)
+                }
+
+                val version = "v" + update.lastVersionName!!
+                tvLastVersion.text = version
+
+                tvMessage.text = getString(R.string.text_has_update)
+
+                cdUpdate.setOnClickListener {
+                    val downloadLink = update.downloadLink
+
+                    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
+                        param(
+                            FirebaseAnalytics.Param.ITEM_NAME,
+                            tvLastVersion.text.toString()
+                        )
+                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                    }
+
+                    goToUrl(downloadLink!!)
+                }
+
+                //showUpdateDialog(update)
+
+            } else {
+                ivIcon.setImageResource(R.drawable.ic_checked)
+
+                color(R.color.green).let { color ->
+                    ivIcon.setColorFilter(color)
+                    tvLastVersion.setTextColor(color)
+                }
+
+                val version = "v" + BuildConfig.VERSION_NAME
+                tvLastVersion.text = version
+
+                tvMessage.text = getString(R.string.text_updated)
+
+                cdUpdate.setOnClickListener(null)
+            }
+
+            tvUpdateBtn.visibility(hasUpdate)
+        }
+
+        cdUpdate.visibility(visible)
     }
 
     private fun showDecryptDialog() {

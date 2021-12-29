@@ -19,6 +19,9 @@
     <color name="string">#FF007613</color>
     <color name="bool">#FFC30000</color>
     <color name="bg_editor">@color/gray_light</color>
+    <color name="bg_drawer">@color/white</color>
     <color name="comment">@color/gray_dark</color>
+    <color name="yellow">#FFC107</color>
+    <color name="green">#005704</color>
 
 </resources>

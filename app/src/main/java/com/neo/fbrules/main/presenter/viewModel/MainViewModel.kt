@@ -3,12 +3,10 @@ package com.neo.fbrules.main.presenter.viewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.neo.fbrules.core.Constants
-import com.neo.fbrules.core.Message
-import com.neo.fbrules.core.Result
+import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.main.domain.useCase.*
-import com.neo.fbrules.core.MutableSingleLiveData
+import com.neo.fbrules.main.presenter.model.Update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,6 +27,7 @@ class MainViewModel @Inject constructor(
     val error = MutableSingleLiveData<Result.Error>()
     val alert = MutableSingleLiveData<Message>()
     val message = MutableSingleLiveData<Message>()
+    val update = MutableLiveData(Update())
 
     val loading = MutableLiveData(false)
 
@@ -134,6 +133,29 @@ class MainViewModel @Inject constructor(
     }
 
     fun openConfig() {
-        configBottomSheet.setValue{}
+        configBottomSheet.setValue {}
+    }
+
+    fun checkUpdate() {
+        UpdateManager(object : UpdateManager.UpdateListener {
+            override fun updated() {
+                update.value = Update(
+                    hasUpdate = false
+                )
+            }
+
+            override fun hasUpdate(
+                lastVersionCode: Int,
+                lastVersionName: String,
+                downloadLink: String
+            ) {
+                update.value = Update(
+                    hasUpdate = true,
+                    lastVersionCode = lastVersionCode,
+                    lastVersionName = lastVersionName,
+                    downloadLink = downloadLink
+                )
+            }
+        })
     }
 }

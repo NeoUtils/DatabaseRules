@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
 }
 
 def keystoreProperties = new Properties()
@@ -58,12 +59,19 @@ dependencies {
     implementation "androidx.collection:collection-ktx:"
     implementation "androidx.fragment:fragment-ktx:1.4.0"
 
+    //Firebase BoM
     implementation platform('com.google.firebase:firebase-bom:29.0.3')
 
     //Firebase Analytics with Kotlin utils
     implementation 'com.google.firebase:firebase-analytics-ktx'
 
-    //Highlighting lib
+    //Firebase Crashlytics with Kotlin utils
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    //Firebase Database with Kotlin utils
+    implementation 'com.google.firebase:firebase-database-ktx'
+
+    //Highlight library
     implementation "com.github.NeoUtils:Highlight:1.0.4"
 
     def lifecycle_version = "2.4.0"
@@ -100,7 +108,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
     //hilt instrumentation tests
-    androidTestImplementation  'com.google.dagger:hilt-android-testing:2.40'
+    androidTestImplementation 'com.google.dagger:hilt-android-testing:2.40'
     kaptAndroidTest 'com.google.dagger:hilt-compiler:2.40'
 
     //hilt unit tests

@@ -1,20 +1,12 @@
 package com.neo.fbrules.main.presenter.view
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
-import android.text.Editable
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat
 import com.neo.fbrules.R
 import com.neo.fbrules.util.getCompatColor
-import com.neo.highlight.core.Highlight
 import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.ColorScheme
-import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 

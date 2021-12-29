@@ -3,6 +3,8 @@ package com.neo.fbrules.util
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import androidx.annotation.ColorRes
@@ -10,6 +12,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
@@ -152,3 +156,23 @@ fun Context.getCompatColor(@ColorRes colorResId: Int): Int {
         ContextCompat.getColor(this, colorResId)
     }
 }
+
+//LINK
+
+fun goToUrl(context: Context, url: String) {
+    runCatching {
+        Firebase.crashlytics.log("opening url $url")
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    }.onFailure {
+        showAlertDialog(
+            context,
+            "Impossível abrir link",
+            "Ocorreu um erro ao tentar abrir o link \"$url\""
+        ) {
+            positiveButton()
+        }
+        Firebase.crashlytics.recordException(it)
+    }
+}
+
+fun Activity.goToUrl(url: String) = goToUrl(this, url)
