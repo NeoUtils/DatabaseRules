@@ -10,39 +10,44 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.ContextCompat
 import com.neo.fbrules.R
-import com.neo.fbrules.main.presenter.model.ColorScheme
 import com.neo.fbrules.util.getCompatColor
+import com.neo.highlight.core.Highlight
+import com.neo.highlight.util.listener.HighlightTextWatcher
+import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 class RulesEditor(
     context: Context, attr: AttributeSet? = null
 ) : AppCompatEditText(context, attr) {
 
-    private val schemes: MutableList<ColorScheme> = mutableListOf()
+    private val highlight = HighlightTextWatcher()
 
     init {
         setBackgroundColor(getContext().getCompatColor(R.color.bg_editor))
 
-        schemes.add(
+        highlight.addScheme(
             ColorScheme(
-                "(?<!\\w)(true|false)(?!\\w)",
+                Pattern.compile("(?<!\\w)(true|false)(?!\\w)"),
                 getContext().getCompatColor(R.color.bool)
             )
         )
-        schemes.add(
+        highlight.addScheme(
             ColorScheme(
-                "\"[^\"]*\"",
+                Pattern.compile("\"[^\"]*\""),
                 getContext().getCompatColor(R.color.string)
             )
         )
 
-        schemes.add(
+        highlight.addScheme(
             ColorScheme(
-                "[/]{2}.*",
+                Pattern.compile("[/]{2}.*"),
                 getContext().getCompatColor(R.color.comment)
             )
         )
+
+        addTextChangedListener(highlight)
     }
 
 
@@ -53,10 +58,6 @@ class RulesEditor(
         lengthAfter: Int
     ) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter)
-
-        Handler(Looper.getMainLooper()).post {
-            highlight();
-        }
 
         text?.let {
 
@@ -118,34 +119,4 @@ class RulesEditor(
         }
         return indent
     }
-
-    private fun highlight() {
-        text?.let { editable ->
-
-            setSpanDefault(editable)
-
-            for (scheme in schemes) {
-                val mather: Matcher = scheme.pattern.matcher(editable)
-                while (mather.find()) {
-                    editable.setSpan(
-                        ForegroundColorSpan(scheme.color),
-                        mather.start(), mather.end(),
-                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-                    )
-                }
-            }
-        }
-    }
-
-    private fun setSpanDefault(editable: Editable) {
-        editable.setSpan(
-            ForegroundColorSpan(
-                ContextCompat.getColor(
-                    context, R.color.others
-                )
-            ), 0, editable.length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-    }
-
 }
