@@ -11,8 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run:
-          echo "${{ secrets.RELEASE_KEYSTORE }}" > keytore.asc
+          echo "${{ secrets.RELEASE_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}" --batch keystore.asc > keystore.jks
+          echo "${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}" > keystore_properties.asc
+          gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}" --batch keystore_properties.asc > keystore.properties
 
   build:
     runs-on: ubuntu-latest
