@@ -22,8 +22,8 @@ jobs:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PASSPHASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}
         run: |
-          echo "$RELEASE_KEYSTORE" > keystore.asc
-          gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.asc > keystore.jks
+          echo "$RELEASE_KEYSTORE" > keystore.jks.asc
+          gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.jks.asc > keystore.jks
           dir
       - name: Create keystore properties
         env:
@@ -31,8 +31,8 @@ jobs:
             RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
           echo "$RELEASE_KEYSTORE_PROPERTIES" > keystore.properties.asc
-          cat keystore.properties.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.properties.asc > keystore.properties
+          cat keystore.properties
           dir
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
