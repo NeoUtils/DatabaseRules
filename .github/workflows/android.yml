@@ -22,7 +22,8 @@ jobs:
           RELEASE_KEYSTORE_PASSPHASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}
           RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
-          echo "$RELEASE_KEYSTORE 
+          echo "Test"
+          echo "$RELEASE_KEYSTORE"
           echo "$RELEASE_KEYSTORE" > keystore.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.asc > keystore.jks
           dir
