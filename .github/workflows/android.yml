@@ -16,26 +16,22 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: gradle
+
       - name: Create keystore
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PASSPHASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}
           RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
-          echo "Test"
-          echo "$RELEASE_KEYSTORE"
           echo "$RELEASE_KEYSTORE" > keystore.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.asc > keystore.jks
           dir
       - name: Create keystore properties
         run: |
-          echo "$RELEASE_KEYSTORE_PROPERTIES"
           echo "$RELEASE_KEYSTORE_PROPERTIES" > keystore.properties.asc
           cat keystore.properties.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.properties.asc > keystore.properties
           dir
-          cat keystore.properties
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
