@@ -39,6 +39,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        debug {
+            versionNameSuffix '-dev'
+            signingConfig signingConfigs.debug
+        }
     }
 
     viewBinding {

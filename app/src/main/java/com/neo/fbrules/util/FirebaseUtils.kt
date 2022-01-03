@@ -3,8 +3,9 @@ package com.neo.fbrules.util
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.neo.fbrules.core.Environment
+
+lateinit var environment : String
 
 val firebaseEnvironment: DatabaseReference by lazy {
-    Firebase.database.getReference(Environment.FIREBASE)
+    Firebase.database.getReference(environment)
 }
