@@ -11,11 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create keystore
-        run: |
+        run:
           echo "${{ secrets.RELEASE_KEYSTORE }}" > keystore.asc
           gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}" --batch keystore.asc > keystore.jks
       - name: Create keystore properties
-        run: |
+        run:
            echo "${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}" > keystore.properties.asc
            gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}" --batch keystore.properties.asc > keystore.properties
       - name: set up JDK 11
