@@ -1,0 +1,1 @@
+gpg -c --armor file_path
