@@ -21,12 +21,14 @@ jobs:
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
           RELEASE_KEYSTORE_PASSPHASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}
-          RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
           echo "$RELEASE_KEYSTORE" > keystore.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.asc > keystore.jks
           dir
       - name: Create keystore properties
+        env:
+            RELEASE_KEYSTORE_PASSPHASE: ${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}
+            RELEASE_KEYSTORE_PROPERTIES: ${{ secrets.RELEASE_KEYSTORE_PROPERTIES }}
         run: |
           echo "$RELEASE_KEYSTORE_PROPERTIES" > keystore.properties.asc
           cat keystore.properties.asc
