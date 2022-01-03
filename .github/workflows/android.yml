@@ -5,20 +5,28 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  assembleKeystore:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: set up JDK 11
-      uses: actions/setup-java@v2
-      with:
-        java-version: '11'
-        distribution: 'adopt'
-        cache: gradle
+      - uses: actions/checkout@v2
+      - run:
+          echo "${{ secrets.RELEASE_KEYSTORE }}" > keytore.asc
+          gpg -d --passphrase "${{ secrets.RELEASE_KEYSTORE_PASSPHASE }}" --batch keystore.asc > keystore.jks
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
