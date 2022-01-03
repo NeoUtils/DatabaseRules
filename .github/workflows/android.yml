@@ -16,7 +16,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
           cache: gradle
-      - shell: bash
       - name: Create keystore
         env:
           RELEASE_KEYSTORE: ${{ secrets.RELEASE_KEYSTORE }}
