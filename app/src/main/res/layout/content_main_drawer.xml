@@ -64,7 +64,7 @@
                 android:background="@color/yellow"
                 android:gravity="center"
                 android:padding="4dp"
-                android:text="@string/click_to_update"
+                android:text="@string/text_drawer_click_to_update"
                 android:textColor="@color/white" />
 
         </LinearLayout>
