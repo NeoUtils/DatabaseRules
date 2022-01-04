@@ -1,8 +1,5 @@
 package com.neo.fbrules.main.presenter
 
-import android.content.Intent
-import android.graphics.Color.green
-import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.neo.fbrules.core.BaseActivity
@@ -17,7 +14,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
@@ -81,8 +77,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 this@MainActivity,
                 this,
                 binding.toolbar,
-                R.string.open_drawer,
-                R.string.close_drawer
+                R.string.text_drawer_open,
+                R.string.text_drawer_close
             )
             addDrawerListener(toggle)
             toggle.syncState()
@@ -149,7 +145,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 val version = "v" + update.lastVersionName!!
                 tvLastVersion.text = version
 
-                tvMessage.text = getString(R.string.text_has_update)
+                tvMessage.text = getString(R.string.text_drawer_has_update)
 
                 cdUpdate.setOnClickListener {
                     val downloadLink = update.downloadLink
@@ -179,7 +175,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 val version = "v" + BuildConfig.VERSION_NAME
                 tvLastVersion.text = version
 
-                tvMessage.text = getString(R.string.text_updated)
+                tvMessage.text = getString(R.string.text_drawer_updated)
 
                 cdUpdate.setOnClickListener(null)
             }

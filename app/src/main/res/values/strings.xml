@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Firebase Rules</string>
+    <string name="app_name">Database Rules</string>
 
     <!-- config -->
 
@@ -16,9 +16,9 @@
     <string name="text_config_encrypt_title">Salvar credenciais</string>
     <string name="text_config_decrypt_title">Recuperar credenciais</string>
     <string name="text_config_password">Senha</string>
-    <string name="open_drawer">Abrir</string>
-    <string name="close_drawer">Fechar</string>
-    <string name="click_to_update">Clique para atualizar</string>
-    <string name="text_has_update">Uma nova versão está disponível!</string>
-    <string name="text_updated">Você está atualizado!</string>
+    <string name="text_drawer_open">Abrir</string>
+    <string name="text_drawer_close">Fechar</string>
+    <string name="text_drawer_click_to_update">Clique para atualizar</string>
+    <string name="text_drawer_has_update">Uma nova versão está disponível!</string>
+    <string name="text_drawer_updated">Você está atualizado!</string>
 </resources>
