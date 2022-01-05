@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.neo.fbrules.core.BaseActivity
@@ -17,6 +18,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
+import com.neo.fbrules.core.NeoUtilsAppsManager
+import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.color
 import com.neo.fbrules.util.goToUrl
@@ -29,6 +32,10 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
     private val viewModel: MainViewModel by viewModels()
 
+    private val neoUtilsAppsAdapter: NeoUtilsAppsAdapter by lazy {
+        NeoUtilsAppsAdapter()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,7 +43,13 @@ class MainActivity : BaseActivity<MainActivityView>() {
         setContentView(binding.root)
 
         init()
+    }
 
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+
+        neoUtilsAppsAdapter.notifyDataSetChanged()
     }
 
     private fun init() {
@@ -45,6 +58,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         setupListeners()
 
         viewModel.checkUpdate()
+        viewModel.loadNeoUtilsApps()
     }
 
     private fun setupListeners() {
@@ -83,6 +97,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
             addDrawerListener(toggle)
             toggle.syncState()
         }
+
+        binding.navBar.rvNeoUtilsApps.adapter = neoUtilsAppsAdapter
     }
 
     private fun setupObservers() {
@@ -124,6 +140,18 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         viewModel.update.observe(this) { update ->
             changeUpdateNotice(update)
+        }
+
+        viewModel.apps.observe(this) { apps ->
+            if (apps.isEmpty()) {
+                binding.navBar.rvNeoUtilsApps.visibility(false)
+                binding.navBar.vDiv.visibility(false)
+            } else {
+                binding.navBar.rvNeoUtilsApps.visibility(true)
+                binding.navBar.vDiv.visibility(true)
+
+                neoUtilsAppsAdapter.setApps(apps)
+            }
         }
     }
 

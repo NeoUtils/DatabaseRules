@@ -18,6 +18,7 @@ import com.neo.fbrules.R
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import androidx.core.content.ContextCompat.startActivity
 
 
 //ALERT DIALOG
@@ -172,6 +173,12 @@ fun goToUrl(context: Context, url: String) {
             positiveButton()
         }
         Firebase.crashlytics.recordException(it)
+    }
+}
+
+fun goToApp(context: Context, packageName: String) {
+    context.packageManager.getLaunchIntentForPackage(packageName)?.let {
+        context.startActivity(it)
     }
 }
 
