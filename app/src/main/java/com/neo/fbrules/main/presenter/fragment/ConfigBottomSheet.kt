@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.DialogConfigBinding
@@ -101,6 +103,8 @@ class ConfigBottomSheet(
                 true -> View.GONE
                 false -> View.VISIBLE
             }
+
+        behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun setupListeners() {

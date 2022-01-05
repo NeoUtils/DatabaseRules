@@ -11,6 +11,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 fun Context.dp(size: Int): Int = dp(size.toFloat()).toInt()
 fun Fragment.dp(size: Int) = requireContext().dp(size)
@@ -33,9 +36,11 @@ fun runOnMainThread(delay: Long = 0, function: () -> Unit) {
     Handler(Looper.getMainLooper()).postDelayed(function, delay)
 }
 
-fun Context.dialog(title : String, message : String) : AlertDialog {
+fun Context.dialog(title: String, message: String): AlertDialog {
     val builder = AlertDialog.Builder(this)
     builder.setTitle(title)
     builder.setMessage(message)
     return builder.show()
 }
+
+val BottomSheetDialogFragment.behavior get() = (this.dialog as? BottomSheetDialog)?.behavior
