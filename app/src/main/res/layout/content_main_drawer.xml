@@ -78,7 +78,7 @@
         android:alpha="0.25"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="?attr/colorOnPrimary"/>
+        android:background="#878787"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_marginTop="8dp"
