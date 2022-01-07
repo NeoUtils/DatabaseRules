@@ -1,16 +1,20 @@
 package com.neo.fbrules.main.presenter.adapter
 
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.ItemAppBinding
 import com.neo.fbrules.main.presenter.model.NeoUtilsApp
 import com.neo.fbrules.util.goToApp
 import com.neo.fbrules.util.goToUrl
+import com.neo.fbrules.util.isInstalled
 import com.neo.fbrules.util.visibility
 
 class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
@@ -48,38 +52,49 @@ class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
         fun bind(app: NeoUtilsApp) {
 
             binding.name.text = app.name
+
             binding.icon.load(app.iconUrl) {
                 placeholder(R.drawable.ic_android)
+                memoryCacheKey(app.iconUrl)
             }
 
-            val packageInstalled = isPackageInstalled(app.packageName, context.packageManager)
+            val isInstalled = isInstalled(app.packageName, context.packageManager)
 
-            binding.ivDownload.visibility(!packageInstalled)
+            binding.ivDownload.visibility(!isInstalled)
 
             itemView.alpha = if (
-                packageInstalled
+                isInstalled
             ) 1f else 0.5f
 
             itemView.setOnClickListener {
-                if (packageInstalled) {
+                if (isInstalled) {
+
+                    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
+                        param(
+                            FirebaseAnalytics.Param.ITEM_NAME,
+                            "open ${app.packageName}"
+                        )
+                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                    }
+
                     goToApp(context, app.packageName)
                 } else {
+
+                    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
+                        param(
+                            FirebaseAnalytics.Param.ITEM_NAME,
+                            "download ${app.packageName}"
+                        )
+                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                    }
+
                     goToUrl(context, app.url)
                 }
             }
         }
 
-        private fun isPackageInstalled(
-            packageName: String,
-            packageManager: PackageManager
-        ): Boolean {
-            return try {
-                packageManager.getPackageInfo(packageName, 0)
-                true
-            } catch (e: PackageManager.NameNotFoundException) {
-                false
-            }
-        }
     }
 
 }

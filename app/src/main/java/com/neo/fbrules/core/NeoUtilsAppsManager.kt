@@ -32,7 +32,6 @@ class NeoUtilsAppsManager(
 
             runCatching {
                 val name = child.child("name").value as String
-                val description = child.child("description-pt").value as String
                 val packageName = child.child("package").value as String
                 val url = child.child("url").value as String
                 val iconUrl = child.child("icon").value as String
@@ -40,7 +39,6 @@ class NeoUtilsAppsManager(
                 neoUtilsApp.add(
                     NeoUtilsApp(
                         name = name,
-                        description = description,
                         packageName = packageName,
                         url = url,
                         iconUrl = iconUrl

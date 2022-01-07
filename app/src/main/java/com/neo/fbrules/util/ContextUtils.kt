@@ -3,6 +3,7 @@ package com.neo.fbrules.util
 import com.neo.fbrules.R
 import android.app.AlertDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Handler
 import android.os.Looper
@@ -22,25 +23,31 @@ fun Context.dp(size: Float): Float = size * resources.getDimension(R.dimen.dimen
 fun Fragment.dp(size: Float) = requireContext().dp(size)
 
 @ColorInt
-fun Resources.Theme.color(colorRes: Int): Int {
+fun Resources.Theme.requestColor(colorRes: Int): Int {
     val typedValue = TypedValue()
     this.resolveAttribute(colorRes, typedValue, true)
     return typedValue.data
 }
 
 @ColorInt
-fun Context.color(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
-fun Fragment.color(@ColorRes colorRes: Int) = requireContext().color(colorRes)
+fun Context.requestColor(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+fun Fragment.requestColor(@ColorRes colorRes: Int) = requireContext().requestColor(colorRes)
 
 fun runOnMainThread(delay: Long = 0, function: () -> Unit) {
     Handler(Looper.getMainLooper()).postDelayed(function, delay)
 }
 
-fun Context.dialog(title: String, message: String): AlertDialog {
-    val builder = AlertDialog.Builder(this)
-    builder.setTitle(title)
-    builder.setMessage(message)
-    return builder.show()
-}
-
 val BottomSheetDialogFragment.behavior get() = (this.dialog as? BottomSheetDialog)?.behavior
+
+fun isInstalled(
+    packageName: String,
+    packageManager: PackageManager
+): Boolean {
+
+    return runCatching {
+        packageManager.getPackageInfo(packageName, 0)
+        true
+    }.getOrElse {
+        false
+    }
+}

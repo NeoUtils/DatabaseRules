@@ -20,7 +20,7 @@ import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.model.Update
-import com.neo.fbrules.util.color
+import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.goToUrl
 import com.neo.fbrules.util.visibility
 
@@ -127,6 +127,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 hideLoading()
             }
         }
+
         viewModel.configBottomSheet.singleObserve(this) { request ->
             showConfigBottomSheet(request)
         }
@@ -153,62 +154,69 @@ class MainActivity : BaseActivity<MainActivityView>() {
     }
 
     private fun changeUpdateNotice(update: Update) = with(binding.navBar) {
-        val visible = update.hasUpdate != null
+        val stateVisibility = update.hasUpdate != null
 
-        if (visible) {
+        if (stateVisibility) {
 
             val hasUpdate = update.hasUpdate == true
 
             if (hasUpdate) {
-                ivIcon.setImageResource(R.drawable.ic_has_update)
-
-                color(R.color.yellow).let { color ->
-                    ivIcon.setColorFilter(color)
-                    tvLastVersion.setTextColor(color)
-                }
-
-                val version = "v" + update.lastVersionName!!
-                tvLastVersion.text = version
-
-                tvMessage.text = getString(R.string.text_drawer_has_update)
-
-                cdUpdate.setOnClickListener {
-                    val downloadLink = update.downloadLink
-
-                    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                        param(
-                            FirebaseAnalytics.Param.ITEM_NAME,
-                            tvLastVersion.text.toString()
-                        )
-                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
-                    }
-
-                    goToUrl(downloadLink!!)
-                }
-
-                //showUpdateDialog(update)
-
+                changeHasUpdate(update)
             } else {
-                ivIcon.setImageResource(R.drawable.ic_checked)
-
-                color(R.color.green).let { color ->
-                    ivIcon.setColorFilter(color)
-                    tvLastVersion.setTextColor(color)
-                }
-
-                val version = "v" + BuildConfig.VERSION_NAME
-                tvLastVersion.text = version
-
-                tvMessage.text = getString(R.string.text_drawer_updated)
-
-                cdUpdate.setOnClickListener(null)
+                changeHasNotUpdate()
             }
 
             tvUpdateBtn.visibility(hasUpdate)
         }
 
-        cdUpdate.visibility(visible)
+        cdUpdate.visibility(stateVisibility)
+    }
+
+    private fun changeHasNotUpdate() = with(binding.navBar) {
+        ivIcon.setImageResource(R.drawable.ic_checked)
+
+        requestColor(R.color.green).let { color ->
+            ivIcon.setColorFilter(color)
+            tvLastVersion.setTextColor(color)
+        }
+
+        val version = "v" + BuildConfig.VERSION_NAME
+        tvLastVersion.text = version
+
+        tvMessage.text = getString(R.string.text_drawer_updated)
+
+        cdUpdate.setOnClickListener(null)
+    }
+
+    private fun changeHasUpdate(update: Update) = with(binding.navBar) {
+        ivIcon.setImageResource(R.drawable.ic_has_update)
+
+        requestColor(R.color.yellow).let { color ->
+            ivIcon.setColorFilter(color)
+            tvLastVersion.setTextColor(color)
+        }
+
+        val version = "v" + update.lastVersionName!!
+        tvLastVersion.text = version
+
+        tvMessage.text = getString(R.string.text_drawer_has_update)
+
+        cdUpdate.setOnClickListener {
+            val downloadLink = update.downloadLink
+
+            Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
+                param(
+                    FirebaseAnalytics.Param.ITEM_NAME,
+                    tvLastVersion.text.toString()
+                )
+                param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+            }
+
+            goToUrl(downloadLink!!)
+        }
+
+        //showUpdateDialog(update)
     }
 
     private fun showDecryptDialog() {
