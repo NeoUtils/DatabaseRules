@@ -27,8 +27,8 @@ android {
         applicationId "com.neo.fbrules"
         minSdk 21
         targetSdk 31
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,6 +78,9 @@ dependencies {
 
     //Highlight library
     implementation "com.github.NeoUtils:Highlight:1.0.4"
+
+    //Load images
+    implementation "io.coil-kt:coil:1.4.0"
 
     def lifecycle_version = "2.4.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"

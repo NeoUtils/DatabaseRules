@@ -9,7 +9,7 @@ dependencyResolutionManagement {
 }
 
 //nome do projeto
-rootProject.name = "Firebase Rules Project"
+rootProject.name = "DatabaseRules Project"
 
 //módulos
 include ':app'

@@ -18,6 +18,7 @@ import com.neo.fbrules.R
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
+import androidx.core.content.ContextCompat.startActivity
 
 
 //ALERT DIALOG
@@ -28,7 +29,7 @@ import org.json.JSONObject
  * @author Irineu A. Silva
  */
 fun Activity.showAlertDialog(
-    title: String, message: String, config: AlertDialogConfig.() -> Unit
+    title: String, message: String, config: AlertDialogConfig.() -> Unit = {}
 ) = showAlertDialog(this, title, message, config)
 
 //alert dialog fragment
@@ -49,7 +50,7 @@ fun showAlertDialog(
     context: Context,
     title: String,
     message: String,
-    config: AlertDialogConfig.() -> Unit
+    config: AlertDialogConfig.() -> Unit = {}
 ): AlertDialog {
 
     //BUILD
@@ -172,6 +173,12 @@ fun goToUrl(context: Context, url: String) {
             positiveButton()
         }
         Firebase.crashlytics.recordException(it)
+    }
+}
+
+fun goToApp(context: Context, packageName: String) {
+    context.packageManager.getLaunchIntentForPackage(packageName)?.let {
+        context.startActivity(it)
     }
 }
 

@@ -7,6 +7,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.util.firebaseEnvironment
+
 class UpdateManager(
     private val updateListener: UpdateListener
 ) : ValueEventListener {
@@ -27,6 +28,7 @@ class UpdateManager(
                 val downloadLink = snapshot.child("download_link").value as String
                 val lastVersionCode = snapshot.child("last_version_code").value as Long
                 val lastVersionName = snapshot.child("last_version_name").value as String
+                val forceUpdate = snapshot.child("force").value as? Boolean ?: false
 
                 if (versionCode == lastVersionCode.toInt()) {
                     updateListener.updated()
@@ -34,7 +36,8 @@ class UpdateManager(
                     updateListener.hasUpdate(
                         lastVersionCode.toInt(),
                         lastVersionName,
-                        downloadLink
+                        downloadLink,
+                        forceUpdate
                     )
                 }
             }
@@ -47,6 +50,11 @@ class UpdateManager(
 
     interface UpdateListener {
         fun updated()
-        fun hasUpdate(lastVersionCode: Int, lastVersionName: String, downloadLink: String)
+        fun hasUpdate(
+            lastVersionCode: Int,
+            lastVersionName: String,
+            downloadLink: String,
+            force: Boolean
+        )
     }
 }

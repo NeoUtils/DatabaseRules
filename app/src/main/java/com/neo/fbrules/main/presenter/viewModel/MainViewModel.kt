@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.main.domain.useCase.*
+import com.neo.fbrules.main.presenter.model.NeoUtilsApp
 import com.neo.fbrules.main.presenter.model.Update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -28,6 +29,7 @@ class MainViewModel @Inject constructor(
     val alert = MutableSingleLiveData<Message>()
     val message = MutableSingleLiveData<Message>()
     val update = MutableLiveData(Update())
+    val apps = MutableLiveData(listOf<NeoUtilsApp>())
 
     val loading = MutableLiveData(false)
 
@@ -147,14 +149,24 @@ class MainViewModel @Inject constructor(
             override fun hasUpdate(
                 lastVersionCode: Int,
                 lastVersionName: String,
-                downloadLink: String
+                downloadLink: String,
+                force : Boolean
             ) {
                 update.value = Update(
                     hasUpdate = true,
                     lastVersionCode = lastVersionCode,
                     lastVersionName = lastVersionName,
-                    downloadLink = downloadLink
+                    downloadLink = downloadLink,
+                    force = force
                 )
+            }
+        })
+    }
+
+    fun loadNeoUtilsApps() {
+        NeoUtilsAppsManager(object : NeoUtilsAppsManager.AppsListener {
+            override fun change(apps: List<NeoUtilsApp>) {
+                this@MainViewModel.apps.value = apps
             }
         })
     }

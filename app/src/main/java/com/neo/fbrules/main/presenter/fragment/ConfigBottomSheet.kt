@@ -5,16 +5,27 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.Spanned
+import android.text.method.LinkMovementMethod
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.DialogConfigBinding
 import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.util.*
+import com.neo.highlight.core.Highlight
+import com.neo.highlight.util.scheme.LinkScheme
+import com.neo.highlight.util.scheme.OnClickScheme
 import java.util.regex.Pattern
 
 private typealias ConfigBottomSheetView = DialogConfigBinding
@@ -37,6 +48,7 @@ class ConfigBottomSheet(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = ConfigBottomSheetView.inflate(
             layoutInflater, container, false
         )
@@ -89,6 +101,8 @@ class ConfigBottomSheet(
 
     private fun setupViews(saveCredentials: Boolean, savedCredentials: Boolean) {
 
+        behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+
         binding.saveCredentials.isChecked = saveCredentials
 
         credential?.let {
@@ -101,6 +115,45 @@ class ConfigBottomSheet(
                 true -> View.GONE
                 false -> View.VISIBLE
             }
+
+        val languageConfigHelp =
+            if (requireContext().resources.getBoolean(R.bool.english)) "config" else "config-pt"
+
+        firebaseEnvironment.child(languageConfigHelp)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+
+                    if (snapshot.exists()) {
+
+                        val highlight = Highlight(
+                            listOf(
+                                OnClickScheme(
+                                    Pattern.compile("(Obter ajuda)|(Get help)")
+                                ) { _, _, _ ->
+                                    runCatching {
+                                        goToUrl(requireContext(), snapshot.value as String)
+                                    }.onFailure {
+                                        Firebase.crashlytics.recordException(it)
+                                    }
+                                }.apply {
+                                    setPainTextUnderline(true)
+                                    setPainText(true)
+                                }
+                            )
+                        )
+
+                        binding.configHelp.visibility(true)
+
+                        binding.configHelpMessage.text =
+                            highlight.getSpannable(getString(R.string.text_config_get_help))
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) = Unit
+            })
+
+
+        binding.configHelpMessage.movementMethod = LinkMovementMethod.getInstance()
     }
 
     private fun setupListeners() {
