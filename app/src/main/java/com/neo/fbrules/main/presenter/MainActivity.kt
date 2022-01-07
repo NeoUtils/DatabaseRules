@@ -18,7 +18,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
-import com.neo.fbrules.core.NeoUtilsAppsManager
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.color
@@ -32,9 +31,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val neoUtilsAppsAdapter: NeoUtilsAppsAdapter by lazy {
-        NeoUtilsAppsAdapter()
-    }
+    private val neoUtilsAppsAdapter: NeoUtilsAppsAdapter by neoUtilsAppsAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -249,4 +246,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         configBottomSheet.show(supportFragmentManager, "config_dialog")
     }
+}
+
+private fun neoUtilsAppsAdapter() = lazy {
+    NeoUtilsAppsAdapter()
 }
