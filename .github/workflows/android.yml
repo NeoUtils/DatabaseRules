@@ -32,7 +32,6 @@ jobs:
         run: |
           echo "$RELEASE_KEYSTORE_PROPERTIES" > keystore.properties.asc
           gpg -d --passphrase "$RELEASE_KEYSTORE_PASSPHASE" --batch keystore.properties.asc > keystore.properties
-          cat keystore.properties
           dir
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
