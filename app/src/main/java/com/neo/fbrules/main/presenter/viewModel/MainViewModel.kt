@@ -149,13 +149,15 @@ class MainViewModel @Inject constructor(
             override fun hasUpdate(
                 lastVersionCode: Int,
                 lastVersionName: String,
-                downloadLink: String
+                downloadLink: String,
+                force : Boolean
             ) {
                 update.value = Update(
                     hasUpdate = true,
                     lastVersionCode = lastVersionCode,
                     lastVersionName = lastVersionName,
-                    downloadLink = downloadLink
+                    downloadLink = downloadLink,
+                    force = force
                 )
             }
         })

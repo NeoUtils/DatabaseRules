@@ -206,17 +206,35 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
             Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                 param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                param(
-                    FirebaseAnalytics.Param.ITEM_NAME,
-                    tvLastVersion.text.toString()
-                )
-                param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                param("context", "Nova atualização")
+                param("text", tvLastVersion.text.toString())
+                param("type", "button")
             }
 
             goToUrl(downloadLink!!)
         }
 
-        //showUpdateDialog(update)
+        if (update.force) {
+            showAlertDialog(
+                "Atualização obrigatória",
+                "Versão ${update.lastVersionName} disponível. Por favor atualize para continuar usando."
+            ) {
+
+                build.setCancelable(false)
+
+                positiveButton("Atualizar") {
+
+                    Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+                        param("context", "Atualização obrigatória")
+                        param("text", "Atualizar")
+                        param("type", "button")
+                    }
+
+                    goToUrl(update.downloadLink!!)
+                    finish()
+                }
+            }
+        }
     }
 
     private fun showDecryptDialog() {

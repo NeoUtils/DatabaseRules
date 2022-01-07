@@ -29,7 +29,7 @@ import androidx.core.content.ContextCompat.startActivity
  * @author Irineu A. Silva
  */
 fun Activity.showAlertDialog(
-    title: String, message: String, config: AlertDialogConfig.() -> Unit
+    title: String, message: String, config: AlertDialogConfig.() -> Unit = {}
 ) = showAlertDialog(this, title, message, config)
 
 //alert dialog fragment
@@ -50,7 +50,7 @@ fun showAlertDialog(
     context: Context,
     title: String,
     message: String,
-    config: AlertDialogConfig.() -> Unit
+    config: AlertDialogConfig.() -> Unit = {}
 ): AlertDialog {
 
     //BUILD

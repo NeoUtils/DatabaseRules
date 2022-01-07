@@ -71,23 +71,18 @@ class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
 
                     Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                         param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                        param(
-                            FirebaseAnalytics.Param.ITEM_NAME,
-                            "open ${app.packageName}"
-                        )
-                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                        param("context", "Abrir ${app.packageName}")
+                        param("type", "button")
                     }
 
                     goToApp(context, app.packageName)
                 } else {
 
                     Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
+
                         param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                        param(
-                            FirebaseAnalytics.Param.ITEM_NAME,
-                            "download ${app.packageName}"
-                        )
-                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "button")
+                        param("context", "Baixar ${app.packageName}")
+                        param("type", "button")
                     }
 
                     goToUrl(context, app.url)
