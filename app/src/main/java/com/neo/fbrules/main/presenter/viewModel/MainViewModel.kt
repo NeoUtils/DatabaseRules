@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
+import com.neo.fbrules.main.domain.model.HistoricModel
 import com.neo.fbrules.main.domain.useCase.*
 import com.neo.fbrules.main.presenter.model.NeoUtilsApp
 import com.neo.fbrules.main.presenter.model.Update
@@ -26,7 +27,7 @@ class MainViewModel @Inject constructor(
 
     //default
     private val _rules = MutableLiveData<String>()
-    val rules : LiveData<String> get() = _rules
+    val rules: LiveData<String> get() = _rules
 
     val error = MutableSingleLiveData<Result.Error>()
 
@@ -35,12 +36,16 @@ class MainViewModel @Inject constructor(
     val message = MutableSingleLiveData<Message>()
 
     private val _update = MutableLiveData(Update())
-    val update : LiveData<Update> = _update
+    val update: LiveData<Update> = _update
 
     private val _apps = MutableLiveData(listOf<NeoUtilsApp>())
-    val apps : LiveData<List<NeoUtilsApp>> = _apps
+    val apps: LiveData<List<NeoUtilsApp>> = _apps
 
     val loading = MutableLiveData(false)
+
+    val historic: HistoricModel = HistoricModel(
+        list = mutableListOf(0 to "")
+    )
 
     //especial
     val configBottomSheet = MutableSingleLiveData<() -> Unit>()

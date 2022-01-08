@@ -56,7 +56,7 @@ class RulesEditor(
             val count = lengthAfter - lengthBefore
             val selection = selectionEnd
 
-            if (count == 1) {
+            if (count == 1 && selection > 0) {
                 newInsert(text[selection - 1], text)
             }
         }

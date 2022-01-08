@@ -18,6 +18,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
+import com.neo.fbrules.core.HistoricTextWatcher
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.requestColor
@@ -81,7 +82,40 @@ class MainActivity : BaseActivity<MainActivityView>() {
             }
         }
 
-//        binding.content.rulesEditor.addTextChangedListener(this)
+        setupHistoric()
+    }
+
+    private fun setupHistoric() {
+        val historyObserver = HistoricTextWatcher(viewModel.historic)
+
+        historyObserver.historyListener = object : HistoricTextWatcher.HistoryListener {
+            override fun hasUndo(has: Boolean) {
+                binding.content.ibUndoBtn.isClickable = has
+                binding.content.ibUndoBtn.alpha = if (has) 1f else 0.6f
+            }
+
+            override fun hasRedo(has: Boolean) {
+                binding.content.ibRedoBtn.isClickable = has
+                binding.content.ibRedoBtn.alpha = if (has) 1f else 0.6f
+            }
+
+            override fun update(history: Pair<Int, String>) {
+                binding.content.rulesEditor.removeTextChangedListener(historyObserver)
+                binding.content.rulesEditor.setText(history.second)
+                binding.content.rulesEditor.setSelection(history.first)
+                binding.content.rulesEditor.addTextChangedListener(historyObserver)
+            }
+        }
+
+        binding.content.rulesEditor.addTextChangedListener(historyObserver)
+
+        binding.content.ibUndoBtn.setOnClickListener {
+            historyObserver.undo()
+        }
+
+        binding.content.ibRedoBtn.setOnClickListener {
+            historyObserver.redo()
+        }
     }
 
     private fun setupViews() = with(binding) {
