@@ -18,6 +18,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
+import com.neo.fbrules.core.HistoricTextWatcher
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.requestColor
@@ -80,6 +81,41 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 else -> false
             }
         }
+
+        setupHistoric()
+    }
+
+    private fun setupHistoric() {
+        val historyObserver = HistoricTextWatcher(viewModel.historic)
+
+        historyObserver.historyListener = object : HistoricTextWatcher.HistoryListener {
+            override fun hasUndo(has: Boolean) {
+                binding.content.ibUndoBtn.isClickable = has
+                binding.content.ibUndoBtn.alpha = if (has) 1f else 0.5f
+            }
+
+            override fun hasRedo(has: Boolean) {
+                binding.content.ibRedoBtn.isClickable = has
+                binding.content.ibRedoBtn.alpha = if (has) 1f else 0.5f
+            }
+
+            override fun update(history: Pair<Int, String>) {
+                binding.content.rulesEditor.removeTextChangedListener(historyObserver)
+                binding.content.rulesEditor.setText(history.second)
+                binding.content.rulesEditor.setSelection(history.first)
+                binding.content.rulesEditor.addTextChangedListener(historyObserver)
+            }
+        }
+
+        binding.content.rulesEditor.addTextChangedListener(historyObserver)
+
+        binding.content.ibUndoBtn.setOnClickListener {
+            historyObserver.undo()
+        }
+
+        binding.content.ibRedoBtn.setOnClickListener {
+            historyObserver.redo()
+        }
     }
 
     private fun setupViews() = with(binding) {
@@ -111,13 +147,13 @@ class MainActivity : BaseActivity<MainActivityView>() {
         }
 
         viewModel.alert.singleObserve(this) { alert ->
-            showAlertDialog(alert.title, alert.message) {
+            showAlertDialog(getString(alert.title), getString(alert.message)) {
                 positiveButton()
             }
         }
 
         viewModel.message.singleObserve(this) { message ->
-            showSnackbar(message.message)
+            showSnackbar(getString(message.message))
         }
 
         viewModel.loading.observe(this) { show ->
@@ -206,7 +242,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
             Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                 param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                param("context", "Nova atualização")
+                param("context", getString(R.string.text_update_new_update))
                 param("text", tvLastVersion.text.toString())
                 param("type", "button")
             }
@@ -216,16 +252,16 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         if (update.force) {
             showAlertDialog(
-                "Atualização obrigatória",
-                "Versão ${update.lastVersionName} disponível. Por favor atualize para continuar usando."
+                getString(R.string.text_update_must_title),
+                getString(R.string.text_update_must_message, update.lastVersionName)
             ) {
 
                 build.setCancelable(false)
 
-                positiveButton("Atualizar") {
+                positiveButton(getString(R.string.text_to_update)) {
 
                     Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param("context", "Atualização obrigatória")
+                        param("context", getString(R.string.text_update_must_title))
                         param("text", "Atualizar")
                         param("type", "button")
                     }
@@ -257,7 +293,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 databaseKey = databaseKey
             )
 
-            showSnackbar("Sucesso!!")
+            showSnackbar(getString(R.string.text_alert_success))
         }
 
         encryptionDialog.show(supportFragmentManager, EncryptionDialog.tag)
@@ -272,8 +308,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         configBottomSheet.show(supportFragmentManager, "config_dialog")
     }
-}
 
-private fun neoUtilsAppsAdapter() = lazy {
-    NeoUtilsAppsAdapter()
+    private fun neoUtilsAppsAdapter() = lazy {
+        NeoUtilsAppsAdapter()
+    }
 }

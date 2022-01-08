@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.DataSnapshot
@@ -24,7 +23,6 @@ import com.neo.fbrules.databinding.DialogConfigBinding
 import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.util.*
 import com.neo.highlight.core.Highlight
-import com.neo.highlight.util.scheme.LinkScheme
 import com.neo.highlight.util.scheme.OnClickScheme
 import java.util.regex.Pattern
 
@@ -81,7 +79,7 @@ class ConfigBottomSheet(
                     privateKey = it,
                     databaseKey = databaseKey!!
                 )
-                showSnackbar(binding.root, "Sucesso!!")
+                showSnackbar(binding.root, getString(R.string.text_alert_success))
             }
 
             dialog.show(parentFragmentManager, EncryptionDialog.tag)
@@ -170,7 +168,7 @@ class ConfigBottomSheet(
             val text = it?.toString()
 
             if (text.isNullOrBlank()) {
-                binding.databaseKey.error = "Digite o banco de dados"
+                binding.databaseKey.error = getString(R.string.text_config_digite_database)
             } else {
                 binding.databaseKey.isErrorEnabled = false
                 databaseKeyHighlight(it)
@@ -181,7 +179,7 @@ class ConfigBottomSheet(
             val text = it?.toString()
 
             if (text.isNullOrBlank()) {
-                binding.privateKey.error = "Digite a chave privada"
+                binding.privateKey.error = getString(R.string.text_config_digite_private_key)
             } else {
                 binding.privateKey.isErrorEnabled = false
             }
@@ -220,12 +218,12 @@ class ConfigBottomSheet(
         var databaseKey = binding.databaseKey.editText?.text?.toString()
 
         if (databaseKey.isNullOrBlank()) {
-            binding.databaseKey.error = "Digite o banco de dados"
+            binding.databaseKey.error = getString(R.string.text_config_digite_database)
             isValid = false
         }
 
         if (privateKey.isNullOrBlank()) {
-            binding.privateKey.error = "Digite a chave privada"
+            binding.privateKey.error = getString(R.string.text_config_digite_private_key)
             isValid = false
         }
 
@@ -246,7 +244,7 @@ class ConfigBottomSheet(
                     confirm(privateKey!!, databaseKey)
                 }
 
-                negativeButton("Está errada")
+                negativeButton(getString(R.string.button_config_is_wrong))
             }
         } else {
             confirm(privateKey!!, databaseKey)

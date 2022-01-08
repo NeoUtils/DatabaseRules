@@ -22,6 +22,6 @@
     <color name="bg_drawer">@color/white</color>
     <color name="comment">@color/gray_dark</color>
     <color name="yellow">#FFC107</color>
-    <color name="green">#005704</color>
+    <color name="green">#009807</color>
 
 </resources>

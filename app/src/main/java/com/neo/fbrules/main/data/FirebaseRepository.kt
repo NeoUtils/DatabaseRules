@@ -23,19 +23,14 @@ class FirebaseRepositoryImpl @Inject constructor(
 
     override suspend fun getRules(credential: DataCredential): Result<String> {
 
-        return try {
+        return runCatching {
             val result = service.getRules(
                 credential.databaseKey,
                 credential.privateKey
             )
 
             Result.Success(result)
-        } catch (e: HttpException) {
-            Result.Error(
-                title = "${e.message}\n",
-                message = "${e.response()?.errorBody()?.errorMessage()}"
-            )
-        }
+        }.getOrElse(::onFailure)
     }
 
     override suspend fun setRules(
@@ -43,7 +38,7 @@ class FirebaseRepositoryImpl @Inject constructor(
         credential: DataCredential
     ): Result<Unit> {
 
-        return try {
+        return runCatching {
             val requestBody = rules.toRequestBody()
 
             service.setRules(
@@ -53,12 +48,18 @@ class FirebaseRepositoryImpl @Inject constructor(
             )
 
             Result.Success(Unit)
-        } catch (e: HttpException) {
+        }.getOrElse(::onFailure)
+    }
 
-            Result.Error(
-                title = "${e.message}\n",
-                message = "${e.response()?.errorBody()?.errorMessage()}"
-            )
-        }
+    private fun onFailure(it: Throwable) = if (it is HttpException) {
+        Result.Error(
+            title = "${it.message}\n",
+            message = "${it.response()?.errorBody()?.errorMessage()}"
+        )
+    } else {
+        Result.Error(
+            title = "${it::class.simpleName}\n",
+            message = "${it.message}"
+        )
     }
 }
