@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Você tem uma credencial salva,\n toque aqui para recuperar." />
+            android:text="@string/text_config_recovery_credentials" />
 
     </androidx.cardview.widget.CardView>
 
@@ -105,7 +105,7 @@
         android:id="@+id/confirm_btn"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Confirmar" />
+        android:text="@string/text_confirm" />
 
 
     <LinearLayout

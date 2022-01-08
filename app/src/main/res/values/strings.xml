@@ -1,25 +1,31 @@
 <resources>
-    <string name="app_name">Database Rules</string>
+    <string name="app_name" translatable="false">Database Rules</string>
 
     <!-- config -->
 
-    <string name="text_config_confirm_key_title">Confirme a key</string>
-    <string name="text_config_confirm_key_message">Parece que você forneceu a url do banco invés de apenas o id. Esse é o id do seu banco de dados?</string>
-    <string name="text_config_save_private_key">Salvar private key</string>
-    <string name="text_config_private_key">Private Key</string>
-    <string name="text_config_database_key">Database ID</string>
-    <string name="check_config_save_credentials">Guardar credenciais</string>
-    <string name="text_config_save_credential_help_title">Lembrar credenciais</string>
-    <string name="text_config_save_credential_help_message">Quando marcado suas credenciais são salvas criptografadas com o algoritimo AES, utilizando uma chave SHA-256 gerada traves de uma senha que apenas você conhece.</string>
-    <string name="text_config_encrypt_message">Para a segurança do seu banco de dados, suas credenciais são criptografadas e salvas com sua senha.</string>
-    <string name="text_config_decrypt_message">Você possui uma credencial criptografada salva, forneça a senha para recuperar.</string>
-    <string name="text_config_encrypt_title">Salvar credenciais</string>
-    <string name="text_config_decrypt_title">Recuperar credenciais</string>
-    <string name="text_config_password">Senha</string>
-    <string name="text_drawer_open">Abrir</string>
-    <string name="text_drawer_close">Fechar</string>
-    <string name="text_drawer_click_to_update">Clique para atualizar</string>
-    <string name="text_drawer_has_update">Uma nova versão está disponível!</string>
-    <string name="text_drawer_updated">Você está atualizado!</string>
-    <string name="text_config_get_help">Não sabe suas credenciais? Obter ajuda</string>
+    <string name="text_config_confirm_key_message">Looks like you provided the bank url instead of just the id. Is this your database id?</string>
+    <string name="text_config_save_private_key">Save private key</string>
+    <string name="text_config_private_key" translatable="false">Private Key</string>
+    <string name="text_config_database_key" translatable="false">Database ID</string>
+    <string name="check_config_save_credentials">Save credentials</string>
+    <string name="text_config_save_credential_help_title">Remember credentials</string>
+    <string name="text_config_save_credential_help_message">When checked your credentials are saved encrypted with the AES algorithm, using a SHA-256 key generated through a password that only you know.</string>
+    <string name="text_config_encrypt_message">For the security of your database, your credentials are encrypted and saved with your password.</string>
+    <string name="text_config_decrypt_message">You have an encrypted credential saved, provide the password to retrieve.</string>
+    <string name="text_config_encrypt_title">Save credentials</string>
+    <string name="text_config_decrypt_title">Retrieve credentials</string>
+    <string name="text_config_password">Password</string>
+    <string name="text_drawer_open">Oepn</string>
+    <string name="text_drawer_close">Close</string>
+    <string name="text_drawer_click_to_update">Click to update</string>
+    <string name="text_drawer_has_update">A new version is available!</string>
+    <string name="text_drawer_updated">You are up to date!</string>
+    <string name="text_config_get_help">Don\'t know your credentials? Get help</string>
+    <string name="text_config_recovery_credentials">You have a saved credential, tap here to retrieve it.</string>
+    <string name="text_confirm">Confirm</string>
+    <string name="text_config_confirm_key_title">Confirm the key</string>
+    <string name="update">Update</string>
+    <string name="push">Push</string>
+    <string name="pull">Pull</string>
+    <string name="keys">Keys</string>
 </resources>
