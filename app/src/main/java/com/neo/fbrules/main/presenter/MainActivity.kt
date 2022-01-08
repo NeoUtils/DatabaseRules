@@ -116,6 +116,10 @@ class MainActivity : BaseActivity<MainActivityView>() {
         binding.content.ibRedoBtn.setOnClickListener {
             historyObserver.redo()
         }
+
+        binding.navBar.cdGithub.setOnClickListener {
+            goToUrl(getString(R.string.url_github_repository))
+        }
     }
 
     private fun setupViews() = with(binding) {

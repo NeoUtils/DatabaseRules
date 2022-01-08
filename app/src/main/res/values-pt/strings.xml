@@ -45,4 +45,5 @@
     <string name="text_config_digite_private_key">Digite a chave privada</string>
     <string name="button_config_is_wrong">Está errada</string>
     <string name="text_digite_password">Digite a senha</string>
+    <string name="text_is_open_source"><b>Database Rules</b> é <i>Open Source </i></string>
 </resources>

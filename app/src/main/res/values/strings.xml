@@ -41,4 +41,6 @@
     <string name="text_digite_password">Type the password</string>
     <string name="text_error_little_password">Password too small</string>
     <string name="text_error_password_different">Password does not match</string>
+    <string name="text_is_open_source"><b>Database Rules</b> is <i>Open Source </i></string>
+    <string name="url_github_repository" translatable="false">https://github.com/Irineu333/DatabaseRules</string>
 </resources>
