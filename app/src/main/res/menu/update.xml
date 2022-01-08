@@ -7,7 +7,7 @@
        app:iconTint="@color/white"
        app:showAsAction="always"
        android:id="@+id/update"
-       android:title="@string/update"
+       android:title="@string/button_update"
        android:icon="@drawable/ic_round_cloud"
        tools:ignore="AlwaysShowAction">
 
@@ -16,19 +16,19 @@
            <item
                android:id="@+id/push"
                android:icon="@drawable/ic_arrow_up"
-               android:title="@string/push"
+               android:title="@string/button_push"
                app:showAsAction="never" />
 
            <item
                android:id="@+id/pull"
                android:icon="@drawable/ic_arrow_down"
-               android:title="@string/pull"
+               android:title="@string/button_pull"
                app:showAsAction="never" />
 
            <item
                android:id="@+id/config"
                android:icon="@drawable/ic_settings"
-               android:title="@string/keys"
+               android:title="@string/button_keys"
                app:showAsAction="never" />
 
        </menu>

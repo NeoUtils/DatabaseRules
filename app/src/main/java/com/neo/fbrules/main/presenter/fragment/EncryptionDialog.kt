@@ -42,10 +42,10 @@ class EncryptionDialog(
 
             when {
                 value.isNullOrBlank() -> {
-                    binding.password.error = "Digite a senha"
+                    binding.password.error = getString(R.string.text_digite_password)
                 }
                 value.length < 4 -> {
-                    binding.password.error = "Senha muito pequena"
+                    binding.password.error = getString(R.string.text_error_little_password)
                 }
                 else -> {
                     binding.password.isErrorEnabled = false
@@ -69,12 +69,12 @@ class EncryptionDialog(
         val password = binding.password.editText?.text?.toString()
 
         if (password.isNullOrBlank()) {
-            binding.password.error = "Digite a senha"
+            binding.password.error = getString(R.string.text_digite_password)
             return
         }
 
         if (password.length < 4) {
-            binding.password.error = "Senha muito pequena"
+            binding.password.error = getString(R.string.text_error_little_password)
             return
         }
 
@@ -102,7 +102,7 @@ class EncryptionDialog(
         val decrypted = AES.decrypt(content, password)
 
         if (decrypted == null) {
-            showSnackbar(binding.root, "A senha não confere")
+            showSnackbar(binding.root, getString(R.string.text_error_password_different))
             return
         }
 

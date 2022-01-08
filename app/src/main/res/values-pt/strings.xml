@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--    config-->
     <string name="text_config_confirm_key_title">Confirme a key</string>
     <string name="text_config_confirm_key_message">Parece que você forneceu a url do banco invés de apenas o id. Esse é o id do seu banco de dados?</string>
-    <string name="text_config_save_private_key">Salvar private key</string>
+    <string name="button_config_save_private_key">Salvar private key</string>
     <string name="check_config_save_credentials">Guardar credenciais</string>
     <string name="text_config_save_credential_help_title">Lembrar credenciais</string>
     <string name="text_config_save_credential_help_message">Quando marcado suas credenciais são salvas criptografadas com o algoritmo AES, utilizando uma chave SHA-256 gerada traves de uma senha que apenas você conhece.</string>
@@ -11,16 +13,36 @@
     <string name="text_config_encrypt_title">Salvar credenciais</string>
     <string name="text_config_decrypt_title">Recuperar credenciais</string>
     <string name="text_config_password">Senha</string>
+    <string name="text_config_get_help">Não sabe suas credenciais? Obter ajuda</string>
+    <string name="text_config_recovery_credentials">Você tem uma credencial salva, toque aqui para recuperar.</string>
+    <string name="text_config_digite_database">Digite o banco de dados</string>
+
+    <!--    drawer-->
+
     <string name="text_drawer_open">Abrir</string>
     <string name="text_drawer_close">Fechar</string>
     <string name="text_drawer_click_to_update">Clique para atualizar</string>
     <string name="text_drawer_has_update">Uma nova versão está disponível!</string>
     <string name="text_drawer_updated">Você está atualizado!</string>
-    <string name="text_config_get_help">Não sabe suas credenciais? Obter ajuda</string>
-    <string name="text_config_recovery_credentials">Você tem uma credencial salva, toque aqui para recuperar.</string>
+
+    <!--    ccomum-->
     <string name="text_confirm">Confirmar</string>
-    <string name="update">Atualizar</string>
-    <string name="push">Enviar</string>
-    <string name="pull">Baixar</string>
-    <string name="keys">Chaves</string>
+    <string name="button_update">Atualizar</string>
+    <string name="button_push">Enviar</string>
+    <string name="button_pull">Baixar</string>
+    <string name="button_keys">Chaves</string>
+    <string name="text_success">Sucesso</string>
+    <string name="text_alert_success">Sucesso!!</string>
+
+    <!--    update-->
+    <string name="text_update_new_update">Nova atualização</string>
+    <string name="text_update_must_title">Atualização obrigatória</string>
+    <string name="text_to_update">Atualizar</string>
+    <string name="text_update_must_message">Versão %s disponível. Por favor atualize para continuar usando.</string>
+    <string name="text_message_rules_updated">Regras atualizadas!</string>
+    <string name="text_error_password_different">A senha não confere</string>
+    <string name="text_error_little_password">Senha muito pequena</string>
+    <string name="text_config_digite_private_key">Digite a chave privada</string>
+    <string name="button_config_is_wrong">Está errada</string>
+    <string name="text_digite_password">Digite a senha</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.neo.fbrules.R
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.main.domain.model.HistoricModel
@@ -119,8 +120,7 @@ class MainViewModel @Inject constructor(
                 is Result.Success -> {
                     message.postValue(
                         Message(
-                            title = "Success",
-                            message = "Regras atualizadas!"
+                            message = R.string.text_message_rules_updated
                         )
                     )
                 }

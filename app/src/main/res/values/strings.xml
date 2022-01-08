@@ -4,7 +4,7 @@
     <!-- config -->
 
     <string name="text_config_confirm_key_message">Looks like you provided the bank url instead of just the id. Is this your database id?</string>
-    <string name="text_config_save_private_key">Save private key</string>
+    <string name="button_config_save_private_key">Save private key</string>
     <string name="text_config_private_key" translatable="false">Private Key</string>
     <string name="text_config_database_key" translatable="false">Database ID</string>
     <string name="check_config_save_credentials">Save credentials</string>
@@ -24,8 +24,21 @@
     <string name="text_config_recovery_credentials">You have a saved credential, tap here to retrieve it.</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_config_confirm_key_title">Confirm the key</string>
-    <string name="update">Update</string>
-    <string name="push">Push</string>
-    <string name="pull">Pull</string>
-    <string name="keys">Keys</string>
+    <string name="text_update_new_update">Nova atualização</string>
+    <string name="button_update">Update</string>
+    <string name="button_push">Push</string>
+    <string name="button_pull">Pull</string>
+    <string name="button_keys">Keys</string>
+    <string name="text_update_must_title">Mandatory update</string>
+    <string name="text_alert_success">Success!!</string>
+    <string name="text_success">Success</string>
+    <string name="text_message_rules_updated">Rules updated!</string>
+    <string name="text_to_update">To update</string>
+    <string name="text_update_must_message">Version %s available. Please update to continue using.</string>
+    <string name="text_config_digite_database">Enter the database</string>
+    <string name="text_config_digite_private_key">Enter the private key</string>
+    <string name="button_config_is_wrong">Is wrong</string>
+    <string name="text_digite_password">Type the password</string>
+    <string name="text_error_little_password">Password too small</string>
+    <string name="text_error_password_different">Password does not match</string>
 </resources>

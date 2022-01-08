@@ -147,13 +147,13 @@ class MainActivity : BaseActivity<MainActivityView>() {
         }
 
         viewModel.alert.singleObserve(this) { alert ->
-            showAlertDialog(alert.title, alert.message) {
+            showAlertDialog(getString(alert.title), getString(alert.message)) {
                 positiveButton()
             }
         }
 
         viewModel.message.singleObserve(this) { message ->
-            showSnackbar(message.message)
+            showSnackbar(getString(message.message))
         }
 
         viewModel.loading.observe(this) { show ->
@@ -242,7 +242,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
             Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
                 param(FirebaseAnalytics.Param.ITEM_ID, it.id.toString())
-                param("context", "Nova atualização")
+                param("context", getString(R.string.text_update_new_update))
                 param("text", tvLastVersion.text.toString())
                 param("type", "button")
             }
@@ -252,16 +252,16 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         if (update.force) {
             showAlertDialog(
-                "Atualização obrigatória",
-                "Versão ${update.lastVersionName} disponível. Por favor atualize para continuar usando."
+                getString(R.string.text_update_must_title),
+                getString(R.string.text_update_must_message, update.lastVersionName)
             ) {
 
                 build.setCancelable(false)
 
-                positiveButton("Atualizar") {
+                positiveButton(getString(R.string.text_to_update)) {
 
                     Firebase.analytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT) {
-                        param("context", "Atualização obrigatória")
+                        param("context", getString(R.string.text_update_must_title))
                         param("text", "Atualizar")
                         param("type", "button")
                     }
@@ -293,7 +293,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 databaseKey = databaseKey
             )
 
-            showSnackbar("Sucesso!!")
+            showSnackbar(getString(R.string.text_alert_success))
         }
 
         encryptionDialog.show(supportFragmentManager, EncryptionDialog.tag)
