@@ -80,6 +80,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 else -> false
             }
         }
+
+//        binding.content.rulesEditor.addTextChangedListener(this)
     }
 
     private fun setupViews() = with(binding) {
@@ -272,8 +274,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         configBottomSheet.show(supportFragmentManager, "config_dialog")
     }
-}
 
-private fun neoUtilsAppsAdapter() = lazy {
-    NeoUtilsAppsAdapter()
+    private fun neoUtilsAppsAdapter() = lazy {
+        NeoUtilsAppsAdapter()
+    }
 }

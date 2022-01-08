@@ -4,23 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/bg_editor"
     android:orientation="vertical">
 
-    <com.neo.fbrules.main.presenter.view.RulesEditor
-        android:id="@+id/rules_editor"
+    <ScrollView
+        android:fillViewport="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_editor"
-        android:gravity="top|start"
-        android:padding="10dp"
-        tools:context=".main.presenter.MainActivity" />
+        android:layout_height="match_parent">
+
+        <com.neo.fbrules.main.presenter.view.RulesEditor
+            android:id="@+id/rules_editor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top|start"
+            android:padding="10dp"/>
+
+    </ScrollView>
 
     <androidx.cardview.widget.CardView
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:visibility="gone"
         app:cardBackgroundColor="?attr/colorPrimary"
         app:cardCornerRadius="16dp"
         app:contentPadding="8dp">
@@ -55,7 +60,6 @@
                 android:tint="?attr/colorOnPrimary" />
 
         </LinearLayout>
-
 
     </androidx.cardview.widget.CardView>
 

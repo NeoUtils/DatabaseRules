@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.neo.fbrules.main.domain.model.DomainCredential
 import com.neo.fbrules.main.domain.useCase.*
 import com.neo.fbrules.main.presenter.model.NeoUtilsApp
 import com.neo.fbrules.main.presenter.model.Update
+import com.neo.fbrules.util.environment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,13 +25,20 @@ class MainViewModel @Inject constructor(
     //OBSERVABLES
 
     //default
-    val rules = MutableLiveData<String>()
+    private val _rules = MutableLiveData<String>()
+    val rules : LiveData<String> get() = _rules
 
     val error = MutableSingleLiveData<Result.Error>()
+
     val alert = MutableSingleLiveData<Message>()
+
     val message = MutableSingleLiveData<Message>()
-    val update = MutableLiveData(Update())
-    val apps = MutableLiveData(listOf<NeoUtilsApp>())
+
+    private val _update = MutableLiveData(Update())
+    val update : LiveData<Update> = _update
+
+    private val _apps = MutableLiveData(listOf<NeoUtilsApp>())
+    val apps : LiveData<List<NeoUtilsApp>> = _apps
 
     val loading = MutableLiveData(false)
 
@@ -39,6 +48,13 @@ class MainViewModel @Inject constructor(
 
     init {
         decryptBottomSheet.setValue(Unit)
+
+        if (environment == "development") {
+            credential = DomainCredential(
+                databaseKey = "test-81a49-default-rtdb",
+                privateKey = "eJiSOixN5fIR2lacQKI2e9MB4njVMDg2ymUlXaml"
+            )
+        }
     }
 
     //actions
@@ -52,7 +68,7 @@ class MainViewModel @Inject constructor(
             ) {
                 is Result.Success -> {
                     val data = response.data
-                    rules.postValue(data)
+                    _rules.postValue(data)
                 }
 
                 is Result.Error -> {
@@ -141,7 +157,7 @@ class MainViewModel @Inject constructor(
     fun checkUpdate() {
         UpdateManager(object : UpdateManager.UpdateListener {
             override fun updated() {
-                update.value = Update(
+                _update.value = Update(
                     hasUpdate = false
                 )
             }
@@ -150,9 +166,9 @@ class MainViewModel @Inject constructor(
                 lastVersionCode: Int,
                 lastVersionName: String,
                 downloadLink: String,
-                force : Boolean
+                force: Boolean
             ) {
-                update.value = Update(
+                _update.value = Update(
                     hasUpdate = true,
                     lastVersionCode = lastVersionCode,
                     lastVersionName = lastVersionName,
@@ -166,7 +182,7 @@ class MainViewModel @Inject constructor(
     fun loadNeoUtilsApps() {
         NeoUtilsAppsManager(object : NeoUtilsAppsManager.AppsListener {
             override fun change(apps: List<NeoUtilsApp>) {
-                this@MainViewModel.apps.value = apps
+                this@MainViewModel._apps.value = apps
             }
         })
     }
