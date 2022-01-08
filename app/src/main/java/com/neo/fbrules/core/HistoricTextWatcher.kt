@@ -28,15 +28,10 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
     @Synchronized
     private fun addRule(position: Int, rules: String) = with(model) {
 
-        if (list.last().second == rules) return@with
+        if (list[point -1 ].second == rules) return@with
 
         if (point < list.size) {
-            for (index in list.size downTo point) {
-
-                if (index == 1) continue
-
-                list.removeAt(index - 1)
-            }
+            list.clear(point, list.size)
         }
 
         list.add(position to rules)
@@ -48,6 +43,15 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
         point = list.size
 
         update()
+    }
+
+    private fun MutableList<*>.clear(start: Int, end: Int) {
+        for (index in end downTo start) {
+
+            if (index == 1) continue
+
+            this.removeAt(index - 1)
+        }
     }
 
     @Synchronized
@@ -67,7 +71,7 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
         update()
     }
 
-    fun update() = with(model) {
+    private fun update() = with(model) {
         historyListener?.hasUndo(point != 1)
         historyListener?.hasRedo(point < list.size)
     }

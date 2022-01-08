@@ -91,12 +91,12 @@ class MainActivity : BaseActivity<MainActivityView>() {
         historyObserver.historyListener = object : HistoricTextWatcher.HistoryListener {
             override fun hasUndo(has: Boolean) {
                 binding.content.ibUndoBtn.isClickable = has
-                binding.content.ibUndoBtn.alpha = if (has) 1f else 0.6f
+                binding.content.ibUndoBtn.alpha = if (has) 1f else 0.5f
             }
 
             override fun hasRedo(has: Boolean) {
                 binding.content.ibRedoBtn.isClickable = has
-                binding.content.ibRedoBtn.alpha = if (has) 1f else 0.6f
+                binding.content.ibRedoBtn.alpha = if (has) 1f else 0.5f
             }
 
             override fun update(history: Pair<Int, String>) {
