@@ -46,10 +46,6 @@ class MainViewModel @Inject constructor(
 
     val loading = MutableLiveData(false)
 
-    val historic: HistoricModel = HistoricModel(
-        list = mutableListOf(0 to "")
-    )
-
     //especial
     val configBottomSheet = MutableSingleLiveData<() -> Unit>()
     val decryptBottomSheet = MutableSingleLiveData<Unit>()
