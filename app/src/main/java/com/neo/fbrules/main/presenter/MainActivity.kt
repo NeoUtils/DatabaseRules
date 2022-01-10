@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
+import com.neo.fbrules.main.presenter.adapter.IntegeratedAppsAdapter
 import com.neo.fbrules.main.presenter.fragment.bottomSheet.ConfigBottomSheet
 import com.neo.fbrules.main.presenter.fragment.dialog.EncryptionDialog
 import com.neo.fbrules.main.presenter.model.Update
@@ -38,7 +38,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val neoUtilsAppsAdapter: NeoUtilsAppsAdapter by neoUtilsAppsAdapter()
+    private val integeratedAppsAdapter: IntegeratedAppsAdapter by setupIntegratedAppsAdapter()
 
     private lateinit var rulesEditor: RulesEditor
 
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
     override fun onResume() {
         super.onResume()
 
-        neoUtilsAppsAdapter.notifyDataSetChanged()
+        integeratedAppsAdapter.notifyDataSetChanged()
     }
 
     private fun init() {
@@ -115,7 +115,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
             toggle.syncState()
         }
 
-        binding.drawer.rvNeoUtilsApps.adapter = neoUtilsAppsAdapter
+        binding.drawer.rvNeoUtilsApps.adapter = integeratedAppsAdapter
 
         setupToolbar()
     }
@@ -191,7 +191,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 binding.drawer.rvNeoUtilsApps.visibility(true)
                 binding.drawer.vDiv.visibility(true)
 
-                neoUtilsAppsAdapter.setApps(apps)
+                integeratedAppsAdapter.setApps(apps)
             }
         }
     }
@@ -316,7 +316,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         configBottomSheet.show(supportFragmentManager, "config_dialog")
     }
 
-    private fun neoUtilsAppsAdapter() = lazy {
-        NeoUtilsAppsAdapter()
+    private fun setupIntegratedAppsAdapter() = lazy {
+        IntegeratedAppsAdapter()
     }
 }

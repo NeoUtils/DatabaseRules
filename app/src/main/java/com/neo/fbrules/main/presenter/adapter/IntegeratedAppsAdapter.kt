@@ -19,7 +19,7 @@ import com.neo.fbrules.util.visibility
 
 typealias NeoUtilsAppsItem = ItemIntegratedAppBinding
 
-class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
+class IntegeratedAppsAdapter : RecyclerView.Adapter<IntegeratedAppsAdapter.Holder>() {
 
     private var apps: List<IntegratedApp> = listOf()
 

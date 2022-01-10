@@ -1,15 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.viewpager2.widget.ViewPager2 xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rules_editors"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_editor"
-    android:orientation="vertical"
-    tools:context=".main.presenter.MainActivity">
-
-   <include
-       android:id="@+id/textRulesEditor"
-       layout="@layout/content_text_rules_editor"/>
-
-</FrameLayout>
+    android:layout_height="match_parent" />
