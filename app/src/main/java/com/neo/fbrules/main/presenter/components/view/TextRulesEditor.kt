@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.presenter.view
+package com.neo.fbrules.main.presenter.components.view
 
 import android.content.Context
 import android.util.AttributeSet

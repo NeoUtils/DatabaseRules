@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.domain.model
+package com.neo.fbrules.main.presenter.components
 
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.DataSnapshot

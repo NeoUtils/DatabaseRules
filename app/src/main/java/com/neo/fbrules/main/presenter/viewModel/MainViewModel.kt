@@ -7,9 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.neo.fbrules.R
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
-import com.neo.fbrules.main.domain.model.IntegratedAppsManager
-import com.neo.fbrules.main.domain.model.UpdateManager
-import com.neo.fbrules.main.presenter.model.HistoricModel
+import com.neo.fbrules.main.presenter.components.IntegratedAppsManager
+import com.neo.fbrules.main.presenter.components.UpdateManager
 import com.neo.fbrules.main.domain.useCase.*
 import com.neo.fbrules.main.presenter.model.IntegratedApp
 import com.neo.fbrules.main.presenter.model.Update

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.neo.fbrules.databinding.ContentTextRulesEditorBinding
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.model.HistoricModel
-import com.neo.fbrules.main.presenter.model.HistoricTextWatcher
+import com.neo.fbrules.main.presenter.components.HistoricTextWatcher
 
 private typealias TextEditorView = ContentTextRulesEditorBinding
 

@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.fragment.VisualEditorFragment
+import com.neo.fbrules.main.presenter.fragment.content.VisualEditorFragment
 import com.neo.fbrules.main.presenter.fragment.content.TextEditorFragment
 import java.lang.IllegalArgumentException
 
