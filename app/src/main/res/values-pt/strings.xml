@@ -25,7 +25,7 @@
     <string name="text_drawer_has_update">Uma nova versão está disponível!</string>
     <string name="text_drawer_updated">Você está atualizado!</string>
 
-    <!--    ccomum-->
+    <!--   comum-->
     <string name="text_confirm">Confirmar</string>
     <string name="button_update">Atualizar</string>
     <string name="button_push">Enviar</string>

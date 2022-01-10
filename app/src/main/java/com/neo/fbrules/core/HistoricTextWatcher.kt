@@ -87,6 +87,6 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
     }
 
     private companion object {
-        const val MAX_HISTORIC = 50
+        const val MAX_HISTORIC = 100
     }
 }

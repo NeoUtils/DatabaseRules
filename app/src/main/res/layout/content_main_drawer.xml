@@ -126,11 +126,11 @@
 
                 <TextView
                     android:textSize="11sp"
-                    android:layout_marginVertical="1dp"
+                    android:layout_marginVertical="2dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:linksClickable="true"
-                    android:text="By Neo Utils | Irineu A. Silva" />
+                    android:text="@string/by_neo_utils_irineu_a_silva" />
 
             </LinearLayout>
 
