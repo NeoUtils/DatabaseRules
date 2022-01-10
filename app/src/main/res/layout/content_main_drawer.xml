@@ -87,7 +87,7 @@
         android:layout_marginTop="8dp"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_app" />
+        tools:listitem="@layout/item_integrated_app" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cd_github"

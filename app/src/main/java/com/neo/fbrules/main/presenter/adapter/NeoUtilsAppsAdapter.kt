@@ -10,19 +10,21 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
-import com.neo.fbrules.databinding.ItemAppBinding
+import com.neo.fbrules.databinding.ItemIntegratedAppBinding
 import com.neo.fbrules.main.presenter.model.NeoUtilsApp
 import com.neo.fbrules.util.goToApp
 import com.neo.fbrules.util.goToUrl
 import com.neo.fbrules.util.isInstalled
 import com.neo.fbrules.util.visibility
 
+typealias NeoUtilsAppsItem = ItemIntegratedAppBinding
+
 class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
 
     private var apps: List<NeoUtilsApp> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
-        return Holder(ItemAppBinding.inflate(LayoutInflater.from(parent.context)))
+        return Holder(NeoUtilsAppsItem.inflate(LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -39,7 +41,7 @@ class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
         notifyDataSetChanged()
     }
 
-    class Holder(private val binding: ItemAppBinding) : RecyclerView.ViewHolder(binding.root) {
+    class Holder(private val binding: NeoUtilsAppsItem) : RecyclerView.ViewHolder(binding.root) {
         private val context = itemView.context
 
         init {

@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.presenter.fragment
+package com.neo.fbrules.main.presenter.fragment.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog
@@ -6,11 +6,11 @@ import android.os.Bundle
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import com.neo.fbrules.R
-import com.neo.fbrules.databinding.DialogPasswordBinding
+import com.neo.fbrules.databinding.DialogInsertPasswordBinding
 import com.neo.fbrules.util.AES
 import com.neo.fbrules.util.showSnackbar
 
-private typealias EncryptionDialogView = DialogPasswordBinding
+private typealias EncryptionDialogView = DialogInsertPasswordBinding
 
 class EncryptionDialog(
     private val content: String,

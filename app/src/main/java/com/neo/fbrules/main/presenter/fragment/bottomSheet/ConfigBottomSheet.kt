@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.presenter.fragment
+package com.neo.fbrules.main.presenter.fragment.bottomSheet
 
 import android.content.Context
 import android.graphics.Color
@@ -19,14 +19,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
-import com.neo.fbrules.databinding.DialogConfigBinding
+import com.neo.fbrules.databinding.DialogCredentialsConfigBinding
 import com.neo.fbrules.main.domain.model.DomainCredential
+import com.neo.fbrules.main.presenter.fragment.dialog.EncryptionDialog
 import com.neo.fbrules.util.*
 import com.neo.highlight.core.Highlight
 import com.neo.highlight.util.scheme.OnClickScheme
 import java.util.regex.Pattern
 
-private typealias ConfigBottomSheetView = DialogConfigBinding
+private typealias ConfigBottomSheetView = DialogCredentialsConfigBinding
 
 class ConfigBottomSheet(
     private var credential: DomainCredential? = null,

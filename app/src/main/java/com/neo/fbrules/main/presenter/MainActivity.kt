@@ -7,8 +7,6 @@ import androidx.activity.viewModels
 import com.neo.fbrules.core.BaseActivity
 import com.neo.fbrules.databinding.ActivityMainBinding
 import com.neo.fbrules.main.domain.model.DomainCredential
-import com.neo.fbrules.main.presenter.fragment.ConfigBottomSheet
-import com.neo.fbrules.main.presenter.fragment.EncryptionDialog
 import com.neo.fbrules.main.presenter.viewModel.MainViewModel
 import com.neo.fbrules.util.showAlertDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +18,10 @@ import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
 import com.neo.fbrules.core.HistoricTextWatcher
+import com.neo.fbrules.main.domain.model.RulesEditor
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
+import com.neo.fbrules.main.presenter.fragment.bottomSheet.ConfigBottomSheet
+import com.neo.fbrules.main.presenter.fragment.dialog.EncryptionDialog
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.goToUrl
@@ -39,6 +40,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
     private val viewModel: MainViewModel by viewModels()
 
     private val neoUtilsAppsAdapter: NeoUtilsAppsAdapter by neoUtilsAppsAdapter()
+
+    private lateinit var rulesEditor: RulesEditor
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,9 +63,16 @@ class MainActivity : BaseActivity<MainActivityView>() {
         setupObservers()
         setupViews()
         setupListeners()
+        setupRulesEditor()
 
         viewModel.checkUpdate()
         viewModel.loadNeoUtilsApps()
+    }
+
+    private fun setupRulesEditor() {
+        rulesEditor =
+            supportFragmentManager.findFragmentById(R.id.rules_editor)
+                    as RulesEditor
     }
 
     private fun setupListeners() {
@@ -74,7 +84,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 }
 
                 R.id.push -> {
-                    val rules = binding.content.rulesEditor.editableText?.toString()
+                    val rules = rulesEditor.getRules()
                     viewModel.pushRules(rules)
                     true
                 }
@@ -88,44 +98,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
             }
         }
 
-        setupHistoric()
-    }
-
-    private fun setupHistoric() {
-        val historyObserver = HistoricTextWatcher(viewModel.historic)
-
-        binding.content.rulesEditor.addTextChangedListener(historyObserver)
-
-        historyObserver.historyListener = object : HistoricTextWatcher.HistoryListener {
-            override fun hasUndo(has: Boolean) {
-                binding.content.ibUndoBtn.isEnabled = has
-                binding.content.ibUndoBtn.alpha = if (has) 1f else 0.5f
-            }
-
-            override fun hasRedo(has: Boolean) {
-                binding.content.ibRedoBtn.isEnabled = has
-                binding.content.ibRedoBtn.alpha = if (has) 1f else 0.5f
-            }
-
-            override fun update(history: Pair<Int, String>) {
-                binding.content.rulesEditor.removeTextChangedListener(historyObserver)
-
-                binding.content.rulesEditor.setText(history.second)
-                binding.content.rulesEditor.setSelection(history.first)
-
-                binding.content.rulesEditor.addTextChangedListener(historyObserver)
-            }
-        }
-
-        binding.content.ibUndoBtn.setOnClickListener {
-            historyObserver.undo()
-        }
-
-        binding.content.ibRedoBtn.setOnClickListener {
-            historyObserver.redo()
-        }
-
-        binding.navBar.cdGithub.setOnClickListener {
+        binding.drawer.cdGithub.setOnClickListener {
             goToUrl(getString(R.string.url_github_repository))
         }
     }
@@ -143,7 +116,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
             toggle.syncState()
         }
 
-        binding.navBar.rvNeoUtilsApps.adapter = neoUtilsAppsAdapter
+        binding.drawer.rvNeoUtilsApps.adapter = neoUtilsAppsAdapter
 
         setupToolbar()
     }
@@ -165,14 +138,14 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 )
             )
         ).apply {
-           binding.title.text = getSpannable("DatabaseRules")
+            binding.title.text = getSpannable("DatabaseRules")
         }
     }
 
     private fun setupObservers() {
 
         viewModel.rules.observe(this) { rules ->
-            binding.content.rulesEditor.setText(rules)
+            rulesEditor.setRules(rules)
         }
 
         viewModel.error.singleObserve(this) { error ->
@@ -213,18 +186,18 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
         viewModel.apps.observe(this) { apps ->
             if (apps.isEmpty()) {
-                binding.navBar.rvNeoUtilsApps.visibility(false)
-                binding.navBar.vDiv.visibility(false)
+                binding.drawer.rvNeoUtilsApps.visibility(false)
+                binding.drawer.vDiv.visibility(false)
             } else {
-                binding.navBar.rvNeoUtilsApps.visibility(true)
-                binding.navBar.vDiv.visibility(true)
+                binding.drawer.rvNeoUtilsApps.visibility(true)
+                binding.drawer.vDiv.visibility(true)
 
                 neoUtilsAppsAdapter.setApps(apps)
             }
         }
     }
 
-    private fun changeUpdateNotice(update: Update) = with(binding.navBar) {
+    private fun changeUpdateNotice(update: Update) = with(binding.drawer) {
         val stateVisibility = update.hasUpdate != null
 
         if (stateVisibility) {
@@ -243,7 +216,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         cdUpdate.visibility(stateVisibility)
     }
 
-    private fun changeHasNotUpdate() = with(binding.navBar) {
+    private fun changeHasNotUpdate() = with(binding.drawer) {
         ivIcon.setImageResource(R.drawable.ic_checked)
 
         requestColor(R.color.green).let { color ->
@@ -259,7 +232,8 @@ class MainActivity : BaseActivity<MainActivityView>() {
         cdUpdate.setOnClickListener(null)
     }
 
-    private fun changeHasUpdate(update: Update) = with(binding.navBar) {
+    @SuppressLint("SetTextI18n")
+    private fun changeHasUpdate(update: Update) = with(binding.drawer) {
         ivIcon.setImageResource(R.drawable.ic_has_update)
 
         requestColor(R.color.yellow).let { color ->
@@ -267,8 +241,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
             tvLastVersion.setTextColor(color)
         }
 
-        val version = "v" + update.lastVersionName!!
-        tvLastVersion.text = version
+        tvLastVersion.text = "v${update.lastVersionName}"
 
         tvMessage.text = getString(R.string.text_drawer_has_update)
 

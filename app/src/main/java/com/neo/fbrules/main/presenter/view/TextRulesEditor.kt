@@ -10,7 +10,7 @@ import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Pattern
 
 
-class RulesEditor(
+class TextRulesEditor(
     context: Context, attr: AttributeSet? = null
 ) : AppCompatEditText(context, attr) {
 

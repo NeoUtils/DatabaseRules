@@ -36,13 +36,16 @@
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
-        <include
-            android:id="@+id/content"
-            layout="@layout/content_main" />
+        <fragment
+            tools:layout="@layout/content_main"
+            android:name="com.neo.fbrules.main.presenter.fragment.content.RulesEditorFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rules_editor" />
 
         <include
             layout="@layout/content_main_drawer"
-            android:id="@+id/nav_bar"
+            android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"/>
