@@ -21,10 +21,10 @@ class RulesEditorsAdapter(
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> {
-                TextEditorFragment()
+                VisualEditorFragment()
             }
             else -> {
-                VisualEditorFragment()
+                TextEditorFragment()
             }
         }.apply {
             editors[position] = this

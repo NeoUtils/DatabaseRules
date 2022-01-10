@@ -17,7 +17,7 @@ class TextRulesEditor(
     private val highlight = HighlightTextWatcher()
 
     init {
-        setBackgroundColor(getContext().getCompatColor(R.color.bg_text_editor))
+        setBackgroundColor(getContext().getCompatColor(R.color.bg_editors))
 
         highlight.addScheme(
             ColorScheme(

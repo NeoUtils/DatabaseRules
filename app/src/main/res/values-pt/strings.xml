@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!-- tipo_feature_subtipo_content -->
+    <!-- text_config_error_insert_password -->
+
+    <!-- tipo_feature_content -->
+    <!-- button_config_confirm -->
+
     <!--    config-->
     <string name="text_config_confirm_key_title">Confirme a key</string>
     <string name="text_config_confirm_key_message">Parece que você forneceu a url do banco invés de apenas o id. Esse é o id do seu banco de dados?</string>

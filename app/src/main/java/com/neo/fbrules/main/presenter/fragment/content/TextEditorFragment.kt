@@ -66,17 +66,17 @@ class TextEditorFragment : Fragment(), RulesEditor {
                 }
 
                 override fun update(history: Pair<Int, String>) {
-                    rulesEditor.removeTextChangedListener(this@apply)
+                    textRulesEditor.removeTextChangedListener(this@apply)
 
-                    rulesEditor.setText(history.second)
-                    rulesEditor.setSelection(history.first)
+                    textRulesEditor.setText(history.second)
+                    textRulesEditor.setSelection(history.first)
 
-                    rulesEditor.addTextChangedListener(this@apply)
+                    textRulesEditor.addTextChangedListener(this@apply)
                 }
             }
         }
 
-        rulesEditor.addTextChangedListener(historyObserver)
+        textRulesEditor.addTextChangedListener(historyObserver)
 
         ibUndoBtn.setOnClickListener {
             historyObserver.undo()
@@ -88,11 +88,11 @@ class TextEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun getRules(): String {
-        return binding.rulesEditor.text.toString()
+        return binding.textRulesEditor.text.toString()
     }
 
     override fun setRules(rules: String) {
-        binding.rulesEditor.setText(rules)
+        binding.textRulesEditor.setText(rules)
     }
 
 }

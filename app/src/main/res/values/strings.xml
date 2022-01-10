@@ -48,4 +48,5 @@
     <string name="tbn_undo">Undo</string>
     <string name="credentials_not_found">Unconfigured Access Credentials</string>
     <string name="unknown_error">Unspecified error</string>
+    <string name="text_visual_rules_error_invalid_rules">This rule is invalid</string>
 </resources>
