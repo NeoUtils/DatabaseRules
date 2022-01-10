@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.domain.model
+package com.neo.fbrules.main.presenter.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

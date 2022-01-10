@@ -44,4 +44,8 @@
     <string name="text_is_open_source"><b>Database Rules</b> is <i>Open Source </i></string>
     <string name="url_github_repository" translatable="false">https://github.com/Irineu333/DatabaseRules</string>
     <string name="by_neo_utils_irineu_a_silva" translatable="false">By Neo Utils | Irineu A. Silva</string>
+    <string name="btn_redo">Redo</string>
+    <string name="tbn_undo">Undo</string>
+    <string name="credentials_not_found">Unconfigured Access Credentials</string>
+    <string name="unknown_error">Unspecified error</string>
 </resources>

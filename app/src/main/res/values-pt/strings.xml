@@ -46,4 +46,8 @@
     <string name="button_config_is_wrong">Está errada</string>
     <string name="text_digite_password">Digite a senha</string>
     <string name="text_is_open_source"><b>Database Rules</b> é <i>Open Source </i></string>
+    <string name="btn_redo">Refazer</string>
+    <string name="tbn_undo">Desfazer</string>
+    <string name="credentials_not_found">Credenciais de acesso não configuradas</string>
+    <string name="unknown_error">Erro não especificado</string>
 </resources>

@@ -1,9 +1,8 @@
-package com.neo.fbrules.core
+package com.neo.fbrules.main.presenter.model
 
 import android.text.Editable
 import android.text.Selection
 import android.text.TextWatcher
-import com.neo.fbrules.main.domain.model.HistoricModel
 import kotlinx.coroutines.*
 
 class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {

@@ -11,7 +11,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.ItemIntegratedAppBinding
-import com.neo.fbrules.main.presenter.model.NeoUtilsApp
+import com.neo.fbrules.main.presenter.model.IntegratedApp
 import com.neo.fbrules.util.goToApp
 import com.neo.fbrules.util.goToUrl
 import com.neo.fbrules.util.isInstalled
@@ -21,7 +21,7 @@ typealias NeoUtilsAppsItem = ItemIntegratedAppBinding
 
 class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
 
-    private var apps: List<NeoUtilsApp> = listOf()
+    private var apps: List<IntegratedApp> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(NeoUtilsAppsItem.inflate(LayoutInflater.from(parent.context)))
@@ -36,7 +36,7 @@ class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
     override fun getItemCount() = apps.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setApps(apps: List<NeoUtilsApp>) {
+    fun setApps(apps: List<IntegratedApp>) {
         this.apps = apps
         notifyDataSetChanged()
     }
@@ -51,7 +51,7 @@ class NeoUtilsAppsAdapter : RecyclerView.Adapter<NeoUtilsAppsAdapter.Holder>() {
             )
         }
 
-        fun bind(app: NeoUtilsApp) {
+        fun bind(app: IntegratedApp) {
 
             binding.name.text = app.name
 

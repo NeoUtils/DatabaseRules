@@ -17,7 +17,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
-import com.neo.fbrules.core.HistoricTextWatcher
 import com.neo.fbrules.main.domain.model.RulesEditor
 import com.neo.fbrules.main.presenter.adapter.NeoUtilsAppsAdapter
 import com.neo.fbrules.main.presenter.fragment.bottomSheet.ConfigBottomSheet
@@ -149,7 +148,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         }
 
         viewModel.error.singleObserve(this) { error ->
-            showAlertDialog(error.title, error.message) {
+            showAlertDialog(error.title, error.getSafeMessage(this)) {
                 positiveButton()
             }
         }

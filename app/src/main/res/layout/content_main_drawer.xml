@@ -83,7 +83,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_neo_utils_apps"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -107,6 +107,7 @@
             android:orientation="horizontal">
 
             <ImageView
+                app:tint="?attr/colorPrimary"
                 android:layout_margin="4dp"
                 android:layout_width="35dp"
                 android:layout_height="35dp"

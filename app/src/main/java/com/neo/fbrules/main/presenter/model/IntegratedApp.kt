@@ -1,6 +1,6 @@
 package com.neo.fbrules.main.presenter.model
 
-data class NeoUtilsApp(
+data class IntegratedApp(
     val name: String,
     val packageName: String,
     val url: String,

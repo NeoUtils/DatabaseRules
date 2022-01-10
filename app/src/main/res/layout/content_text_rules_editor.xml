@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bg_editor"
-    android:orientation="vertical"
-    tools:context=".main.presenter.MainActivity">
+    android:layout_height="match_parent">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top|start"
+            android:inputType="text|textMultiLine|textNoSuggestions"
             android:padding="10dp" />
 
     </ScrollView>
@@ -42,26 +39,28 @@
             android:layout_height="match_parent"
             android:paddingHorizontal="8dp">
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageButton
                 android:id="@+id/ib_undo_btn"
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/tbn_undo"
                 android:src="@drawable/ic_round_undo"
-                android:tint="?attr/colorOnPrimary" />
+                app:tint="?attr/colorOnPrimary" />
 
             <Space
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
+            <ImageButton
                 android:id="@+id/ib_redo_btn"
                 android:layout_width="35dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/btn_redo"
                 android:src="@drawable/ic_round_redo"
-                android:tint="?attr/colorOnPrimary" />
+                app:tint="?attr/colorOnPrimary" />
 
         </LinearLayout>
 

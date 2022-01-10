@@ -1,15 +1,15 @@
-package com.neo.fbrules.core
+package com.neo.fbrules.main.domain.model
 
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.neo.fbrules.main.presenter.model.NeoUtilsApp
+import com.neo.fbrules.main.presenter.model.IntegratedApp
 import com.neo.fbrules.util.firebaseEnvironment
 
 
-class NeoUtilsAppsManager(
+class IntegratedAppsManager(
     private val appsListener: AppsListener
 ) : ValueEventListener {
 
@@ -21,12 +21,12 @@ class NeoUtilsAppsManager(
     }
 
     interface AppsListener {
-        fun change(apps: List<NeoUtilsApp>)
+        fun change(apps: List<IntegratedApp>)
     }
 
     override fun onDataChange(snapshot: DataSnapshot) {
 
-        val neoUtilsApp = mutableListOf<NeoUtilsApp>()
+        val neoUtilsApp = mutableListOf<IntegratedApp>()
 
         for (child in snapshot.children) {
 
@@ -37,7 +37,7 @@ class NeoUtilsAppsManager(
                 val iconUrl = child.child("icon").value as String
 
                 neoUtilsApp.add(
-                    NeoUtilsApp(
+                    IntegratedApp(
                         name = name,
                         packageName = packageName,
                         url = url,

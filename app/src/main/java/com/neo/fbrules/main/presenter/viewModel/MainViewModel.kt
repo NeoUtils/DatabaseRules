@@ -7,9 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.neo.fbrules.R
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
-import com.neo.fbrules.main.domain.model.HistoricModel
+import com.neo.fbrules.main.domain.model.IntegratedAppsManager
+import com.neo.fbrules.main.domain.model.UpdateManager
+import com.neo.fbrules.main.presenter.model.HistoricModel
 import com.neo.fbrules.main.domain.useCase.*
-import com.neo.fbrules.main.presenter.model.NeoUtilsApp
+import com.neo.fbrules.main.presenter.model.IntegratedApp
 import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.environment
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,8 +41,8 @@ class MainViewModel @Inject constructor(
     private val _update = MutableLiveData(Update())
     val update: LiveData<Update> = _update
 
-    private val _apps = MutableLiveData(listOf<NeoUtilsApp>())
-    val apps: LiveData<List<NeoUtilsApp>> = _apps
+    private val _apps = MutableLiveData(listOf<IntegratedApp>())
+    val apps: LiveData<List<IntegratedApp>> = _apps
 
     val loading = MutableLiveData(false)
 
@@ -185,8 +187,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadNeoUtilsApps() {
-        NeoUtilsAppsManager(object : NeoUtilsAppsManager.AppsListener {
-            override fun change(apps: List<NeoUtilsApp>) {
+        IntegratedAppsManager(object : IntegratedAppsManager.AppsListener {
+            override fun change(apps: List<IntegratedApp>) {
                 this@MainViewModel._apps.value = apps
             }
         })

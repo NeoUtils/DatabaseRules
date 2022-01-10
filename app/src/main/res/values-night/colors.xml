@@ -6,7 +6,7 @@
     <!--Editor-->
     <color name="others">#006E2C</color>
     <color name="string">#00B11E</color>
-    <color name="bool">#CD0000</color>
+    <color name="bool">#B60000</color>
     <color name="bg_editor">#181818</color>
     <color name="bg_drawer">#151515</color>
 
