@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.TextView
-import com.neo.fbrules.R
 import org.json.JSONObject
 
 class VisualRulesEditor(
@@ -13,7 +12,11 @@ class VisualRulesEditor(
 
     private lateinit var rulesJson: JSONObject
 
-    var errorListener: ((String) -> Unit)? = null
+    var errorListener: ((ERROR, Throwable?) -> Unit)? = null
+
+    init {
+        orientation = VERTICAL
+    }
 
     fun setRules(rules: String) {
         runCatching {
@@ -21,18 +24,47 @@ class VisualRulesEditor(
             render()
         }.onFailure {
             errorListener?.invoke(
-                context.getString(
-                    R.string.text_visual_rules_error_invalid_rules
-                )
+                ERROR.invalid_rules,
+                it
             )
         }
     }
 
     private fun render() {
+
         for (key in rulesJson.keys()) {
+
             val any = rulesJson.get(key)
-            addView(TextView(context).apply { text = key })
+
+            when (any) {
+                //rule
+                is JSONObject -> {
+
+                }
+                //condition
+                is String -> {
+
+                }
+
+                //literal value
+                is Boolean -> {
+
+                }
+
+                else -> {
+                    errorListener?.invoke(
+                        ERROR.unrecognized_rule,
+                        IllegalArgumentException("$any unrecognized")
+                    )
+                }
+            }
+
+            addView(TextView(context).apply { text = "$key=$any" })
         }
     }
 
+    enum class ERROR {
+        unrecognized_rule,
+        invalid_rules
+    }
 }

@@ -4,8 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
+import com.neo.fbrules.R
 import com.neo.fbrules.databinding.ContentVisualRulesEditorBinding
+import com.neo.fbrules.main.presenter.components.view.VisualRulesEditor
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.util.showAlertDialog
 
@@ -29,8 +34,25 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.visualRulesEditor.errorListener = {
-            showAlertDialog("Error", it)
+        binding.visualRulesEditor.errorListener = { type, throwable ->
+
+            @StringRes
+            val errorMessage = when (type) {
+
+                VisualRulesEditor.ERROR.invalid_rules -> {
+                    R.string.text_visual_rules_editor_error_invalid_rules
+                }
+
+                VisualRulesEditor.ERROR.unrecognized_rule -> {
+                    R.string.text_visual_rules_editor_error_unrecognized_rule
+                }
+            }
+
+            showAlertDialog("Error", getString(errorMessage))
+
+            if (throwable != null) {
+                Firebase.crashlytics.recordException(throwable)
+            }
         }
     }
 
