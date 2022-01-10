@@ -3,6 +3,7 @@ package com.neo.fbrules.main.presenter.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.fragment.content.VisualEditorFragment
@@ -43,6 +44,10 @@ class RulesEditorsAdapter(
 
         editors[position]?.setRules(rules)
             ?: throw IllegalArgumentException("position $position is null")
+    }
+
+    fun onChange(old: Int, position: Int) {
+        editors[old]?.let { editors[position]?.setRules(it.getRules()) }
     }
 
     interface ViewPagerListener {

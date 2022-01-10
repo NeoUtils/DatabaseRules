@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
 import com.neo.fbrules.databinding.ContentRulesEditorBinding
 import com.neo.fbrules.main.presenter.adapter.RulesEditorsAdapter
@@ -32,13 +33,25 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         super.onViewCreated(view, savedInstanceState)
 
         setupView()
+        setupListener()
+    }
+
+    private fun setupListener() {
+        binding.vpRulesEditors.registerOnPageChangeCallback(
+            object :
+                ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    rulesEditorsAdapter.onChange(if (position == 0) 1 else 0, position)
+                }
+            }
+        )
     }
 
     private fun setupView() = with(binding) {
         vpRulesEditors.adapter = rulesEditorsAdapter
 
         TabLayoutMediator(tlTabs, vpRulesEditors) { tab, position ->
-            tab.text = when(position) {
+            tab.text = when (position) {
                 0 -> "Visual Editor"
                 else -> "Text Editor"
             }

@@ -15,6 +15,11 @@ class VisualRulesEditor(
     var errorListener: ((ERROR, Throwable?) -> Unit)? = null
 
     fun setRules(rules: String) = runCatching {
+
+        if (rules.isEmpty()) {
+            return@runCatching
+        }
+
         rulesJson = JSONObject(rules)
 
         if (!rulesJson.has("rules")) {
@@ -22,6 +27,7 @@ class VisualRulesEditor(
                 ERROR.INVALID_RULES,
                 IllegalArgumentException("rules key not found")
             )
+            return@runCatching
         }
 
         readRulesJson()
@@ -33,6 +39,11 @@ class VisualRulesEditor(
     }
 
     fun getRules(): String {
+
+        if (!this::rulesJson.isInitialized) {
+            return ""
+        }
+
         return rulesJson.toString(4)
     }
 
