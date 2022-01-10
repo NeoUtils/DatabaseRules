@@ -150,7 +150,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
     private fun setupToolbar() {
 
-        val highlight = Highlight(
+        Highlight(
             listOf(
                 StyleScheme(
                     Pattern.compile("Database"),

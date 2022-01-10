@@ -30,7 +30,7 @@ class UpdateManager(
                 val lastVersionName = snapshot.child("last_version_name").value as String
                 val forceUpdate = snapshot.child("force").value as? Boolean ?: false
 
-                if (versionCode == lastVersionCode.toInt()) {
+                if (versionCode >= lastVersionCode.toInt()) {
                     updateListener.updated()
                 } else {
                     updateListener.hasUpdate(
