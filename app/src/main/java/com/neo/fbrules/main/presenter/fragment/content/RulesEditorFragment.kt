@@ -5,10 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.neo.fbrules.main.presenter.model.HistoricTextWatcher
+import com.google.android.material.tabs.TabLayoutMediator
 import com.neo.fbrules.databinding.ContentRulesEditorBinding
 import com.neo.fbrules.main.presenter.adapter.RulesEditorsAdapter
-import com.neo.fbrules.main.presenter.model.HistoricModel
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 
 private typealias RulesEditorView = ContentRulesEditorBinding
@@ -35,8 +34,15 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         setupView()
     }
 
-    private fun setupView() {
-        binding.rulesEditors.adapter = rulesEditorsAdapter
+    private fun setupView() = with(binding) {
+        vpRulesEditors.adapter = rulesEditorsAdapter
+
+        TabLayoutMediator(tlTabs, vpRulesEditors) { tab, position ->
+            tab.text = when(position) {
+                0 -> "Visual Editor"
+                else -> "Text Editor"
+            }
+        }.attach()
     }
 
     override fun getRules(): String {
@@ -47,14 +53,13 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         rulesEditorsAdapter.setRules(rules)
     }
 
-
     private fun setupRulesEditorsAdapter() = lazy {
         RulesEditorsAdapter(
             childFragmentManager,
             lifecycle,
             object : RulesEditorsAdapter.ViewPagerListener {
                 override fun getPosition(): Int {
-                    return binding.rulesEditors.currentItem
+                    return binding.vpRulesEditors.currentItem
                 }
             }
         )
