@@ -1,6 +1,7 @@
 package com.neo.fbrules.main.presenter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.neo.fbrules.core.BaseActivity
@@ -24,6 +25,11 @@ import com.neo.fbrules.main.presenter.model.Update
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.goToUrl
 import com.neo.fbrules.util.visibility
+import com.neo.highlight.core.Highlight
+import com.neo.highlight.util.scheme.ColorScheme
+import com.neo.highlight.util.scheme.Scope
+import com.neo.highlight.util.scheme.StyleScheme
+import java.util.regex.Pattern
 
 private typealias MainActivityView = ActivityMainBinding
 
@@ -88,26 +94,28 @@ class MainActivity : BaseActivity<MainActivityView>() {
     private fun setupHistoric() {
         val historyObserver = HistoricTextWatcher(viewModel.historic)
 
+        binding.content.rulesEditor.addTextChangedListener(historyObserver)
+
         historyObserver.historyListener = object : HistoricTextWatcher.HistoryListener {
             override fun hasUndo(has: Boolean) {
-                binding.content.ibUndoBtn.isClickable = has
+                binding.content.ibUndoBtn.isEnabled = has
                 binding.content.ibUndoBtn.alpha = if (has) 1f else 0.5f
             }
 
             override fun hasRedo(has: Boolean) {
-                binding.content.ibRedoBtn.isClickable = has
+                binding.content.ibRedoBtn.isEnabled = has
                 binding.content.ibRedoBtn.alpha = if (has) 1f else 0.5f
             }
 
             override fun update(history: Pair<Int, String>) {
                 binding.content.rulesEditor.removeTextChangedListener(historyObserver)
+
                 binding.content.rulesEditor.setText(history.second)
                 binding.content.rulesEditor.setSelection(history.first)
+
                 binding.content.rulesEditor.addTextChangedListener(historyObserver)
             }
         }
-
-        binding.content.rulesEditor.addTextChangedListener(historyObserver)
 
         binding.content.ibUndoBtn.setOnClickListener {
             historyObserver.undo()
@@ -136,6 +144,29 @@ class MainActivity : BaseActivity<MainActivityView>() {
         }
 
         binding.navBar.rvNeoUtilsApps.adapter = neoUtilsAppsAdapter
+
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
+
+        val highlight = Highlight(
+            listOf(
+                StyleScheme(
+                    Pattern.compile("Database"),
+                    StyleScheme.STYLE.BOLD
+                ),
+                Scope(
+                    Pattern.compile("Rules"),
+                    ColorScheme(Color.CYAN),
+                    StyleScheme(
+                        StyleScheme.STYLE.BOLD_ITALIC
+                    )
+                )
+            )
+        ).apply {
+           binding.title.text = getSpannable("DatabaseRules")
+        }
     }
 
     private fun setupObservers() {

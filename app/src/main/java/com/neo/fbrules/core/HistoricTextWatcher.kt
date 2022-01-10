@@ -9,6 +9,10 @@ import kotlinx.coroutines.*
 class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
 
     var historyListener: HistoryListener? = null
+        set(value) {
+            field = value
+            update()
+        }
 
     private var job: Job? = null
 
@@ -18,7 +22,7 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
 
     override fun afterTextChanged(rules: Editable) {
         job?.cancel()
-        job = CoroutineScope(Dispatchers.IO).launch {
+        job = CoroutineScope(Dispatchers.Main).launch {
             delay(150)
             val position = Selection.getSelectionStart(rules)
             addRule(position, rules.toString())
@@ -28,7 +32,7 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
     @Synchronized
     private fun addRule(position: Int, rules: String) = with(model) {
 
-        if (list[point -1 ].second == rules) return@with
+        if (list[point - 1].second == rules) return@with
 
         if (point < list.size) {
             list.clear(point, list.size)
@@ -74,10 +78,6 @@ class HistoricTextWatcher(private val model: HistoricModel) : TextWatcher {
     private fun update() = with(model) {
         historyListener?.hasUndo(point != 1)
         historyListener?.hasRedo(point < list.size)
-    }
-
-    fun getActual(): String {
-        return model.list[model.point - 1].second
     }
 
     interface HistoryListener {
