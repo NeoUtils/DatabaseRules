@@ -50,4 +50,5 @@
     <string name="unknown_error">Unspecified error</string>
     <string name="text_visual_rules_editor_error_invalid_rules">This rule is invalid</string>
     <string name="text_visual_rules_editor_error_unrecognized_rule">Regra não reconhecida</string>
+    <string name="text_visual_rules_editor_error_invalid_json">Sintaxe não reconhecida como JSON</string>
 </resources>

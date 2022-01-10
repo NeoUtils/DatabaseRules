@@ -39,12 +39,16 @@ class VisualEditorFragment : Fragment(), RulesEditor {
             @StringRes
             val errorMessage = when (type) {
 
-                VisualRulesEditor.ERROR.invalid_rules -> {
+                VisualRulesEditor.ERROR.INVALID_RULES -> {
                     R.string.text_visual_rules_editor_error_invalid_rules
                 }
 
-                VisualRulesEditor.ERROR.unrecognized_rule -> {
+                VisualRulesEditor.ERROR.UNRECOGNIZED_RULES -> {
                     R.string.text_visual_rules_editor_error_unrecognized_rule
+                }
+
+                VisualRulesEditor.ERROR.INVALID_JSON -> {
+                    R.string.text_visual_rules_editor_error_invalid_json
                 }
             }
 
@@ -57,7 +61,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun getRules(): String {
-        TODO("Not yet implemented")
+        return binding.visualRulesEditor.getRules()
     }
 
     override fun setRules(rules: String) {

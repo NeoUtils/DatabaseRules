@@ -3,7 +3,7 @@ package com.neo.fbrules.main.presenter.components.view
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import android.widget.TextView
+import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import org.json.JSONObject
 
 class VisualRulesEditor(
@@ -14,57 +14,39 @@ class VisualRulesEditor(
 
     var errorListener: ((ERROR, Throwable?) -> Unit)? = null
 
-    init {
-        orientation = VERTICAL
-    }
+    fun setRules(rules: String) = runCatching {
+        rulesJson = JSONObject(rules)
 
-    fun setRules(rules: String) {
-        runCatching {
-            rulesJson = JSONObject(rules).getJSONObject("rules")
-            render()
-        }.onFailure {
+        if (!rulesJson.has("rules")) {
             errorListener?.invoke(
-                ERROR.invalid_rules,
-                it
+                ERROR.INVALID_RULES,
+                IllegalArgumentException("rules key not found")
             )
         }
+
+        readRulesJson()
+    }.onFailure {
+        errorListener?.invoke(
+            ERROR.INVALID_JSON,
+            it
+        )
     }
 
-    private fun render() {
+    fun getRules(): String {
+        return rulesJson.toString(4)
+    }
 
-        for (key in rulesJson.keys()) {
-
-            val any = rulesJson.get(key)
-
-            when (any) {
-                //rule
-                is JSONObject -> {
-
-                }
-                //condition
-                is String -> {
-
-                }
-
-                //literal value
-                is Boolean -> {
-
-                }
-
-                else -> {
-                    errorListener?.invoke(
-                        ERROR.unrecognized_rule,
-                        IllegalArgumentException("$any unrecognized")
-                    )
-                }
-            }
-
-            addView(TextView(context).apply { text = "$key=$any" })
-        }
+    private fun readRulesJson() = runCatching {
+        ReadRulesJson().getRules(rulesJson)
+    }.onFailure {
+        errorListener?.invoke(
+            ERROR.UNRECOGNIZED_RULES, it
+        )
     }
 
     enum class ERROR {
-        unrecognized_rule,
-        invalid_rules
+        UNRECOGNIZED_RULES,
+        INVALID_RULES,
+        INVALID_JSON
     }
 }
