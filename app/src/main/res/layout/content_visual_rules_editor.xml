@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    android:fillViewport="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rv_rules"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <com.neo.fbrules.main.presenter.components.view.VisualRulesEditor
-        android:id="@+id/visual_rules_editor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-</ScrollView>
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:listitem="@layout/item_rule"
+    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
