@@ -38,7 +38,7 @@
 
         <fragment
             tools:layout="@layout/fragment_rules_editor"
-            android:name="com.neo.fbrules.main.presenter.fragment.content.RulesEditorFragment"
+            android:name="com.neo.fbrules.main.presenter.fragment.RulesEditorFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rules_editor" />

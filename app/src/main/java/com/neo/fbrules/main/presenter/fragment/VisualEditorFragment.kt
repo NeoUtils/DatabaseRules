@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.presenter.fragment.content
+package com.neo.fbrules.main.presenter.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

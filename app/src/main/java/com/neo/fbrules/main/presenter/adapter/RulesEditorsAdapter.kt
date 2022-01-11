@@ -3,12 +3,10 @@ package com.neo.fbrules.main.presenter.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.fragment.content.VisualEditorFragment
-import com.neo.fbrules.main.presenter.fragment.content.TextEditorFragment
-import java.lang.IllegalArgumentException
+import com.neo.fbrules.main.presenter.fragment.TextEditorFragment
+import com.neo.fbrules.main.presenter.fragment.VisualEditorFragment
 
 class RulesEditorsAdapter(
     manager: FragmentManager, lifecycle: Lifecycle,
