@@ -11,6 +11,7 @@
         android:fillViewport="true">
 
         <com.neo.fbrules.main.presenter.components.view.TextRulesEditor
+            android:textSize="14sp"
             android:id="@+id/text_rules_editor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

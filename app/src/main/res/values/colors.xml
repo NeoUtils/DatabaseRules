@@ -7,7 +7,7 @@
     <color name="black">#000000</color>
     <color name="black_light">#181818</color>
     <color name="white">#FFFFFF</color>
-    <color name="gray_light">#E3E3E3</color>
+    <color name="gray_light">#F5F5F5</color>
     <color name="gray_dark">#656565</color>
 
     <!-- Day Night-->
@@ -23,5 +23,7 @@
     <color name="comment">@color/gray_dark</color>
     <color name="yellow">#FFC107</color>
     <color name="green">#009807</color>
+    <color name="bg_tabs">#FFFFFF</color>
+    <color name="bg_path_rules">#FFFFFF</color>
 
 </resources>

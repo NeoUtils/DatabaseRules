@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.neo.fbrules.databinding.ContentTextRulesEditorBinding
+import com.neo.fbrules.databinding.FragmentTextRulesEditorBinding
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.model.HistoricModel
 import com.neo.fbrules.main.presenter.components.HistoricTextWatcher
 
-private typealias TextEditorView = ContentTextRulesEditorBinding
+private typealias TextEditorView = FragmentTextRulesEditorBinding
 
 class TextEditorFragment : Fragment(), RulesEditor {
 

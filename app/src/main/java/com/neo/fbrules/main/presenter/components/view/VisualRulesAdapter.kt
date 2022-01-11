@@ -6,16 +6,18 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
-import com.neo.fbrules.databinding.ItemRuleBinding
+import com.neo.fbrules.databinding.ItemPathRulesBinding
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
+
+private typealias PathRulesView = ItemPathRulesBinding
 
 class VisualRulesAdapter : RecyclerView.Adapter<VisualRulesAdapter.Holder>() {
 
     private var rules: MutableList<RuleModel> = mutableListOf()
 
     class Holder(
-        private val binding: ItemRuleBinding
+        private val binding: PathRulesView
     ) : RecyclerView.ViewHolder(binding.root) {
 
         private val context = itemView.context
@@ -29,7 +31,7 @@ class VisualRulesAdapter : RecyclerView.Adapter<VisualRulesAdapter.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            ItemRuleBinding.inflate(
+            PathRulesView.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )

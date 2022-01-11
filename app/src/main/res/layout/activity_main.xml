@@ -37,7 +37,7 @@
         tools:openDrawer="start">
 
         <fragment
-            tools:layout="@layout/content_rules_editor"
+            tools:layout="@layout/fragment_rules_editor"
             android:name="com.neo.fbrules.main.presenter.fragment.content.RulesEditorFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

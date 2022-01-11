@@ -51,4 +51,6 @@
     <string name="text_visual_rules_editor_error_invalid_rules">This rule is invalid</string>
     <string name="text_visual_rules_editor_error_unrecognized_rule">Regra não reconhecida</string>
     <string name="text_visual_rules_editor_error_invalid_json">Sintaxe não reconhecida como JSON</string>
+    <string name="text_visualEditor_fixedRules_rulesFixedMessage">Corrigimos alguns erros comuns no seu JSON, se estiver tudo certo dê um push.</string>
+    <string name="text_visualEditor_fixedRules_rulesFiexTitle">Correções</string>
 </resources>

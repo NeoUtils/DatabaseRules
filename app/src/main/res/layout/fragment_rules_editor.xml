@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".main.presenter.MainActivity">
 
     <com.google.android.material.tabs.TabLayout
+        app:tabBackground="@color/bg_tabs"
         android:id="@+id/tl_tabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >

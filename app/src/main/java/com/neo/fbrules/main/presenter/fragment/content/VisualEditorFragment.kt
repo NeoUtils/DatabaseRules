@@ -8,16 +8,17 @@ import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
-import com.neo.fbrules.databinding.ContentVisualRulesEditorBinding
+import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
+import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.components.view.VisualRulesAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.util.showAlertDialog
 import org.json.JSONObject
-import java.util.regex.Pattern
 
-private typealias VisualEditorView = ContentVisualRulesEditorBinding
+private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
 class VisualEditorFragment : Fragment(), RulesEditor {
 
@@ -60,6 +61,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun setRules(rules: String) {
+        var tryFix = false
+
         runCatching {
 
             if (rules.isEmpty()) {
@@ -69,20 +72,24 @@ class VisualEditorFragment : Fragment(), RulesEditor {
             rulesJson = runCatching {
                 JSONObject(rules)
             }.getOrElse {
-                tryFix(rules)
+                tryFix = true
+                tryFixRules(rules)
             }
 
             if (!rulesJson.has("rules")) {
                 handlerError(
                     ERROR.INVALID_RULES,
-                    IllegalArgumentException("rules key not found")
+                    IllegalArgumentException("rules not found")
                 )
                 return@runCatching
             }
 
+            if (tryFix) {
+                showFixedRulesAlert()
+            }
+
             readRulesJson()
         }.onFailure {
-
             handlerError(
                 ERROR.INVALID_JSON,
                 it
@@ -90,44 +97,22 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         }
     }
 
-    private fun tryFix(rules: String): JSONObject {
-        val fix0 = rules.replace(Regex(",\\s*\\}\\s*,"), "},")
-        val fix1 = fix0.replace(Regex("\\}\\s*,\\s*\\}"), "}}")
-        return JSONObject(fix1)
+    private fun showFixedRulesAlert() {
+        showAlertDialog(
+            getString(R.string.text_visualEditor_fixedRules_rulesFiexTitle),
+            getString(R.string.text_visualEditor_fixedRules_rulesFixedMessage)
+        ) {
+            positiveButton()
+        }
+    }
+
+    private fun tryFixRules(rules: String): JSONObject {
+        val detectCommaAtEndRegex = Regex(",(?=[^{}\\w]*\\})")
+        val fixedCommaAtEnd = rules.replace(detectCommaAtEndRegex, "")
+        return JSONObject(fixedCommaAtEnd)
     }
 
     private fun setupVisualRulesAdapter() = lazy {
         VisualRulesAdapter()
-    }
-
-    private fun handlerError(type: ERROR, throwable: Throwable? = null) {
-
-        @StringRes
-        val errorMessage = when (type) {
-
-            ERROR.INVALID_RULES -> {
-                R.string.text_visual_rules_editor_error_invalid_rules
-            }
-
-            ERROR.UNRECOGNIZED_RULES -> {
-                R.string.text_visual_rules_editor_error_unrecognized_rule
-            }
-
-            ERROR.INVALID_JSON -> {
-                R.string.text_visual_rules_editor_error_invalid_json
-            }
-        }
-
-        showAlertDialog("Error", getString(errorMessage))
-
-        if (throwable != null) {
-            Firebase.crashlytics.recordException(throwable)
-        }
-    }
-
-    enum class ERROR {
-        UNRECOGNIZED_RULES,
-        INVALID_RULES,
-        INVALID_JSON
     }
 }
