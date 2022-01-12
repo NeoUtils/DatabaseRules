@@ -16,6 +16,7 @@
         android:padding="4dp">
 
         <TextView
+            android:layout_marginBottom="4dp"
             android:layout_marginStart="4dp"
             android:textSize="16sp"
             android:id="@+id/tv_path"

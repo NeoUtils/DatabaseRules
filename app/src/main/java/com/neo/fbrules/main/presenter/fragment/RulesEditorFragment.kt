@@ -10,6 +10,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.neo.fbrules.databinding.FragmentRulesEditorBinding
 import com.neo.fbrules.main.presenter.adapter.RulesEditorsAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
+import kotlin.math.absoluteValue
 
 private typealias RulesEditorView = FragmentRulesEditorBinding
 
@@ -41,7 +42,17 @@ class RulesEditorFragment : Fragment(), RulesEditor {
             object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    rulesEditorsAdapter.onChangeTo(position)
+                    val oldPosition = 1 - position
+
+                    val oldFragment = childFragmentManager
+                        .findFragmentByTag("f" + oldPosition.absoluteValue)
+                            as? RulesEditor
+
+                    val newFragment = childFragmentManager
+                        .findFragmentByTag("f" +  position.absoluteValue)
+                            as? RulesEditor
+
+                    oldFragment?.let { newFragment?.setRules(oldFragment.getRules()) }
                 }
             }
         )
@@ -59,21 +70,40 @@ class RulesEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun getRules(): String {
-        return rulesEditorsAdapter.getRules()
+        val myFragment = childFragmentManager
+            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
+        as RulesEditor
+
+        return myFragment.getRules()
     }
 
     override fun setRules(rules: String) {
-        rulesEditorsAdapter.setRules(rules)
+        val myFragment = childFragmentManager
+            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
+                as RulesEditor
+
+        myFragment.setRules(rules)
     }
 
     private fun setupRulesEditorsAdapter() = lazy {
         RulesEditorsAdapter(
             childFragmentManager,
             lifecycle,
-            object : RulesEditorsAdapter.ViewPagerListener {
-                override fun getPosition(): Int {
-                    return binding.vpRulesEditors.currentItem
+            object : RulesEditorsAdapter.OnCreateFragmentListener {
+                override fun createFragment(position: Int, fragment: Fragment) {
+                    val oldPosition = 1 - position
+
+                    val oldFragment = childFragmentManager
+                        .findFragmentByTag("f$oldPosition")
+                            as? RulesEditor
+
+                    oldFragment?.let {
+                        fragment.arguments = Bundle().apply {
+                            putString("rules", oldFragment.getRules())
+                        }
+                    }
                 }
+
             }
         )
     }
