@@ -38,6 +38,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         super.onViewCreated(view, savedInstanceState)
 
         setupView()
+
+        arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
     private fun setupView() {

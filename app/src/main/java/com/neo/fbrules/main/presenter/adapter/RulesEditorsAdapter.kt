@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter.adapter
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -27,6 +28,14 @@ class RulesEditorsAdapter(
             }
         }.apply {
             editors[position] = this
+
+            val old = if (position == 0) 1 else 0
+
+            editors[old]?.let {
+                arguments = Bundle().apply {
+                    putString("rules", it.getRules())
+                }
+            }
         }
     }
 
@@ -44,8 +53,12 @@ class RulesEditorsAdapter(
             ?: throw IllegalArgumentException("position $position is null")
     }
 
-    fun onChange(old: Int, position: Int) {
+    private fun onChange(old: Int, position: Int) {
         editors[old]?.let { editors[position]?.setRules(it.getRules()) }
+    }
+
+    fun onChangeTo(position: Int) {
+        onChange(if (position == 0) 1 else 0, position)
     }
 
     interface ViewPagerListener {

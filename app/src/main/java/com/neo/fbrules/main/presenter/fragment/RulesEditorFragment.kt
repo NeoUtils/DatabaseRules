@@ -41,7 +41,7 @@ class RulesEditorFragment : Fragment(), RulesEditor {
             object :
                 ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
-                    rulesEditorsAdapter.onChange(if (position == 0) 1 else 0, position)
+                    rulesEditorsAdapter.onChangeTo(position)
                 }
             }
         )

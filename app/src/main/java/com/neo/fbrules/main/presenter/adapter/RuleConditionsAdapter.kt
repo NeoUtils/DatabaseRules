@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,9 +11,11 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
 
     private val conditions = mutableListOf<Pair<String, String>>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setConditions(conditions: MutableList<Pair<String, String>>) {
         this.conditions.clear()
         this.conditions.addAll(conditions)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {

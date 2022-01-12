@@ -33,7 +33,6 @@ class TextEditorFragment : Fragment(), RulesEditor {
         outState.putParcelable(HistoricModel::class.simpleName, historic)
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +48,8 @@ class TextEditorFragment : Fragment(), RulesEditor {
         super.onViewCreated(view, savedInstanceState)
 
         setupHistoric()
+
+        arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
     private fun setupHistoric() = with(binding) {
