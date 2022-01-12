@@ -11,31 +11,21 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:nestedScrollingEnabled="false"
             android:id="@+id/rv_rules"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="3"
             tools:listitem="@layout/item_path_rules" />
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.button.MaterialButton
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:text="Adicionar regra"
+            android:layout_margin="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            app:cardBackgroundColor="@color/bg_path_rules"
-            app:cardCornerRadius="2dp"
-            app:contentPadding="4dp">
-
-            <TextView
-                android:id="@+id/tv_condition"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:text="Adicionar regra"
-                android:textSize="16sp" />
-
-        </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

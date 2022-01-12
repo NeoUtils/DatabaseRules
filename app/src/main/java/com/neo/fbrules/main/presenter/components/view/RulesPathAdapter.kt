@@ -28,7 +28,7 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
             binding.tvPath.text = rule.path
             ruleConditionAdapter.setConditions(rule.condition)
 
-            configBottomMargin(isLastItem)
+            //configBottomMargin(isLastItem)
         }
 
         private fun configBottomMargin(lastItem: Boolean) =

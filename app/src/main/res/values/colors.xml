@@ -24,7 +24,9 @@
     <color name="yellow">#FFC107</color>
     <color name="green">#009807</color>
     <color name="bg_tabs">#FFFFFF</color>
-    <color name="bg_rule_condition">#F3F3F3</color>
+    <color name="bg_rule_condition">#EDEDED</color>
     <color name="bg_path_rules">#FFFFFF</color>
+    <color name="color_button_add_rules">#DDDDDD</color>
+    <color name="bg_firebase">#EF8E00</color>
 
 </resources>
