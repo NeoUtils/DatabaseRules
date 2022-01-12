@@ -4,16 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
 import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
-import com.neo.fbrules.main.presenter.components.view.VisualRulesAdapter
+import com.neo.fbrules.main.presenter.components.view.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.util.showAlertDialog
 import org.json.JSONObject
@@ -23,7 +20,7 @@ private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 class VisualEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var binding: VisualEditorView
-    private val visualRulesAdapter: VisualRulesAdapter by setupVisualRulesAdapter()
+    private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
     private lateinit var rulesJson: JSONObject
 
     override fun onCreateView(
@@ -44,12 +41,12 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     private fun setupView() {
-        binding.rvRules.adapter = visualRulesAdapter
+        binding.rvRules.adapter = rulesPathAdapter
     }
 
     private fun readRulesJson() = runCatching {
         val rules = ReadRulesJson().getRules(rulesJson)
-        visualRulesAdapter.setRules(rules)
+        rulesPathAdapter.setRules(rules)
     }.onFailure {
         handlerError(
             ERROR.UNRECOGNIZED_RULES, it
@@ -113,6 +110,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     private fun setupVisualRulesAdapter() = lazy {
-        VisualRulesAdapter()
+        RulesPathAdapter()
     }
 }

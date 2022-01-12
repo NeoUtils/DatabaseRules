@@ -3,16 +3,15 @@ package com.neo.fbrules.main.presenter.components.view
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.databinding.ItemPathRulesBinding
+import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 
 private typealias PathRulesView = ItemPathRulesBinding
 
-class VisualRulesAdapter : RecyclerView.Adapter<VisualRulesAdapter.Holder>() {
+class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
     private var rules: MutableList<RuleModel> = mutableListOf()
 
@@ -20,11 +19,28 @@ class VisualRulesAdapter : RecyclerView.Adapter<VisualRulesAdapter.Holder>() {
         private val binding: PathRulesView
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private val context = itemView.context
+        private val context get() = itemView.context
 
-        fun bind(rule: RuleModel) {
-            binding.title.text = rule.path
-            binding.condition.text = rule.condition.toString()
+        private val ruleConditionAdapter: RuleConditionsAdapter
+                by setupRulesConditionAdapter()
+
+        fun bind(rule: RuleModel, isLastItem : Boolean) {
+            binding.tvPath.text = rule.path
+            ruleConditionAdapter.setConditions(rule.condition)
+
+            configBottomMargin(isLastItem)
+        }
+
+        private fun configBottomMargin(lastItem: Boolean) =
+            with(itemView.layoutParams as ViewGroup.MarginLayoutParams) {
+                bottomMargin = context.dp(if (lastItem) 6 else 0)
+                itemView.layoutParams = this
+            }
+
+        private fun setupRulesConditionAdapter() = lazy {
+            RuleConditionsAdapter().apply {
+                binding.rvConditions.adapter = this
+            }
         }
 
     }
@@ -41,7 +57,9 @@ class VisualRulesAdapter : RecyclerView.Adapter<VisualRulesAdapter.Holder>() {
     override fun onBindViewHolder(holder: Holder, position: Int) {
         val rule = rules[position]
 
-        holder.bind(rule)
+        val lastItemPosition = itemCount - 1
+
+        holder.bind(rule, lastItemPosition == position)
     }
 
     override fun getItemCount() = rules.size

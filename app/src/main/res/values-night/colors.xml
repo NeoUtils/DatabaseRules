@@ -7,10 +7,11 @@
     <color name="others">#006E2C</color>
     <color name="string">#00B11E</color>
     <color name="bool">#B60000</color>
-    <color name="bg_editors">#131313</color>
+    <color name="bg_editors">#121212</color>
     <color name="bg_drawer">#151515</color>
-    <color name="bg_tabs">#171717</color>
-    <color name="bg_path_rules">#171717</color>
+    <color name="bg_tabs">#181818</color>
+    <color name="bg_rule_condition">#202020</color>
+    <color name="bg_path_rules">#161616</color>
 
 
 </resources>

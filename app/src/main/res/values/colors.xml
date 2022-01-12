@@ -24,6 +24,7 @@
     <color name="yellow">#FFC107</color>
     <color name="green">#009807</color>
     <color name="bg_tabs">#FFFFFF</color>
+    <color name="bg_rule_condition">#F3F3F3</color>
     <color name="bg_path_rules">#FFFFFF</color>
 
 </resources>
