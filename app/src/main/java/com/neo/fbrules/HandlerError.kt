@@ -29,7 +29,17 @@ fun Context.handlerError(type: ERROR, throwable: Throwable? = null) {
         }
     }
 
-    showAlertDialog(this, "Error", getString(errorMessage))
+    showAlertDialog(this, "Error", getString(errorMessage)) {
+        if (throwable != null) {
+            negativeButton("log") {
+                showAlertDialog(
+                    this@handlerError,
+                    "Error",
+                    getString(errorMessage) + "\n\n" + throwable.message
+                )
+            }
+        }
+    }
 
     if (throwable != null) {
         Firebase.crashlytics.recordException(throwable)

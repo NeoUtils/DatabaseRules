@@ -25,10 +25,11 @@
             tools:text="Path" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginHorizontal="4dp"
             android:id="@+id/rv_conditions"
             tools:itemCount="2"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_rule"
+            tools:listitem="@layout/item_rule_condition"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

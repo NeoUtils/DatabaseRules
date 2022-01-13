@@ -9,13 +9,19 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
+import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
+import com.neo.fbrules.handlerError
+import com.neo.fbrules.main.presenter.model.RuleCondition
+import com.neo.fbrules.util.isBoolean
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.BackgroundScheme
 import com.neo.highlight.util.scheme.ColorScheme
+import org.json.JSONObject
 import java.util.regex.Pattern
 
 private typealias AddRuleConditionView = DialogRuleConditionsBinding
@@ -74,10 +80,10 @@ class AddRuleConditionDialog : DialogFragment() {
 
         conditionsAutocomplete.setAdapter(conditionAutocompleteAdapter)
 
-        setupHighLight()
+        setupHighlight()
     }
 
-    private fun setupHighLight() {
+    private fun setupHighlight() {
         HighlightTextWatcher().apply {
             addScheme(
                 BackgroundScheme(
@@ -152,11 +158,6 @@ class AddRuleConditionDialog : DialogFragment() {
         binding.optionsConditions.ibExpandBtn.setOnClickListener {
             conditionsAutocomplete.showDropDown()
         }
-
-        binding.ibCloseBtn.setOnClickListener {
-            dismiss()
-        }
-
         binding.tlProperty.editText?.addTextChangedListener { editable ->
             val value = editable?.toString()
             val property = properties.find { it.first == value }
@@ -169,6 +170,7 @@ class AddRuleConditionDialog : DialogFragment() {
 
             }
 
+            binding.tlProperty.isErrorEnabled = false
             binding.optionsProperty.ibCodeBtn.visibility(property != null)
         }
 
@@ -184,7 +186,7 @@ class AddRuleConditionDialog : DialogFragment() {
                     conditionsAutocomplete.setText(condition.second, false)
                 }
             }
-
+            binding.tlCondition.isErrorEnabled = false
             binding.optionsConditions.ibCodeBtn.visibility(condition != null)
         }
 
@@ -197,9 +199,61 @@ class AddRuleConditionDialog : DialogFragment() {
         binding.cancel.button.setOnClickListener {
             dismiss()
         }
+
+        binding.ibCloseBtn.setOnClickListener {
+            dismiss()
+        }
+
     }
 
     private fun confirm() {
 
+        val condition = getCondition()
+        val property = getProperty()
+
+        if (!validate(condition, property)) return
+
+        val result = Bundle().apply {
+            putParcelable(
+                RuleCondition::class.java.simpleName,
+                RuleCondition(property, condition)
+            )
+        }
+
+        setFragmentResult(AddRuleConditionDialog::class.java.simpleName, result); dismiss()
+    }
+
+    private fun validate(condition: String, property: String): Boolean {
+
+        if (property.isBlank()) {
+            binding.tlProperty.error = "Digite alguma propriedade"
+            return false
+        }
+
+        if (condition.isBlank()) {
+            binding.tlCondition.error = "Digite alguma condição"
+            return false
+        }
+
+        return runCatching {
+            JSONObject("{$property:$condition}")
+            true
+        }.getOrElse {
+            handlerError(ERROR.INVALID_JSON, it)
+            false
+        }
+    }
+
+    private fun getProperty(): String {
+        val propertyValue = binding.tlProperty.editText!!.text.toString()
+        val result = properties.find { it.first == propertyValue }?.second ?: propertyValue
+        return "\"$result\""
+    }
+
+    private fun getCondition(): String {
+        val conditionValue = binding.tlCondition.editText!!.text.toString()
+        val result = conditions.find { it.first == conditionValue }?.second ?: conditionValue
+
+        return if (result.isBoolean()) result else "\"$result\""
     }
 }

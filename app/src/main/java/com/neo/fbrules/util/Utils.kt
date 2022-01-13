@@ -183,3 +183,5 @@ fun goToApp(context: Context, packageName: String) {
 }
 
 fun Activity.goToUrl(url: String) = goToUrl(this, url)
+
+fun String.isBoolean() = toBoolean()

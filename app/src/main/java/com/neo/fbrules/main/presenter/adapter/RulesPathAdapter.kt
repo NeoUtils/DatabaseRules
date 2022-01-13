@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.databinding.ItemPathRulesBinding
-import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 
@@ -26,7 +25,7 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
         fun bind(rule: RuleModel, isLastItem : Boolean) {
             binding.tvPath.text = rule.path
-            ruleConditionAdapter.setConditions(rule.condition)
+            ruleConditionAdapter.setConditions(rule.conditions)
 
             configBottomMargin(isLastItem)
         }

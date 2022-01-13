@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter.components
 
+import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import org.json.JSONObject
 import java.lang.IllegalArgumentException
@@ -7,13 +8,15 @@ import java.lang.IllegalArgumentException
 class ReadRulesJson {
 
     private val rules = mutableListOf<RuleModel>()
+    lateinit var jsonObject : JSONObject
 
     fun getRules(rulesJson: JSONObject): List<RuleModel> {
+        jsonObject = rulesJson.getJSONObject("rules")
 
         rules.clear()
 
         mapRules(
-            RuleModel("rules", rulesJson.getJSONObject("rules")),
+            RuleModel("rules"),
             rules
         )
 
@@ -25,21 +28,29 @@ class ReadRulesJson {
 
         rules.add(rule)
 
-        for (key in rule.jsonObject.keys()) {
+        for (key in jsonObject.keys()) {
 
-            when (val value = rule.jsonObject.get(key)) {
+            when (val value = jsonObject.get(key)) {
 
                 //path
                 is JSONObject -> {
+
+                    this.jsonObject = value
+
                     mapRules(
-                        RuleModel(rule.path + "/$key", value),
+                        RuleModel(rule.path + "/$key"),
                         rules
                     )
                 }
 
                 //condition
-                is String, is Boolean -> {
-                    rule.condition.add(key to "$value")
+                is String -> {
+                    rule.conditions.add(RuleCondition(key, value))
+                }
+
+                //condition
+                 is Boolean -> {
+                    rule.conditions.add(RuleCondition(key, value.toString()))
                 }
 
                 else -> {

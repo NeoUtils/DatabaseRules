@@ -4,34 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="2dp"
+    android:layout_marginTop="4dp"
     android:background="@drawable/bg_rule_condition"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    app:cardCornerRadius="2dp"
+    app:cardElevation="0dp"
+    tools:showIn="@layout/dialog_add_path">
 
     <TextView
-        android:id="@+id/tv_rule"
+        android:id="@+id/tv_property"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="8dp"
-        android:paddingVertical="4dp"
+        android:layout_height="match_parent"
+        android:padding="8dp"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.2"
-        tools:text="Ler" />
+        tools:text="rules" />
 
     <LinearLayout
-        android:background="?attr/colorPrimary"
         android:layout_width="1dp"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/gray_dark" />
 
     <TextView
-        android:id="@+id/tie_condition"
+        android:id="@+id/tv_condition"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="4dp"
+        android:padding="8dp"
         android:textSize="16sp"
-        tools:text="condição" />
+        tools:text="condition" />
 
 </LinearLayout>

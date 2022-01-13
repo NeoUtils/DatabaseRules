@@ -4,23 +4,30 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.neo.fbrules.databinding.ItemRuleBinding
+import com.neo.fbrules.R
+import com.neo.fbrules.databinding.ItemRuleConditionBinding
+import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.util.dp
+import com.neo.fbrules.util.requestColor
+import com.neo.highlight.util.listener.HighlightTextWatcher
+import com.neo.highlight.util.scheme.ColorScheme
+import java.util.regex.Pattern
+
+private typealias RuleConditionView = ItemRuleConditionBinding
 
 class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
 
-    private val conditions = mutableListOf<Pair<String, String>>()
+    private var conditions = mutableListOf<RuleCondition>()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setConditions(conditions: MutableList<Pair<String, String>>) {
-        this.conditions.clear()
-        this.conditions.addAll(conditions)
+    fun setConditions(conditions: MutableList<RuleCondition>) {
+        this.conditions = conditions
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            ItemRuleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            RuleConditionView.inflate(LayoutInflater.from(parent.context), parent, false)
         )
     }
 
@@ -33,15 +40,57 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
     }
 
 
-    class Holder(private val binding: ItemRuleBinding) : RecyclerView.ViewHolder(binding.root) {
+    class Holder(private val binding: RuleConditionView) : RecyclerView.ViewHolder(binding.root) {
 
         private val context get() = itemView.context
 
-        fun bind(condition: Pair<String, String>, isLastItem: Boolean) {
-            binding.tvRule.text = condition.first
-            binding.tvCondition.text = condition.second
+        fun bind(condition: RuleCondition, isLastItem: Boolean) {
+            binding.tvProperty.text = condition.property
+            binding.tvCondition.text = condition.condition
 
             configBottomMargin(isLastItem)
+            setupHighlight()
+        }
+
+
+        private fun setupHighlight() {
+            HighlightTextWatcher().apply {
+                addScheme(
+                    ColorScheme(
+                        Pattern.compile("(.read)|(.write)"),
+                        context.theme.requestColor(R.attr.colorAccent)
+                    )
+                )
+
+                setSpan(binding.tvProperty)
+            }
+
+            HighlightTextWatcher().apply {
+                addScheme(
+                    ColorScheme(
+                        Pattern.compile("(auth)"),
+                        context.theme.requestColor(R.attr.colorAccent)
+                    ),
+                    ColorScheme(
+                        Pattern.compile("(?<=auth\\.)uid"),
+                        context.theme.requestColor(R.attr.colorAccent)
+                    ),
+                    ColorScheme(
+                        Pattern.compile("=="),
+                        context.theme.requestColor(R.attr.colorPrimary)
+                    ),
+                    ColorScheme(
+                        Pattern.compile("\\$\\w+"),
+                        context.theme.requestColor(R.attr.colorAccent)
+                    ),
+                    ColorScheme(
+                        Pattern.compile("^(true|false)\$"),
+                        context.requestColor(R.color.bool)
+                    )
+                )
+
+                setSpan(binding.tvCondition)
+            }
         }
 
         private fun configBottomMargin(lastItem: Boolean) =
@@ -51,5 +100,12 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
             }
     }
 
+
     override fun getItemCount() = conditions.size
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addCondition(ruleCondition: RuleCondition) {
+        this.conditions.add(ruleCondition)
+        notifyDataSetChanged()
+    }
 }

@@ -6,13 +6,12 @@
     <!--Editor-->
     <color name="others">#006E2C</color>
     <color name="string">#00B11E</color>
-    <color name="bool">#B60000</color>
+    <color name="bool">#99FF0000</color>
     <color name="bg_editors">#121212</color>
     <color name="bg_drawer">#151515</color>
     <color name="bg_tabs">#181818</color>
     <color name="bg_rule_condition">#202020</color>
     <color name="color_button_add_rules">#2C2C2C</color>
     <color name="bg_path_rules">#161616</color>
-
 
 </resources>
