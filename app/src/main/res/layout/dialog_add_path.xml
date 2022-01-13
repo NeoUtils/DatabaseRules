@@ -15,7 +15,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_title"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="35dp"
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tl_path"
