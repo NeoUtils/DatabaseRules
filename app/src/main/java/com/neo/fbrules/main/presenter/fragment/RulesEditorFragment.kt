@@ -52,7 +52,11 @@ class RulesEditorFragment : Fragment(), RulesEditor {
                         .findFragmentByTag("f" +  position.absoluteValue)
                             as? RulesEditor
 
-                    oldFragment?.let { newFragment?.setRules(oldFragment.getRules()) }
+                    oldFragment?.let {
+                        oldFragment.getRules()?.let { rules ->
+                            newFragment?.setRules(rules)
+                        }
+                    }
                 }
             }
         )
@@ -69,7 +73,7 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         }.attach()
     }
 
-    override fun getRules(): String {
+    override fun getRules(): String? {
         val myFragment = childFragmentManager
             .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
         as RulesEditor

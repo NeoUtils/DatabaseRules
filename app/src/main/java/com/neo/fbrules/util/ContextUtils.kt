@@ -31,6 +31,8 @@ fun Resources.Theme.requestColor(colorRes: Int): Int {
 
 @ColorInt
 fun Context.requestColor(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+
+@ColorInt
 fun Fragment.requestColor(@ColorRes colorRes: Int) = requireContext().requestColor(colorRes)
 
 fun runOnMainThread(delay: Long = 0, function: () -> Unit) {

@@ -5,14 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
 import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
-import com.neo.fbrules.main.presenter.components.view.RulesPathAdapter
+import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
+import com.neo.fbrules.main.presenter.fragment.dialog.AddPathDialog
 import com.neo.fbrules.util.showAlertDialog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
@@ -38,25 +43,47 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         super.onViewCreated(view, savedInstanceState)
 
         setupView()
+        setupListeners()
+        getRulesFromArguments()
+    }
 
+    private fun setupListeners() {
+        binding.fbAddPathBtn.setOnClickListener {
+            showAddPathDialog()
+        }
+    }
+
+    private fun showAddPathDialog() {
+        val dialog = AddPathDialog()
+
+        dialog.show(childFragmentManager, AddPathDialog.tag)
+    }
+
+    private fun getRulesFromArguments() {
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
     private fun setupView() {
-        binding.rvRules.adapter = rulesPathAdapter
+
     }
 
     private fun readRulesJson() = runCatching {
-        val rules = ReadRulesJson().getRules(rulesJson)
-        rulesPathAdapter.setRules(rules)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val rules = ReadRulesJson().getRules(rulesJson)
+            withContext(Dispatchers.Main) {
+                rulesPathAdapter.setRules(rules)
+            }
+        }
     }.onFailure {
         handlerError(
             ERROR.UNRECOGNIZED_RULES, it
         )
     }
 
-    override fun getRules(): String {
-        return rulesJson.toString(4)
+    override fun getRules(): String? {
+        return runCatching {
+            rulesJson.toString(4)
+        }.getOrNull()
     }
 
     override fun setRules(rules: String) {
@@ -112,6 +139,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     private fun setupVisualRulesAdapter() = lazy {
-        RulesPathAdapter()
+        RulesPathAdapter().apply {
+            binding.rvRules.adapter = this
+        }
     }
 }

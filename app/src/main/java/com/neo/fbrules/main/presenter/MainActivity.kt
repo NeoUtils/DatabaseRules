@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 import com.neo.fbrules.BuildConfig
 import com.neo.fbrules.R
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.adapter.IntegeratedAppsAdapter
+import com.neo.fbrules.main.presenter.adapter.IntegratedAppsAdapter
 import com.neo.fbrules.main.presenter.fragment.bottomSheet.ConfigBottomSheet
 import com.neo.fbrules.main.presenter.fragment.dialog.EncryptionDialog
 import com.neo.fbrules.main.presenter.model.Update
@@ -38,7 +38,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    private val integeratedAppsAdapter: IntegeratedAppsAdapter by setupIntegratedAppsAdapter()
+    private val integratedAppsAdapter: IntegratedAppsAdapter by setupIntegratedAppsAdapter()
 
     private lateinit var rulesEditor: RulesEditor
 
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
     override fun onResume() {
         super.onResume()
 
-        integeratedAppsAdapter.notifyDataSetChanged()
+        integratedAppsAdapter.notifyDataSetChanged()
     }
 
     private fun init() {
@@ -115,7 +115,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
             toggle.syncState()
         }
 
-        binding.drawer.rvNeoUtilsApps.adapter = integeratedAppsAdapter
+        binding.drawer.rvNeoUtilsApps.adapter = integratedAppsAdapter
 
         setupToolbar()
     }
@@ -191,7 +191,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
                 binding.drawer.rvNeoUtilsApps.visibility(true)
                 binding.drawer.vDiv.visibility(true)
 
-                integeratedAppsAdapter.setApps(apps)
+                integratedAppsAdapter.setApps(apps)
             }
         }
     }
@@ -317,6 +317,6 @@ class MainActivity : BaseActivity<MainActivityView>() {
     }
 
     private fun setupIntegratedAppsAdapter() = lazy {
-        IntegeratedAppsAdapter()
+        IntegratedAppsAdapter()
     }
 }

@@ -1,4 +1,4 @@
-package com.neo.fbrules.main.presenter.components.view
+package com.neo.fbrules.main.presenter.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -28,7 +28,7 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
             binding.tvPath.text = rule.path
             ruleConditionAdapter.setConditions(rule.condition)
 
-            //configBottomMargin(isLastItem)
+            configBottomMargin(isLastItem)
         }
 
         private fun configBottomMargin(lastItem: Boolean) =

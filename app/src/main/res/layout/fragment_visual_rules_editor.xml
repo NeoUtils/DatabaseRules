@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -19,14 +20,16 @@
             tools:itemCount="3"
             tools:listitem="@layout/item_path_rules" />
 
-        <com.google.android.material.button.MaterialButton
-            android:elevation="0dp"
-            app:elevation="0dp"
-            android:text="Adicionar regra"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fb_add_path_btn"
+            app:tint="@color/white"
+            android:src="@drawable/ic_round_add_24"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
             android:layout_margin="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:contentDescription="@null" />
 
-    </LinearLayout>
+    </FrameLayout>
 
 </androidx.core.widget.NestedScrollView>
