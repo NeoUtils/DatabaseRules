@@ -13,7 +13,7 @@ import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.fragment.dialog.AddPathDialog
+import com.neo.fbrules.main.presenter.fragment.dialog.AddRulePathDialog
 import com.neo.fbrules.util.showAlertDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,9 +54,9 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     private fun showAddPathDialog() {
-        val dialog = AddPathDialog()
+        val dialog = AddRulePathDialog()
 
-        dialog.show(childFragmentManager, AddPathDialog.tag)
+        dialog.show(childFragmentManager, AddRulePathDialog.tag)
     }
 
     private fun getRulesFromArguments() {

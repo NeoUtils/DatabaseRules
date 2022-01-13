@@ -5,17 +5,13 @@ import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import com.neo.fbrules.R
 import com.neo.fbrules.databinding.DialogAddPathBinding
-import com.neo.fbrules.util.requestColor
 import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Pattern
 
-class AddPathDialog : DialogFragment() {
+class AddRulePathDialog : DialogFragment() {
 
     private lateinit var binding: DialogAddPathBinding
 
@@ -42,9 +38,18 @@ class AddPathDialog : DialogFragment() {
 
             binding.tlPath.editText?.addTextChangedListener(this)
         }
+
+        binding.flAddCondition.setOnClickListener {
+           showAddRuleCondition()
+        }
+    }
+
+    private fun showAddRuleCondition() {
+        val dialog = AddRuleConditionDialog()
+        dialog.show(requireActivity().supportFragmentManager, "")
     }
 
     companion object {
-        val tag = AddPathDialog::class.java.simpleName
+        val tag = AddRulePathDialog::class.java.simpleName
     }
 }
