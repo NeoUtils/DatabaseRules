@@ -11,15 +11,17 @@ import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Pattern
 
+private typealias AddRulePathView = DialogAddPathBinding
+
 class AddRulePathDialog : DialogFragment() {
 
-    private lateinit var binding: DialogAddPathBinding
+    private lateinit var binding: AddRulePathView
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val alert = AlertDialog.Builder(requireContext())
 
-        binding = DialogAddPathBinding.inflate(LayoutInflater.from(requireContext()))
+        binding = AddRulePathView.inflate(LayoutInflater.from(requireContext()))
         alert.setView(binding.root)
 
         setupView()
