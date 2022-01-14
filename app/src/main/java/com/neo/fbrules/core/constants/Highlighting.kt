@@ -47,7 +47,7 @@ class Highlighting(context: Context) {
         ),
         ColorScheme(
             Pattern.compile("[/]{2}.*"),
-            context.getCompatColor(R.color.comment)
+            context.getCompatColor(R.color.syntax_comment)
         ),
         ColorScheme(
             Pattern.compile("(?<=auth\\.)uid|auth"),

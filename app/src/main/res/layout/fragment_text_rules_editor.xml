@@ -21,51 +21,12 @@
 
     </ScrollView>
 
-    <androidx.cardview.widget.CardView
+    <include
+        android:id="@+id/fab"
+        android:layout_margin="16dp"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        app:cardBackgroundColor="?attr/colorPrimary"
-        app:cardCornerRadius="16dp">
-
-        <View
-            android:layout_width="@dimen/dimen_1dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginVertical="8dp"
-            android:background="?attr/colorOnPrimary" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingHorizontal="8dp">
-
-            <ImageButton
-                android:id="@+id/ib_undo_btn"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/tbn_undo"
-                android:src="@drawable/ic_round_undo"
-                app:tint="?attr/colorOnPrimary" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <ImageButton
-                android:id="@+id/ib_redo_btn"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@string/btn_redo"
-                android:src="@drawable/ic_round_redo"
-                app:tint="?attr/colorOnPrimary" />
-
-        </LinearLayout>
-
-    </androidx.cardview.widget.CardView>
+        layout="@layout/content_historic_fab" />
 
 </FrameLayout>

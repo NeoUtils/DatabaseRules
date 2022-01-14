@@ -57,13 +57,13 @@ class TextEditorFragment : Fragment(), RulesEditor {
         val historyObserver = HistoricTextWatcher(historic).apply {
             historyListener = object : HistoricTextWatcher.HistoryListener {
                 override fun hasUndo(has: Boolean) {
-                    ibUndoBtn.isEnabled = has
-                    ibUndoBtn.alpha = if (has) 1f else 0.5f
+                    fab.ibUndoBtn.isEnabled = has
+                    fab.ibUndoBtn.alpha = if (has) 1f else 0.5f
                 }
 
                 override fun hasRedo(has: Boolean) {
-                    ibRedoBtn.isEnabled = has
-                    ibRedoBtn.alpha = if (has) 1f else 0.5f
+                    fab.ibRedoBtn.isEnabled = has
+                    fab.ibRedoBtn.alpha = if (has) 1f else 0.5f
                 }
 
                 override fun update(history: Pair<Int, String>) {
@@ -79,11 +79,11 @@ class TextEditorFragment : Fragment(), RulesEditor {
 
         textRulesEditor.addTextChangedListener(historyObserver)
 
-        ibUndoBtn.setOnClickListener {
+        fab.ibUndoBtn.setOnClickListener {
             historyObserver.undo()
         }
 
-        ibRedoBtn.setOnClickListener {
+        fab.ibRedoBtn.setOnClickListener {
             historyObserver.redo()
         }
     }

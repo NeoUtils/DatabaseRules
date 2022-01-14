@@ -55,7 +55,7 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
         private val context get() = itemView.context
 
         fun bind(condition: RuleCondition, isLastItem: Boolean) {
-            binding.tvProperty.text = condition.property.substringAfter("rulests")
+            binding.tvProperty.text = condition.property.substringAfter("rules/")
             binding.tvCondition.text = condition.condition
 
             configBottomMargin(isLastItem)

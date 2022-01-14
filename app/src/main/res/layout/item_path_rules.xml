@@ -33,24 +33,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <androidx.cardview.widget.CardView
-            app:cardBackgroundColor="@color/color_button_add_rules"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.google.android.material.button.MaterialButton
             android:layout_margin="4dp"
-            app:cardElevation="0dp"
-            app:contentPadding="4dp"
-            app:cardCornerRadius="3dp">
-
-            <TextView
-                android:layout_gravity="center"
-                android:textSize="16sp"
-                android:id="@+id/tv_condition"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="Adicionar condição" />
-
-        </androidx.cardview.widget.CardView>
+            android:backgroundTint="?attr/colorAccent"
+            android:id="@+id/mb_add_condition"
+            app:icon="@drawable/ic_round_add_24"
+            app:iconGravity="textStart"
+            android:text="Adicionar Condição"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

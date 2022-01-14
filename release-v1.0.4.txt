@@ -11,3 +11,7 @@
 
 [] criar função editar path
 [] criar função editar condição
+
+[] scroll multidirecional
+
+[] refatoração
