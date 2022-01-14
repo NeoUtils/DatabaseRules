@@ -15,7 +15,6 @@ import com.neo.fbrules.R
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
 import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.model.RuleCondition
-import com.neo.fbrules.util.isBoolean
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
@@ -70,7 +69,9 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private fun setupView() {
 
-        binding.tvTitle.text = "Adicionar condição"
+        binding.head.tvTitle.text = "Adicionar condição"
+
+        binding.head.ibCloseBtn.visibility(false)
 
         val propertiesAutocomplete = binding.tlProperty.editText as AutoCompleteTextView
 
@@ -200,7 +201,7 @@ class AddRuleConditionDialog : DialogFragment() {
             dismiss()
         }
 
-        binding.ibCloseBtn.setOnClickListener {
+        binding.head.ibBackBtn.setOnClickListener {
             dismiss()
         }
 
@@ -236,7 +237,7 @@ class AddRuleConditionDialog : DialogFragment() {
         }
 
         return runCatching {
-            JSONObject("{$property:$condition}")
+            JSONObject("{\"$property\":\"$condition\"}")
             true
         }.getOrElse {
             handlerError(ERROR.INVALID_JSON, it)
@@ -246,14 +247,11 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private fun getProperty(): String {
         val propertyValue = binding.tlProperty.editText!!.text.toString()
-        val result = properties.find { it.first == propertyValue }?.second ?: propertyValue
-        return "\"$result\""
+        return properties.find { it.first == propertyValue }?.second ?: propertyValue
     }
 
     private fun getCondition(): String {
         val conditionValue = binding.tlCondition.editText!!.text.toString()
-        val result = conditions.find { it.first == conditionValue }?.second ?: conditionValue
-
-        return if (result.isBoolean()) result else "\"$result\""
+        return conditions.find { it.first == conditionValue }?.second ?: conditionValue
     }
 }

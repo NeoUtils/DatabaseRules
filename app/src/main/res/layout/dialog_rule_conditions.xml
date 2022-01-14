@@ -7,33 +7,12 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <LinearLayout
+    <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/ib_close_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_round_arrow_back_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingHorizontal="6dp"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="20sp"
-            tools:text="Add condition" />
-
-    </LinearLayout>
+        android:id="@+id/head"
+        layout="@layout/include_dialog_head" />
 
     <LinearLayout
         android:layout_width="match_parent"

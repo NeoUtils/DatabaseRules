@@ -8,9 +8,9 @@ import java.lang.IllegalArgumentException
 class ReadRulesJson {
 
     private val rules = mutableListOf<RuleModel>()
-    lateinit var jsonObject : JSONObject
+    private lateinit var jsonObject : JSONObject
 
-    fun getRules(rulesJson: JSONObject): List<RuleModel> {
+    fun getRulesModel(rulesJson: JSONObject): MutableList<RuleModel> {
         jsonObject = rulesJson.getJSONObject("rules")
 
         rules.clear()
@@ -58,5 +58,9 @@ class ReadRulesJson {
                 }
             }
         }
+    }
+
+    fun getRulesString(rules: MutableList<RuleModel>): String {
+        TODO("Not yet implemented")
     }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
 import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
@@ -14,6 +15,7 @@ import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.fragment.dialog.AddRulePathDialog
+import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.showAlertDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +28,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
-    private lateinit var rulesJson: JSONObject
+    private val rules : MutableList<RuleModel> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,12 +53,19 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         binding.fbAddPathBtn.setOnClickListener {
             showAddPathDialog()
         }
+
+        setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
+            val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
+            rule?.let {
+                rulesPathAdapter.addRule(rule)
+            }
+        }
     }
 
     private fun showAddPathDialog() {
         val dialog = AddRulePathDialog()
 
-        dialog.show(childFragmentManager, AddRulePathDialog.tag)
+        dialog.show(parentFragmentManager, AddRulePathDialog.TAG)
     }
 
     private fun getRulesFromArguments() {
@@ -67,9 +76,9 @@ class VisualEditorFragment : Fragment(), RulesEditor {
 
     }
 
-    private fun readRulesJson() = runCatching {
+    private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
         lifecycleScope.launch(Dispatchers.IO) {
-            val rules = ReadRulesJson().getRules(rulesJson)
+            val rules = ReadRulesJson().getRulesModel(rulesJson)
             withContext(Dispatchers.Main) {
                 rulesPathAdapter.setRules(rules)
             }
@@ -80,10 +89,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         )
     }
 
-    override fun getRules(): String? {
-        return runCatching {
-            rulesJson.toString(4)
-        }.getOrNull()
+    override fun getRules(): String {
+        return ReadRulesJson().getRulesString(rules)
     }
 
     override fun setRules(rules: String) {
@@ -95,7 +102,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
                 return@runCatching
             }
 
-            rulesJson = runCatching {
+            val rulesJson = runCatching {
                 JSONObject(rules)
             }.getOrElse {
                 tryFix = true
@@ -114,7 +121,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
                 showFixedRulesAlert()
             }
 
-            readRulesJson()
+            readRulesJson(rulesJson)
         }.onFailure {
             handlerError(
                 ERROR.INVALID_JSON,

@@ -27,6 +27,6 @@
     <color name="bg_rule_condition">#EDEDED</color>
     <color name="bg_path_rules">#FFFFFF</color>
     <color name="color_button_add_rules">#DDDDDD</color>
-    <color name="bg_firebase">#EF8E00</color>
+    <color name="bg_variable">#A6FF9800</color>
 
 </resources>
