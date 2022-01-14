@@ -5,8 +5,8 @@
 
     <!--Editor-->
     <color name="others">#006E2C</color>
-    <color name="string">#00B11E</color>
-    <color name="bool">#99FF0000</color>
+    <color name="syntax_string">#00B11E</color>
+    <color name="syntax_literal">#99FF0000</color>
     <color name="bg_editors">#121212</color>
     <color name="bg_drawer">#151515</color>
     <color name="bg_tabs">#181818</color>

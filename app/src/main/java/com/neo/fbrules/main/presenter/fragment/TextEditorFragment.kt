@@ -88,7 +88,7 @@ class TextEditorFragment : Fragment(), RulesEditor {
         }
     }
 
-    override fun getRules(): String? {
+    override fun getRules(): String {
         return binding.textRulesEditor.text.toString()
     }
 

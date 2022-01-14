@@ -14,6 +14,10 @@ class ReadRulesJson {
 
         rules.clear()
 
+        if (!rulesJson.has("rules")) {
+            throw IllegalArgumentException("rules not found")
+        }
+
         mapRules(
             RuleModel("rules"),
             rules,

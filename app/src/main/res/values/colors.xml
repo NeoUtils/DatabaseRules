@@ -16,8 +16,8 @@
 
     <!-- Editor -->
     <color name="others">#FF00190A</color>
-    <color name="string">#FF007613</color>
-    <color name="bool">#FFC30000</color>
+    <color name="syntax_string">#FF007613</color>
+    <color name="syntax_literal">#FFC30000</color>
     <color name="bg_editors">@color/gray_light</color>
     <color name="bg_drawer">@color/white</color>
     <color name="comment">@color/gray_dark</color>
@@ -27,6 +27,6 @@
     <color name="bg_rule_condition">#EDEDED</color>
     <color name="bg_path_rules">#FFFFFF</color>
     <color name="color_button_add_rules">#DDDDDD</color>
-    <color name="bg_variable">#A6FF9800</color>
+    <color name="syntax_variable">#A6FF9800</color>
 
 </resources>

@@ -55,7 +55,11 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
             val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
             rule?.let {
-                rulesPathAdapter.addRule(rule)
+                runCatching {
+                    rulesPathAdapter.addRule(rule)
+                }.onFailure {
+                    handlerError(ERROR.INVALID_JSON, it)
+                }
             }
         }
     }
@@ -98,6 +102,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         var tryFix = false
 
         runCatching {
+
+            rulesPathAdapter.clear()
 
             if (rules.isEmpty()) {
                 return@runCatching

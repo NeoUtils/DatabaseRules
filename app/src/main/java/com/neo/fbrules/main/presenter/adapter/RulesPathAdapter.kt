@@ -7,11 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.ItemPathRulesBinding
+import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.core.Highlight
 import com.neo.highlight.util.scheme.ColorScheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
 
 private typealias PathRulesView = ItemPathRulesBinding
 
@@ -48,6 +54,18 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
     fun addRule(rule: RuleModel) {
         rules.add(rule)
         notifyDataSetChanged()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val readRulesJson = ReadRulesJson()
+            val rulesString = readRulesJson.getRulesString(rules)
+
+            rules = readRulesJson.getRulesModel(JSONObject(rulesString))
+
+            withContext(Dispatchers.Main) {
+                notifyDataSetChanged()
+            }
+        }
+
     }
 
     fun getRules(): MutableList<RuleModel> {
@@ -69,8 +87,8 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         private val ruleConditionAdapter: RuleConditionsAdapter
                 by setupRulesConditionAdapter()
 
-        fun bind(rule: RuleModel, isLastItem : Boolean) {
-            binding.tvPath.text = rule.path.replaceFirst("rules/", "")
+        fun bind(rule: RuleModel, isLastItem: Boolean) {
+            binding.tvPath.text = rule.path.replaceFirst("rules/", "/")
             ruleConditionAdapter.setConditions(rule.conditions, rule.path)
 
             configBottomMargin(isLastItem)
@@ -93,7 +111,7 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
                 addScheme(
                     ColorScheme(
                         Expression.variable,
-                        context.requestColor(R.color.bg_variable)
+                        context.requestColor(R.color.syntax_variable)
                     )
                 )
 

@@ -12,6 +12,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
+import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
 import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.model.RuleCondition
@@ -86,6 +88,9 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private fun setupHighlight() {
         HighlightTextWatcher().apply {
+
+            schemes = Highlighting(requireContext()).propertySyntax
+
             addScheme(
                 BackgroundScheme(
                     Pattern.compile(
@@ -96,10 +101,6 @@ class AddRuleConditionDialog : DialogFragment() {
                         )
                     ),
                     Color.GRAY
-                ),
-                ColorScheme(
-                    Pattern.compile("(.read)|(.write)"),
-                    requireContext().theme.requestColor(R.attr.colorAccent)
                 )
             )
 
@@ -107,6 +108,9 @@ class AddRuleConditionDialog : DialogFragment() {
         }
 
         HighlightTextWatcher().apply {
+
+            schemes = Highlighting(requireContext()).conditionSyntax
+
             addScheme(
                 BackgroundScheme(
                     Pattern.compile(
@@ -119,24 +123,8 @@ class AddRuleConditionDialog : DialogFragment() {
                     Color.GRAY
                 ),
                 ColorScheme(
-                    Pattern.compile("(?<=auth\\.)uid|auth|null"),
+                    Expression.variable,
                     requireContext().theme.requestColor(R.attr.colorAccent)
-                ),
-                ColorScheme(
-                    Pattern.compile("===|==|!="),
-                    requireContext().theme.requestColor(R.attr.colorPrimary)
-                ),
-                ColorScheme(
-                    Pattern.compile("\\$\\w+"),
-                    requireContext().theme.requestColor(R.attr.colorAccent)
-                ),
-                ColorScheme(
-                    Pattern.compile("^(true|false)\$"),
-                    requestColor(R.color.bool)
-                ),
-                ColorScheme(
-                    Pattern.compile("'[^']*'"),
-                    requestColor(R.color.string)
                 )
             )
 

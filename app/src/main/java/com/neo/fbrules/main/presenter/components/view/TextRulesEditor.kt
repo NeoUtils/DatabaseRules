@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import com.neo.fbrules.R
+import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.util.getCompatColor
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.util.listener.HighlightTextWatcher
@@ -15,45 +16,17 @@ class TextRulesEditor(
     context: Context, attr: AttributeSet? = null
 ) : AppCompatEditText(context, attr) {
 
-    private val highlight = HighlightTextWatcher()
 
     init {
         setBackgroundColor(getContext().getCompatColor(R.color.bg_editors))
+        setupHighlighting(context)
+    }
 
-        highlight.apply {
-            addScheme(
-                ColorScheme(
-                    Pattern.compile("(?<!\\w)(true|false)(?!\\w)"),
-                    getContext().getCompatColor(R.color.bool)
-                ),
-                ColorScheme(
-                    Pattern.compile("\"[^\"]*\""),
-                    getContext().getCompatColor(R.color.string)
-                ),
-                ColorScheme(
-                    Pattern.compile("[/]{2}.*"),
-                    getContext().getCompatColor(R.color.comment)
-                ),
-                ColorScheme(
-                    Pattern.compile("(?<=auth\\.)uid|auth|null"),
-                    context.theme.requestColor(R.attr.colorAccent)
-                ),
-                ColorScheme(
-                    Pattern.compile("===|==|!="),
-                    context.theme.requestColor(R.attr.colorPrimary)
-                ),
-                ColorScheme(
-                    Pattern.compile("\\$\\w+"),
-                    context.requestColor(R.color.bg_variable)
-                ),
-                ColorScheme(
-                    Pattern.compile("\"(\\.read|\\.write)\""),
-                    context.theme.requestColor(R.attr.colorAccent)
-                )
-            )
+    private fun setupHighlighting(context: Context) {
+        HighlightTextWatcher().apply {
+            schemes = Highlighting(context).completeSyntax
+            addTextChangedListener(this)
         }
-
-        addTextChangedListener(highlight)
     }
 
 

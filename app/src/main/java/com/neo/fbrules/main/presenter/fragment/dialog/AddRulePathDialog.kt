@@ -91,7 +91,14 @@ class AddRulePathDialog : DialogFragment() {
         if (!validate(path, conditions)) return
 
         val result = Bundle().apply {
-            putParcelable(RuleModel::class.java.simpleName, RuleModel(path, conditions))
+
+            val ruleModel =
+                RuleModel("rules/$path".replace("//", "/"), conditions)
+
+            putParcelable(
+                RuleModel::class.java.simpleName,
+                ruleModel
+            )
         }
 
         setFragmentResult(TAG, result); dismiss()
@@ -140,7 +147,7 @@ class AddRulePathDialog : DialogFragment() {
                 ),
                 ColorScheme(
                     Expression.variable,
-                    requestColor(R.color.bg_variable)
+                    requestColor(R.color.syntax_variable)
                 )
             )
             binding.tlPath.editText?.addTextChangedListener(this)

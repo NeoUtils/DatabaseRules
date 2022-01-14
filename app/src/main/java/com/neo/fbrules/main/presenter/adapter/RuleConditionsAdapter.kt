@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.databinding.ItemRuleConditionBinding
 import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.util.dp
@@ -62,40 +63,18 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
 
 
         fun setupHighlight(path: String) {
+            val highlighting = Highlighting(context)
+
             Highlight().apply {
-                addScheme(
-                    ColorScheme(
-                        Pattern.compile("^(.read)|(.write)$"),
-                        context.theme.requestColor(R.attr.colorAccent)
-                    )
-                )
+
+                schemes = highlighting.propertySyntax
 
                 setSpan(binding.tvProperty)
             }
 
             Highlight().apply {
-                addScheme(
-                    ColorScheme(
-                        Pattern.compile("(?<=auth\\.)uid|auth|null"),
-                        context.theme.requestColor(R.attr.colorAccent)
-                    ),
-                    ColorScheme(
-                        Pattern.compile("===|==|!="),
-                        context.theme.requestColor(R.attr.colorPrimary)
-                    ),
-                    ColorScheme(
-                        Pattern.compile("^(true|false)\$"),
-                        context.requestColor(R.color.bool)
-                    ),
-                    ColorScheme(
-                        Pattern.compile("\"[^\"]*\""),
-                        context.requestColor(R.color.string)
-                    ),
-                    ColorScheme(
-                        Pattern.compile("'[^']*'"),
-                        context.requestColor(R.color.string)
-                    )
-                )
+
+                schemes = highlighting.conditionSyntax
 
                 val matcher = Expression.variable.matcher(path)
                 while (matcher.find()) {
@@ -103,7 +82,7 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
                     addScheme(
                         ColorScheme(
                             Pattern.compile("\\$variable\\b"),
-                            context.requestColor(R.color.bg_variable)
+                            context.requestColor(R.color.syntax_variable)
                         )
                     )
                 }
