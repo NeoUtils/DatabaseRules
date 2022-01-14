@@ -70,7 +70,7 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
                 by setupRulesConditionAdapter()
 
         fun bind(rule: RuleModel, isLastItem : Boolean) {
-            binding.tvPath.text = rule.path
+            binding.tvPath.text = rule.path.replaceFirst("rules/", "")
             ruleConditionAdapter.setConditions(rule.conditions, rule.path)
 
             configBottomMargin(isLastItem)
