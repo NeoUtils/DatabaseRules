@@ -9,23 +9,22 @@ import java.lang.IllegalArgumentException
 class ReadRulesJson {
 
     private val rules = mutableListOf<RuleModel>()
-    private lateinit var jsonObject: JSONObject
 
     fun getRulesModel(rulesJson: JSONObject): MutableList<RuleModel> {
-        jsonObject = rulesJson.getJSONObject("rules")
 
         rules.clear()
 
         mapRules(
             RuleModel("rules"),
-            rules
+            rules,
+            rulesJson.getJSONObject("rules")
         )
 
         return rules
 
     }
 
-    private fun mapRules(rule: RuleModel, rules: MutableList<RuleModel>) {
+    private fun mapRules(rule: RuleModel, rules: MutableList<RuleModel>, jsonObject: JSONObject) {
 
         rules.add(rule)
 
@@ -36,11 +35,10 @@ class ReadRulesJson {
                 //path
                 is JSONObject -> {
 
-                    this.jsonObject = value
-
                     mapRules(
                         RuleModel(rule.path + "/$key"),
-                        rules
+                        rules,
+                        value
                     )
                 }
 
