@@ -22,10 +22,15 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
     private var path = ""
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setConditions(conditions: MutableList<RuleCondition>, path: String) {
+    fun setConditions(conditions: MutableList<RuleCondition>) {
         this.conditions = conditions
-        this.path = path
         notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setConditions(conditions: MutableList<RuleCondition>, path: String) {
+        this.path = path
+        setConditions(conditions)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -118,15 +123,18 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
     override fun getItemCount() = conditions.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addCondition(ruleCondition: RuleCondition, path : String) {
+    fun addCondition(ruleCondition: RuleCondition) {
         this.conditions.add(ruleCondition)
-        this.path = path
         notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun onChange(value: String) {
+    fun setPath(value: String) {
         this.path = value
         notifyDataSetChanged()
+    }
+
+    fun getPath(): String {
+        return path
     }
 }

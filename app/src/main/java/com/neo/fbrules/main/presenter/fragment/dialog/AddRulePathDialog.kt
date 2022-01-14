@@ -28,7 +28,6 @@ class AddRulePathDialog : DialogFragment() {
 
     private lateinit var binding: AddRulePathView
     private val conditions: MutableList<RuleCondition> = mutableListOf()
-    private var path = ""
 
     private val ruleConditionsAdapter: RuleConditionsAdapter by setupRulesConditions()
 
@@ -67,9 +66,10 @@ class AddRulePathDialog : DialogFragment() {
         binding.tlPath.editText?.addTextChangedListener {
             val value = it?.toString()
             if (value != null) {
-                ruleConditionsAdapter.onChange(value)
-                path = value
+                ruleConditionsAdapter.setPath(value)
             }
+
+            binding.tlPath.isErrorEnabled = false
         }
 
         binding.head.ibCloseBtn.setOnClickListener {
@@ -86,7 +86,7 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun confirm() {
-        path = binding.tlPath.editText!!.text.toString()
+        val path = binding.tlPath.editText!!.text.toString()
 
         if (!validate(path, conditions)) return
 
@@ -115,16 +115,18 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun addCondition(ruleCondition: RuleCondition) {
-        ruleConditionsAdapter.addCondition(ruleCondition, path)
+        ruleConditionsAdapter.addCondition(ruleCondition)
     }
 
     private fun setupView() {
+
+        binding.head.tvTitle.text = "Adicionar Regra"
 
         binding.mbAddCondition.setOnClickListener {
             showAddRuleCondition()
         }
 
-        ruleConditionsAdapter.setConditions(conditions, path)
+        ruleConditionsAdapter.setConditions(conditions)
 
         binding.head.ibBackBtn.visibility(false)
     }
