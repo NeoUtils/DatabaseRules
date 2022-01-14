@@ -65,7 +65,7 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
             Highlight().apply {
                 addScheme(
                     ColorScheme(
-                        Pattern.compile("(.read)|(.write)"),
+                        Pattern.compile("^(.read)|(.write)$"),
                         context.theme.requestColor(R.attr.colorAccent)
                     )
                 )
@@ -76,15 +76,11 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
             Highlight().apply {
                 addScheme(
                     ColorScheme(
-                        Pattern.compile("(auth)"),
+                        Pattern.compile("(?<=auth\\.)uid|auth|null"),
                         context.theme.requestColor(R.attr.colorAccent)
                     ),
                     ColorScheme(
-                        Pattern.compile("(?<=auth\\.)uid"),
-                        context.theme.requestColor(R.attr.colorAccent)
-                    ),
-                    ColorScheme(
-                        Pattern.compile("=="),
+                        Pattern.compile("===|==|!="),
                         context.theme.requestColor(R.attr.colorPrimary)
                     ),
                     ColorScheme(
@@ -93,6 +89,10 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
                     ),
                     ColorScheme(
                         Pattern.compile("\"[^\"]*\""),
+                        context.requestColor(R.color.string)
+                    ),
+                    ColorScheme(
+                        Pattern.compile("'[^']*'"),
                         context.requestColor(R.color.string)
                     )
                 )

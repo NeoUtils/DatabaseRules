@@ -119,15 +119,11 @@ class AddRuleConditionDialog : DialogFragment() {
                     Color.GRAY
                 ),
                 ColorScheme(
-                    Pattern.compile("(auth)"),
+                    Pattern.compile("(?<=auth\\.)uid|auth|null"),
                     requireContext().theme.requestColor(R.attr.colorAccent)
                 ),
                 ColorScheme(
-                    Pattern.compile("(?<=auth\\.)uid"),
-                    requireContext().theme.requestColor(R.attr.colorAccent)
-                ),
-                ColorScheme(
-                    Pattern.compile("=="),
+                    Pattern.compile("===|==|!="),
                     requireContext().theme.requestColor(R.attr.colorPrimary)
                 ),
                 ColorScheme(
@@ -137,6 +133,10 @@ class AddRuleConditionDialog : DialogFragment() {
                 ColorScheme(
                     Pattern.compile("^(true|false)\$"),
                     requestColor(R.color.bool)
+                ),
+                ColorScheme(
+                    Pattern.compile("'[^']*'"),
+                    requestColor(R.color.string)
                 )
             )
 

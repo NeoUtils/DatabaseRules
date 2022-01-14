@@ -35,15 +35,11 @@ class TextRulesEditor(
                     getContext().getCompatColor(R.color.comment)
                 ),
                 ColorScheme(
-                    Pattern.compile("(auth)"),
+                    Pattern.compile("(?<=auth\\.)uid|auth|null"),
                     context.theme.requestColor(R.attr.colorAccent)
                 ),
                 ColorScheme(
-                    Pattern.compile("(?<=auth\\.)uid"),
-                    context.theme.requestColor(R.attr.colorAccent)
-                ),
-                ColorScheme(
-                    Pattern.compile("=="),
+                    Pattern.compile("===|==|!="),
                     context.theme.requestColor(R.attr.colorPrimary)
                 ),
                 ColorScheme(
@@ -51,7 +47,7 @@ class TextRulesEditor(
                     context.requestColor(R.color.bg_variable)
                 ),
                 ColorScheme(
-                    Pattern.compile("^(.read)|(.write)\$"),
+                    Pattern.compile("\"(\\.read|\\.write)\""),
                     context.theme.requestColor(R.attr.colorAccent)
                 )
             )
