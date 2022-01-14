@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatEditText
 import com.neo.fbrules.R
 import com.neo.fbrules.util.getCompatColor
+import com.neo.fbrules.util.requestColor
 import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Pattern
@@ -19,25 +20,42 @@ class TextRulesEditor(
     init {
         setBackgroundColor(getContext().getCompatColor(R.color.bg_editors))
 
-        highlight.addScheme(
-            ColorScheme(
-                Pattern.compile("(?<!\\w)(true|false)(?!\\w)"),
-                getContext().getCompatColor(R.color.bool)
+        highlight.apply {
+            addScheme(
+                ColorScheme(
+                    Pattern.compile("(?<!\\w)(true|false)(?!\\w)"),
+                    getContext().getCompatColor(R.color.bool)
+                ),
+                ColorScheme(
+                    Pattern.compile("\"[^\"]*\""),
+                    getContext().getCompatColor(R.color.string)
+                ),
+                ColorScheme(
+                    Pattern.compile("[/]{2}.*"),
+                    getContext().getCompatColor(R.color.comment)
+                ),
+                ColorScheme(
+                    Pattern.compile("(auth)"),
+                    context.theme.requestColor(R.attr.colorAccent)
+                ),
+                ColorScheme(
+                    Pattern.compile("(?<=auth\\.)uid"),
+                    context.theme.requestColor(R.attr.colorAccent)
+                ),
+                ColorScheme(
+                    Pattern.compile("=="),
+                    context.theme.requestColor(R.attr.colorPrimary)
+                ),
+                ColorScheme(
+                    Pattern.compile("\\$\\w+"),
+                    context.requestColor(R.color.bg_variable)
+                ),
+                ColorScheme(
+                    Pattern.compile("^(.read)|(.write)\$"),
+                    context.theme.requestColor(R.attr.colorAccent)
+                )
             )
-        )
-        highlight.addScheme(
-            ColorScheme(
-                Pattern.compile("\"[^\"]*\""),
-                getContext().getCompatColor(R.color.string)
-            )
-        )
-
-        highlight.addScheme(
-            ColorScheme(
-                Pattern.compile("[/]{2}.*"),
-                getContext().getCompatColor(R.color.comment)
-            )
-        )
+        }
 
         addTextChangedListener(highlight)
     }

@@ -1,13 +1,13 @@
 [] criar função excluir path
-[] verificar o comportamento do fragmento quando tema alterado (change configs)
+[x] verificar o comportamento do fragmento quando tema alterado (change configs)
 [] o estado da regra deve sobreviver quando tema alterado (change configs)
 
-[] parser de List<RuleModel> para JSON
+[x] parser de List<RuleModel> para JSON
 
-[] criar função adicionar path
+[x] criar função adicionar path
 
 [] criar função remover condição
-[] criar função adicionar condição
+[x] criar função adicionar condição
 
 [] criar função editar path
 [] criar função editar condição

@@ -25,7 +25,6 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
                 LayoutInflater.from(parent.context), parent, false
             )
         )
-
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -49,6 +48,10 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
     fun addRule(rule: RuleModel) {
         rules.add(rule)
         notifyDataSetChanged()
+    }
+
+    fun getRules(): MutableList<RuleModel> {
+        return rules
     }
 
     class Holder(

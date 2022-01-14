@@ -2,13 +2,14 @@ package com.neo.fbrules.main.presenter.components
 
 import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.util.isBoolean
 import org.json.JSONObject
 import java.lang.IllegalArgumentException
 
 class ReadRulesJson {
 
     private val rules = mutableListOf<RuleModel>()
-    private lateinit var jsonObject : JSONObject
+    private lateinit var jsonObject: JSONObject
 
     fun getRulesModel(rulesJson: JSONObject): MutableList<RuleModel> {
         jsonObject = rulesJson.getJSONObject("rules")
@@ -49,7 +50,7 @@ class ReadRulesJson {
                 }
 
                 //condition
-                 is Boolean -> {
+                is Boolean -> {
                     rule.conditions.add(RuleCondition(key, value.toString()))
                 }
 
@@ -61,6 +62,40 @@ class ReadRulesJson {
     }
 
     fun getRulesString(rules: MutableList<RuleModel>): String {
-        TODO("Not yet implemented")
+        val result = JSONObject()
+
+        for (rule in rules) {
+            val jsonPath = getJsonPath(result, rule.path)
+            jsonPath.apply {
+                rule.conditions.forEach {
+                    if (it.condition.isBoolean()) {
+                        jsonPath.put(it.property, it.condition.toBoolean())
+                    } else {
+                        jsonPath.put(it.property, it.condition)
+                    }
+                }
+            }
+        }
+
+        return result.toString(4)
+    }
+
+    private fun getJsonPath(origin: JSONObject, path: String) : JSONObject {
+        val pathList = path.split("/")
+
+        var result = origin
+
+        for (it in pathList) {
+
+            result = if (result.has(it)) {
+                result.getJSONObject(it)
+            } else {
+                val temp = JSONObject()
+                result.put(it, temp)
+                temp
+            }
+        }
+
+        return result
     }
 }

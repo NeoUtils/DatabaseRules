@@ -28,7 +28,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
-    private val rules : MutableList<RuleModel> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -90,7 +89,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun getRules(): String {
-        return ReadRulesJson().getRulesString(rules)
+        return ReadRulesJson().getRulesString(rulesPathAdapter.getRules())
     }
 
     override fun setRules(rules: String) {
