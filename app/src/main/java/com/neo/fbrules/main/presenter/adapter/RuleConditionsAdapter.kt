@@ -102,7 +102,7 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
                     val variable = matcher.group()
                     addScheme(
                         ColorScheme(
-                            Pattern.compile("\\$variable\b"),
+                            Pattern.compile("\\$variable\\b"),
                             context.requestColor(R.color.bg_variable)
                         )
                     )
