@@ -43,7 +43,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupView()
         setupListeners()
         getRulesFromArguments()
     }
@@ -71,11 +70,9 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
-    private fun setupView() {
-
-    }
-
     private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
+        rulesPathAdapter.clear()
+
         lifecycleScope.launch(Dispatchers.IO) {
             val rules = ReadRulesJson().getRulesModel(rulesJson)
             withContext(Dispatchers.Main) {
@@ -88,8 +85,13 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         )
     }
 
-    override fun getRules(): String {
-        return ReadRulesJson().getRulesString(rulesPathAdapter.getRules())
+    override fun getRules(): String? {
+
+        val rules = rulesPathAdapter.getRules()
+
+        if (rules.isEmpty()) return null
+
+        return ReadRulesJson().getRulesString(rules)
     }
 
     override fun setRules(rules: String) {

@@ -54,6 +54,12 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         return rules
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun clear() {
+        rules.clear()
+        notifyDataSetChanged()
+    }
+
     class Holder(
         private val binding: PathRulesView
     ) : RecyclerView.ViewHolder(binding.root) {
