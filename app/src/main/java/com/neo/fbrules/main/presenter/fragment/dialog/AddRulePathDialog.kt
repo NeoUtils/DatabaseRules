@@ -91,7 +91,7 @@ class AddRulePathDialog : DialogFragment() {
     private fun confirm() {
         val path = binding.tlPath.editText!!.text.toString()
 
-        if (!validate(path, conditions)) return
+        if (!validate(path.trim(), conditions)) return
 
         val result = Bundle().apply {
 

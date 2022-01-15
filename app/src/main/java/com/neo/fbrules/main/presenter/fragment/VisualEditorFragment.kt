@@ -24,7 +24,7 @@ import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
-class VisualEditorFragment : Fragment(), RulesEditor {
+class VisualEditorFragment(var rules: MutableList<RuleModel>) : Fragment(), RulesEditor {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
@@ -55,12 +55,22 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
             val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
             rule?.let {
-                runCatching {
-                    rulesPathAdapter.addRule(rule)
-                }.onFailure {
-                    handlerError(ERROR.INVALID_JSON, it)
-                }
+                addRulePath(rule)
             }
+        }
+    }
+
+    private fun addRulePath(rule: RuleModel) {
+
+        if (rules.any { it.path == rule.path }) {
+            showAlertDialog("Error", "Esse path já existe")
+            return
+        }
+
+        runCatching {
+            rulesPathAdapter.addRule(rule)
+        }.onFailure {
+            handlerError(ERROR.INVALID_JSON, it)
         }
     }
 
@@ -80,6 +90,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         lifecycleScope.launch(Dispatchers.IO) {
             val rules = ReadRulesJson().getRulesModel(rulesJson)
             withContext(Dispatchers.Main) {
+                this@VisualEditorFragment.rules = rules
                 rulesPathAdapter.setRules(rules)
             }
         }
