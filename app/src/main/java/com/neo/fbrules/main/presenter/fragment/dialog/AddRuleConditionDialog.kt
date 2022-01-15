@@ -197,8 +197,8 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private fun confirm() {
 
-        val condition = getCondition()
-        val property = getProperty()
+        val condition = getCondition().trim()
+        val property = getProperty().trim()
 
         if (!validate(condition, property)) return
 

@@ -9,13 +9,16 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.DialogAddPathBinding
+import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.requestColor
+import com.neo.fbrules.util.showAlertDialog
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
 import com.neo.highlight.util.scheme.ColorScheme
@@ -122,6 +125,13 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun addCondition(ruleCondition: RuleCondition) {
+        if (conditions.any { it.property == ruleCondition.property }) {
+            showAlertDialog("Error", "Essa propriedade já existe") {
+                positiveButton()
+            }
+            return
+        }
+
         ruleConditionsAdapter.addCondition(ruleCondition)
     }
 
