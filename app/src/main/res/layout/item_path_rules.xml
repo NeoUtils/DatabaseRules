@@ -36,7 +36,7 @@
         <com.google.android.material.button.MaterialButton
             android:layout_margin="4dp"
             android:backgroundTint="?attr/colorAccent"
-            android:id="@+id/mb_add_condition"
+            android:id="@+id/mb_add_condition_btn"
             app:icon="@drawable/ic_round_add_24"
             app:iconGravity="textStart"
             android:text="Adicionar Condição"

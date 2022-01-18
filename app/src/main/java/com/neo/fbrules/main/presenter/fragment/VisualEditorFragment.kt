@@ -14,7 +14,9 @@ import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
+import com.neo.fbrules.main.presenter.fragment.dialog.AddRuleConditionDialog
 import com.neo.fbrules.main.presenter.fragment.dialog.AddRulePathDialog
+import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.showAlertDialog
 import kotlinx.coroutines.Dispatchers
@@ -24,10 +26,11 @@ import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
-class VisualEditorFragment(var rules: MutableList<RuleModel>) : Fragment(), RulesEditor {
+class VisualEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
+    private val rules get() = rulesPathAdapter.getRules()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,12 +55,46 @@ class VisualEditorFragment(var rules: MutableList<RuleModel>) : Fragment(), Rule
             showAddPathDialog()
         }
 
+        rulesPathAdapter.setOnAddConditionListener { position ->
+            showAddConditionDialog(position)
+        }
+    }
+
+    private fun registerAddPathListener() {
         setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
             val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
             rule?.let {
                 addRulePath(rule)
             }
         }
+    }
+
+    private fun registerAddConditionListener() {
+        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
+            val condition =
+                bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
+
+            val position = bundle.getInt("position", -1)
+
+            if (condition != null && position != -1) {
+                addRuleCondition(condition, position)
+            }
+        }
+    }
+
+    private fun addRuleCondition(
+        condition: RuleCondition,
+        position: Int
+    ) {
+        val rule = rules[position]
+
+        if (rule.conditions.any { it.property == condition.property }) {
+            showAlertDialog("Error", "Esse property já existe")
+            return
+        }
+
+        rule.conditions.add(condition)
+        rulesPathAdapter.setRules(rules)
     }
 
     private fun addRulePath(rule: RuleModel) {
@@ -74,10 +111,32 @@ class VisualEditorFragment(var rules: MutableList<RuleModel>) : Fragment(), Rule
         }
     }
 
+    private fun showAddConditionDialog(position: Int) {
+
+        registerAddConditionListener()
+
+        val dialog = AddRuleConditionDialog()
+
+        dialog.arguments = Bundle().apply {
+            putInt("position", position)
+        }
+
+        dialog.show(
+            parentFragmentManager,
+            AddRuleConditionDialog.TAG
+        )
+    }
+
     private fun showAddPathDialog() {
+
+        registerAddPathListener()
+
         val dialog = AddRulePathDialog()
 
-        dialog.show(parentFragmentManager, AddRulePathDialog.TAG)
+        dialog.show(
+            parentFragmentManager,
+            AddRulePathDialog.TAG
+        )
     }
 
     private fun getRulesFromArguments() {
@@ -90,7 +149,6 @@ class VisualEditorFragment(var rules: MutableList<RuleModel>) : Fragment(), Rule
         lifecycleScope.launch(Dispatchers.IO) {
             val rules = ReadRulesJson().getRulesModel(rulesJson)
             withContext(Dispatchers.Main) {
-                this@VisualEditorFragment.rules = rules
                 rulesPathAdapter.setRules(rules)
             }
         }

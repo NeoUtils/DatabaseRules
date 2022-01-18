@@ -8,6 +8,7 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.ItemPathRulesBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
+import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
@@ -24,12 +25,17 @@ private typealias PathRulesView = ItemPathRulesBinding
 class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
     private var rules: MutableList<RuleModel> = mutableListOf()
+    private var onAddConditionListener: OnAddConditionListener? = null
+
+    fun setOnAddConditionListener(onAddConditionListener: OnAddConditionListener?) {
+        this.onAddConditionListener = onAddConditionListener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
             PathRulesView.inflate(
                 LayoutInflater.from(parent.context), parent, false
-            )
+            ),
         )
     }
 
@@ -40,6 +46,10 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
         holder.bind(rule, lastItemPosition == position)
         holder.setupHighlight()
+
+        holder.addConditionBtn.setOnClickListener {
+            onAddConditionListener?.onClick(position)
+        }
     }
 
     override fun getItemCount() = rules.size
@@ -82,6 +92,8 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         private val binding: PathRulesView
     ) : RecyclerView.ViewHolder(binding.root) {
 
+        val addConditionBtn = binding.mbAddConditionBtn
+
         private val context get() = itemView.context
 
         private val ruleConditionAdapter: RuleConditionsAdapter
@@ -118,6 +130,9 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
                 setSpan(binding.tvPath)
             }
         }
+    }
 
+    fun interface OnAddConditionListener {
+        fun onClick(position: Int)
     }
 }

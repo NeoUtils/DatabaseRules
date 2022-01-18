@@ -57,7 +57,7 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun setupListeners() {
-        setFragmentResultListener(AddRuleConditionDialog::class.java.simpleName) { _, bundle ->
+        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
             val ruleCondition =
                 bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
 

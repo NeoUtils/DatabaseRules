@@ -17,6 +17,7 @@ import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
 import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.model.RuleCondition
+import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
@@ -53,6 +54,7 @@ class AddRuleConditionDialog : DialogFragment() {
         ArrayAdapter(requireContext(), R.layout.dropdown_item, propertiesFirst)
     }
 
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val alert = AlertDialog.Builder(requireContext())
@@ -70,6 +72,7 @@ class AddRuleConditionDialog : DialogFragment() {
     }
 
     private fun setupView() {
+
 
         binding.head.tvTitle.text = "Adicionar condição"
 
@@ -207,9 +210,16 @@ class AddRuleConditionDialog : DialogFragment() {
                 RuleCondition::class.java.simpleName,
                 RuleCondition(property, condition)
             )
+
+            arguments?.let {
+                val position = it.getInt("position", -1)
+                if (position != -1) {
+                    putInt("position", position)
+                }
+            }
         }
 
-        setFragmentResult(AddRuleConditionDialog::class.java.simpleName, result); dismiss()
+        setFragmentResult(TAG, result); dismiss()
     }
 
     private fun validate(condition: String, property: String): Boolean {
@@ -241,5 +251,9 @@ class AddRuleConditionDialog : DialogFragment() {
     private fun getCondition(): String {
         val conditionValue = binding.tlCondition.editText!!.text.toString()
         return conditions.find { it.first == conditionValue }?.second ?: conditionValue
+    }
+
+    companion object {
+        val TAG = AddRuleConditionDialog::class.java.simpleName
     }
 }
