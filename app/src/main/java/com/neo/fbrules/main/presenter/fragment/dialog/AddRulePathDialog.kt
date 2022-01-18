@@ -30,9 +30,9 @@ private typealias AddRulePathView = DialogAddPathBinding
 class AddRulePathDialog : DialogFragment() {
 
     private lateinit var binding: AddRulePathView
-    private val conditions: MutableList<RuleCondition> = mutableListOf()
 
     private val ruleConditionsAdapter: RuleConditionsAdapter by setupRulesConditions()
+    private val conditions get() = ruleConditionsAdapter.getConditions()
 
     private fun setupRulesConditions() = lazy {
         RuleConditionsAdapter().apply {
@@ -57,17 +57,10 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun setupListeners() {
-        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
-            val ruleCondition =
-                bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
-
-            ruleCondition?.let {
-                addCondition(ruleCondition)
-            }
-        }
 
         binding.tlPath.editText?.addTextChangedListener {
             val value = it?.toString()
+
             if (value != null) {
                 ruleConditionsAdapter.setPath(value)
             }
@@ -85,6 +78,17 @@ class AddRulePathDialog : DialogFragment() {
 
         binding.confirm.button.setOnClickListener {
             confirm()
+        }
+    }
+
+    private fun registerAddCondition() {
+        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
+            val ruleCondition =
+                bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
+
+            ruleCondition?.let {
+                addCondition(ruleCondition)
+            }
         }
     }
 
@@ -165,11 +169,14 @@ class AddRulePathDialog : DialogFragment() {
     }
 
     private fun showAddRuleCondition() {
+
+        registerAddCondition()
+
         val dialog = AddRuleConditionDialog()
 
         dialog.show(
             parentFragmentManager,
-            AddRuleConditionDialog::class.java.simpleName
+            AddRuleConditionDialog.TAG
         )
     }
 

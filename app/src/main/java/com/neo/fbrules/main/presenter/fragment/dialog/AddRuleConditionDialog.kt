@@ -43,7 +43,11 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private val conditionsFirst get() = conditions.map { it.first }
 
-    private val properties = arrayListOf("Leitura" to ".read", "Escrita" to ".write")
+    private val properties = arrayListOf(
+        "Leitura" to ".read",
+        "Escrita" to ".write"
+    )
+
     private val propertiesFirst get() = properties.map { it.first }
 
     private fun setupConditionAdapter() = lazy {

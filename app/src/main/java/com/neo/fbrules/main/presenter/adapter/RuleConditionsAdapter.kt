@@ -116,4 +116,6 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
     fun getPath(): String {
         return path
     }
+
+    fun getConditions() = conditions
 }

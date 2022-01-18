@@ -46,8 +46,12 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        init()
+    }
+
+    private fun init() {
         setupListeners()
-        getRulesFromArguments()
+        setupArguments()
     }
 
     private fun setupListeners() {
@@ -139,7 +143,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         )
     }
 
-    private fun getRulesFromArguments() {
+    private fun setupArguments() {
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
@@ -159,8 +163,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     }
 
     override fun getRules(): String? {
-
-        val rules = rulesPathAdapter.getRules()
 
         if (rules.isEmpty()) return null
 
