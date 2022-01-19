@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
-import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
+import com.neo.fbrules.core.ERROR
+import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
-import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
@@ -32,6 +32,20 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
     private val rules get() = rulesPathAdapter.getRules()
 
+    private fun setupVisualRulesAdapter() = lazy {
+        RulesPathAdapter(object : RulesPathAdapter.RulesPathListener {
+            override fun onAddCondition(position: Int) {
+                showAddConditionDialog(position)
+            }
+
+            override fun onEditPath(rule: RuleModel, position: Int) {
+                showAddPathDialog(rule, position)
+            }
+        }).apply {
+            binding.rvRules.adapter = this
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,10 +60,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        init()
-    }
-
-    private fun init() {
         setupListeners()
         setupArguments()
     }
@@ -58,19 +68,26 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         binding.fbAddPathBtn.setOnClickListener {
             showAddPathDialog()
         }
-
-        rulesPathAdapter.setOnAddConditionListener { position ->
-            showAddConditionDialog(position)
-        }
     }
 
-    private fun registerAddPathListener() {
-        setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
-            val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
-            rule?.let {
-                addRulePath(rule)
-            }
+    private fun setupArguments() {
+        arguments?.getString("rules", null)?.let { setRules(it) }
+    }
+
+    private fun showAddConditionDialog(position: Int) {
+
+        registerAddConditionListener()
+
+        val dialog = AddRuleConditionDialog()
+
+        dialog.arguments = Bundle().apply {
+            putInt("position", position)
         }
+
+        dialog.show(
+            parentFragmentManager,
+            AddRuleConditionDialog.TAG
+        )
     }
 
     private fun registerAddConditionListener() {
@@ -101,6 +118,38 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         rulesPathAdapter.setRules(rules)
     }
 
+
+    private fun showAddPathDialog(
+        rule: RuleModel? = null,
+        position: Int? = null
+    ) {
+
+        registerAddPathListener()
+
+        val dialog = AddRulePathDialog()
+
+        if (rule != null && position != null) {
+            dialog.arguments = Bundle().apply {
+                putParcelable(RuleModel::class.java.simpleName, rule)
+                putInt("position", position)
+            }
+        }
+
+        dialog.show(
+            parentFragmentManager,
+            AddRulePathDialog.TAG
+        )
+    }
+
+    private fun registerAddPathListener() {
+        setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
+            val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
+            rule?.let {
+                addRulePath(rule)
+            }
+        }
+    }
+
     private fun addRulePath(rule: RuleModel) {
 
         if (rules.any { it.path == rule.path }) {
@@ -115,52 +164,6 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         }
     }
 
-    private fun showAddConditionDialog(position: Int) {
-
-        registerAddConditionListener()
-
-        val dialog = AddRuleConditionDialog()
-
-        dialog.arguments = Bundle().apply {
-            putInt("position", position)
-        }
-
-        dialog.show(
-            parentFragmentManager,
-            AddRuleConditionDialog.TAG
-        )
-    }
-
-    private fun showAddPathDialog() {
-
-        registerAddPathListener()
-
-        val dialog = AddRulePathDialog()
-
-        dialog.show(
-            parentFragmentManager,
-            AddRulePathDialog.TAG
-        )
-    }
-
-    private fun setupArguments() {
-        arguments?.getString("rules", null)?.let { setRules(it) }
-    }
-
-    private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
-        rulesPathAdapter.clear()
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            val rules = ReadRulesJson().getRulesModel(rulesJson)
-            withContext(Dispatchers.Main) {
-                rulesPathAdapter.setRules(rules)
-            }
-        }
-    }.onFailure {
-        handlerError(
-            ERROR.UNRECOGNIZED_RULES, it
-        )
-    }
 
     override fun getRules(): String? {
 
@@ -208,6 +211,21 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         }
     }
 
+    private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
+        rulesPathAdapter.clear()
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val rules = ReadRulesJson().getRulesModel(rulesJson)
+            withContext(Dispatchers.Main) {
+                rulesPathAdapter.setRules(rules)
+            }
+        }
+    }.onFailure {
+        handlerError(
+            ERROR.UNRECOGNIZED_RULES, it
+        )
+    }
+
     private fun showFixedRulesAlert() {
         showAlertDialog(
             getString(R.string.text_visualEditor_fixedRules_rulesFiexTitle),
@@ -221,11 +239,5 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         val detectCommaAtEndRegex = Regex(",(?=[^{}\\w]*\\})")
         val fixedCommaAtEnd = rules.replace(detectCommaAtEndRegex, "")
         return JSONObject(fixedCommaAtEnd)
-    }
-
-    private fun setupVisualRulesAdapter() = lazy {
-        RulesPathAdapter().apply {
-            binding.rvRules.adapter = this
-        }
     }
 }

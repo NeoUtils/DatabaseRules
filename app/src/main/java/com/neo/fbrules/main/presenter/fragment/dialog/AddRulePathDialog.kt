@@ -9,11 +9,9 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
-import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.DialogAddPathBinding
-import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
@@ -68,6 +66,10 @@ class AddRulePathDialog : DialogFragment() {
             binding.tlPath.isErrorEnabled = false
         }
 
+        binding.mbAddCondition.setOnClickListener {
+            showAddRuleCondition()
+        }
+
         binding.head.ibCloseBtn.setOnClickListener {
             dismiss()
         }
@@ -81,6 +83,44 @@ class AddRulePathDialog : DialogFragment() {
         }
     }
 
+
+    private fun setupView() {
+
+        binding.head.tvTitle.text = "Adicionar Regra"
+
+        ruleConditionsAdapter.setConditions(conditions)
+
+        binding.head.ibBackBtn.visibility(false)
+    }
+
+    private fun setupHighlight() {
+        HighlightTextWatcher().apply {
+            addScheme(
+                ColorScheme(
+                    Pattern.compile("/"),
+                    Color.CYAN
+                ),
+                ColorScheme(
+                    Expression.variable,
+                    requestColor(R.color.syntax_variable)
+                )
+            )
+            binding.tlPath.editText?.addTextChangedListener(this)
+        }
+    }
+
+    private fun showAddRuleCondition() {
+
+        registerAddCondition()
+
+        val dialog = AddRuleConditionDialog()
+
+        dialog.show(
+            parentFragmentManager,
+            AddRuleConditionDialog.TAG
+        )
+    }
+
     private fun registerAddCondition() {
         setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
             val ruleCondition =
@@ -90,6 +130,17 @@ class AddRulePathDialog : DialogFragment() {
                 addCondition(ruleCondition)
             }
         }
+    }
+
+    private fun addCondition(ruleCondition: RuleCondition) {
+        if (conditions.any { it.property == ruleCondition.property }) {
+            showAlertDialog("Error", "Essa propriedade já existe") {
+                positiveButton()
+            }
+            return
+        }
+
+        ruleConditionsAdapter.addCondition(ruleCondition)
     }
 
     private fun confirm() {
@@ -126,58 +177,6 @@ class AddRulePathDialog : DialogFragment() {
             })
             true
         }.getOrElse { false }
-    }
-
-    private fun addCondition(ruleCondition: RuleCondition) {
-        if (conditions.any { it.property == ruleCondition.property }) {
-            showAlertDialog("Error", "Essa propriedade já existe") {
-                positiveButton()
-            }
-            return
-        }
-
-        ruleConditionsAdapter.addCondition(ruleCondition)
-    }
-
-    private fun setupView() {
-
-        binding.head.tvTitle.text = "Adicionar Regra"
-
-        binding.mbAddCondition.setOnClickListener {
-            showAddRuleCondition()
-        }
-
-        ruleConditionsAdapter.setConditions(conditions)
-
-        binding.head.ibBackBtn.visibility(false)
-    }
-
-    private fun setupHighlight() {
-        HighlightTextWatcher().apply {
-            addScheme(
-                ColorScheme(
-                    Pattern.compile("/"),
-                    Color.CYAN
-                ),
-                ColorScheme(
-                    Expression.variable,
-                    requestColor(R.color.syntax_variable)
-                )
-            )
-            binding.tlPath.editText?.addTextChangedListener(this)
-        }
-    }
-
-    private fun showAddRuleCondition() {
-
-        registerAddCondition()
-
-        val dialog = AddRuleConditionDialog()
-
-        dialog.show(
-            parentFragmentManager,
-            AddRuleConditionDialog.TAG
-        )
     }
 
     companion object {

@@ -1,10 +1,11 @@
-package com.neo.fbrules
+package com.neo.fbrules.core
 
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import com.neo.fbrules.R
 import com.neo.fbrules.util.showAlertDialog
 
 

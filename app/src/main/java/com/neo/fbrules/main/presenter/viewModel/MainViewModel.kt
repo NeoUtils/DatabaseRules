@@ -11,7 +11,7 @@ import com.neo.fbrules.main.presenter.components.IntegratedAppsManager
 import com.neo.fbrules.main.presenter.components.UpdateManager
 import com.neo.fbrules.main.domain.useCase.*
 import com.neo.fbrules.main.presenter.model.IntegratedApp
-import com.neo.fbrules.main.presenter.model.Update
+import com.neo.fbrules.main.presenter.model.UpdateModel
 import com.neo.fbrules.util.environment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -37,8 +37,8 @@ class MainViewModel @Inject constructor(
 
     val message = MutableSingleLiveData<Message>()
 
-    private val _update = MutableLiveData(Update())
-    val update: LiveData<Update> = _update
+    private val _update = MutableLiveData(UpdateModel())
+    val update: LiveData<UpdateModel> = _update
 
     private val _apps = MutableLiveData(listOf<IntegratedApp>())
     val apps: LiveData<List<IntegratedApp>> = _apps
@@ -159,7 +159,7 @@ class MainViewModel @Inject constructor(
     fun checkUpdate() {
         UpdateManager(object : UpdateManager.UpdateListener {
             override fun updated() {
-                _update.value = Update(
+                _update.value = UpdateModel(
                     hasUpdate = false
                 )
             }
@@ -170,7 +170,7 @@ class MainViewModel @Inject constructor(
                 downloadLink: String,
                 force: Boolean
             ) {
-                _update.value = Update(
+                _update.value = UpdateModel(
                     hasUpdate = true,
                     lastVersionCode = lastVersionCode,
                     lastVersionName = lastVersionName,

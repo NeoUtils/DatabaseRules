@@ -10,14 +10,13 @@ import android.widget.AutoCompleteTextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.neo.fbrules.ERROR
 import com.neo.fbrules.R
+import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
+import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
-import com.neo.fbrules.handlerError
 import com.neo.fbrules.main.presenter.model.RuleCondition
-import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
@@ -71,12 +70,12 @@ class AddRuleConditionDialog : DialogFragment() {
 
         setupListener()
         setupView()
+        setupHighlight()
 
         return alert.create()
     }
 
     private fun setupView() {
-
 
         binding.head.tvTitle.text = "Adicionar condição"
 
@@ -89,54 +88,6 @@ class AddRuleConditionDialog : DialogFragment() {
         val conditionsAutocomplete = binding.tlCondition.editText as AutoCompleteTextView
 
         conditionsAutocomplete.setAdapter(conditionAutocompleteAdapter)
-
-        setupHighlight()
-    }
-
-    private fun setupHighlight() {
-        HighlightTextWatcher().apply {
-
-            schemes = Highlighting(requireContext()).propertySyntax
-
-            addScheme(
-                BackgroundScheme(
-                    Pattern.compile(
-                        propertiesFirst.joinToString(
-                            prefix = "(",
-                            separator = ")|(",
-                            postfix = ")"
-                        )
-                    ),
-                    Color.GRAY
-                )
-            )
-
-            binding.tlProperty.editText?.addTextChangedListener(this)
-        }
-
-        HighlightTextWatcher().apply {
-
-            schemes = Highlighting(requireContext()).conditionSyntax
-
-            addScheme(
-                BackgroundScheme(
-                    Pattern.compile(
-                        conditionsFirst.joinToString(
-                            prefix = "(",
-                            separator = ")|(",
-                            postfix = ")"
-                        )
-                    ),
-                    Color.GRAY
-                ),
-                ColorScheme(
-                    Expression.variable,
-                    requireContext().theme.requestColor(R.attr.colorAccent)
-                )
-            )
-
-            binding.tlCondition.editText?.addTextChangedListener(this)
-        }
     }
 
     private fun setupListener() {
@@ -200,6 +151,52 @@ class AddRuleConditionDialog : DialogFragment() {
             dismiss()
         }
 
+    }
+
+    private fun setupHighlight() {
+        HighlightTextWatcher().apply {
+
+            schemes = Highlighting(requireContext()).propertySyntax
+
+            addScheme(
+                BackgroundScheme(
+                    Pattern.compile(
+                        propertiesFirst.joinToString(
+                            prefix = "(",
+                            separator = ")|(",
+                            postfix = ")"
+                        )
+                    ),
+                    Color.GRAY
+                )
+            )
+
+            binding.tlProperty.editText?.addTextChangedListener(this)
+        }
+
+        HighlightTextWatcher().apply {
+
+            schemes = Highlighting(requireContext()).conditionSyntax
+
+            addScheme(
+                BackgroundScheme(
+                    Pattern.compile(
+                        conditionsFirst.joinToString(
+                            prefix = "(",
+                            separator = ")|(",
+                            postfix = ")"
+                        )
+                    ),
+                    Color.GRAY
+                ),
+                ColorScheme(
+                    Expression.variable,
+                    requireContext().theme.requestColor(R.attr.colorAccent)
+                )
+            )
+
+            binding.tlCondition.editText?.addTextChangedListener(this)
+        }
     }
 
     private fun confirm() {

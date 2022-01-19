@@ -8,7 +8,6 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.ItemPathRulesBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
-import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
@@ -22,14 +21,11 @@ import org.json.JSONObject
 
 private typealias PathRulesView = ItemPathRulesBinding
 
-class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
+class RulesPathAdapter(
+    private val pathListener: RulesPathListener
+) : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
     private var rules: MutableList<RuleModel> = mutableListOf()
-    private var onAddConditionListener: OnAddConditionListener? = null
-
-    fun setOnAddConditionListener(onAddConditionListener: OnAddConditionListener?) {
-        this.onAddConditionListener = onAddConditionListener
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
@@ -48,7 +44,11 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         holder.setupHighlight()
 
         holder.addConditionBtn.setOnClickListener {
-            onAddConditionListener?.onClick(position)
+            pathListener.onAddCondition(position)
+        }
+
+        holder.itemView.setOnClickListener {
+            pathListener.onEditPath(rule, position)
         }
     }
 
@@ -99,6 +99,12 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         private val ruleConditionAdapter: RuleConditionsAdapter
                 by setupRulesConditionAdapter()
 
+        private fun setupRulesConditionAdapter() = lazy {
+            RuleConditionsAdapter().apply {
+                binding.rvConditions.adapter = this
+            }
+        }
+
         fun bind(rule: RuleModel, isLastItem: Boolean) {
             binding.tvPath.text = rule.path.replaceFirst("rules/", "/")
             ruleConditionAdapter.setConditions(rule.conditions, rule.path)
@@ -111,12 +117,6 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
                 bottomMargin = context.dp(if (lastItem) 6 else 0)
                 itemView.layoutParams = this
             }
-
-        private fun setupRulesConditionAdapter() = lazy {
-            RuleConditionsAdapter().apply {
-                binding.rvConditions.adapter = this
-            }
-        }
 
         fun setupHighlight() {
             Highlight().apply {
@@ -132,7 +132,8 @@ class RulesPathAdapter : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
         }
     }
 
-    fun interface OnAddConditionListener {
-        fun onClick(position: Int)
+    interface RulesPathListener {
+        fun onAddCondition(position: Int)
+        fun onEditPath(rule: RuleModel, position: Int)
     }
 }

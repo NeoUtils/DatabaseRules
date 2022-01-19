@@ -21,7 +21,7 @@ import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.adapter.IntegratedAppsAdapter
 import com.neo.fbrules.main.presenter.fragment.bottomSheet.ConfigBottomSheet
 import com.neo.fbrules.main.presenter.fragment.dialog.EncryptionDialog
-import com.neo.fbrules.main.presenter.model.Update
+import com.neo.fbrules.main.presenter.model.UpdateModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.goToUrl
 import com.neo.fbrules.util.visibility
@@ -196,7 +196,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         }
     }
 
-    private fun changeUpdateNotice(update: Update) = with(binding.drawer) {
+    private fun changeUpdateNotice(update: UpdateModel) = with(binding.drawer) {
         val stateVisibility = update.hasUpdate != null
 
         if (stateVisibility) {
@@ -232,7 +232,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
     }
 
     @SuppressLint("SetTextI18n")
-    private fun changeHasUpdate(update: Update) = with(binding.drawer) {
+    private fun changeHasUpdate(update: UpdateModel) = with(binding.drawer) {
         ivIcon.setImageResource(R.drawable.ic_has_update)
 
         requestColor(R.color.yellow).let { color ->
