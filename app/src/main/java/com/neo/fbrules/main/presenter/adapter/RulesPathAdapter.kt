@@ -65,6 +65,19 @@ class RulesPathAdapter(
         rules.add(rule)
         notifyDataSetChanged()
 
+        jsonFormat()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun editRule(rule: RuleModel, position: Int) {
+        rules[position] = rule
+        notifyDataSetChanged()
+
+        jsonFormat()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun jsonFormat() {
         CoroutineScope(Dispatchers.IO).launch {
             val readRulesJson = ReadRulesJson()
             val rulesString = readRulesJson.getRulesString(rules)
@@ -75,7 +88,6 @@ class RulesPathAdapter(
                 notifyDataSetChanged()
             }
         }
-
     }
 
     fun getRules(): MutableList<RuleModel> {

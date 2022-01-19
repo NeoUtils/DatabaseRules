@@ -130,7 +130,7 @@ class VisualEditorFragment : Fragment(), RulesEditor {
 
         if (rule != null && position != null) {
             dialog.arguments = Bundle().apply {
-                putParcelable(RuleModel::class.java.simpleName, rule)
+                putSerializable(RuleModel::class.java.simpleName, rule)
                 putInt("position", position)
             }
         }
@@ -145,7 +145,12 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
             val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
             rule?.let {
-                addRulePath(rule)
+                val position = bundle.getInt("position", -1)
+                if (position != -1) {
+                    editRulePath(rule, position)
+                } else {
+                    addRulePath(rule)
+                }
             }
         }
     }
@@ -164,6 +169,13 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         }
     }
 
+    private fun editRulePath(rule: RuleModel, position: Int) {
+        runCatching {
+            rulesPathAdapter.editRule(rule, position)
+        }.onFailure {
+            handlerError(ERROR.INVALID_JSON, it)
+        }
+    }
 
     override fun getRules(): String? {
 

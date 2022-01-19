@@ -2,12 +2,13 @@ package com.neo.fbrules.main.presenter.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import java.io.Serializable
 
 @Parcelize
 data class RuleModel(
     val path: String = "",
     val conditions: MutableList<RuleCondition> = mutableListOf()
-) : Parcelable {
+) : Parcelable, Serializable {
 
     fun addOnEditCondition(newCondition: RuleCondition) {
         val condition = conditions.find { it.property == newCondition.property }

@@ -100,7 +100,7 @@ class AddRulePathDialog : DialogFragment() {
 
     private fun setupArguments() {
         arguments?.let { it ->
-            it.getParcelable<RuleModel>(RuleModel::class.java.simpleName)?.also {
+            it.getSerializable<RuleModel>(RuleModel::class.java.simpleName)?.also {
                 ruleConditionsAdapter.setRulePath(it)
             }
         }
@@ -170,6 +170,10 @@ class AddRulePathDialog : DialogFragment() {
                 RuleModel::class.java.simpleName,
                 ruleModel
             )
+
+            arguments?.let {
+                putInt("position", it.getInt("position", -1))
+            }
         }
 
         setFragmentResult(TAG, result); dismiss()
