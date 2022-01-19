@@ -60,8 +60,8 @@ class VisualEditorFragment : Fragment(), RulesEditor {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setupListeners()
         setupArguments()
+        setupListeners()
     }
 
     private fun setupListeners() {

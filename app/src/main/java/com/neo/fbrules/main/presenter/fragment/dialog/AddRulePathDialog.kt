@@ -31,6 +31,7 @@ class AddRulePathDialog : DialogFragment() {
 
     private val ruleConditionsAdapter: RuleConditionsAdapter by setupRulesConditions()
     private val conditions get() = ruleConditionsAdapter.getConditions()
+    private val path get() = ruleConditionsAdapter.getPath()
 
     private fun setupRulesConditions() = lazy {
         RuleConditionsAdapter().apply {
@@ -47,9 +48,11 @@ class AddRulePathDialog : DialogFragment() {
 
         isCancelable = true
 
+        setupHighlight()
+        setupArguments()
+
         setupView()
         setupListeners()
-        setupHighlight()
 
         return alert.create()
     }
@@ -88,9 +91,19 @@ class AddRulePathDialog : DialogFragment() {
 
         binding.head.tvTitle.text = "Adicionar Regra"
 
+        binding.tlPath.editText?.setText(path)
+
         ruleConditionsAdapter.setConditions(conditions)
 
         binding.head.ibBackBtn.visibility(false)
+    }
+
+    private fun setupArguments() {
+        arguments?.let { it ->
+            it.getParcelable<RuleModel>(RuleModel::class.java.simpleName)?.also {
+                ruleConditionsAdapter.setRulePath(it)
+            }
+        }
     }
 
     private fun setupHighlight() {

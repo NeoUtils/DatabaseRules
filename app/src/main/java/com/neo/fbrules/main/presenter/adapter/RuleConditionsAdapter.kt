@@ -9,6 +9,7 @@ import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.databinding.ItemRuleConditionBinding
 import com.neo.fbrules.main.presenter.model.RuleCondition
+import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.core.Highlight
@@ -118,4 +119,11 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
     }
 
     fun getConditions() = conditions
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun setRulePath(rulePath: RuleModel) {
+        this.conditions = rulePath.conditions
+        this.path = rulePath.path.substringAfter("rules/")
+        notifyDataSetChanged()
+    }
 }
