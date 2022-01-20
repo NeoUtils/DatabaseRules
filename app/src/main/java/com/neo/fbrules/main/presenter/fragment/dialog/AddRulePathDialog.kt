@@ -36,7 +36,7 @@ class AddRulePathDialog : DialogFragment() {
     private val path get() = ruleModel.path
 
     private fun setupRulesConditions() = lazy {
-        RuleConditionsAdapter({ ruleModel }).apply {
+        RuleConditionsAdapter { ruleModel }.apply {
             binding.rvRuleConditions.adapter = this
         }
     }
@@ -131,15 +131,12 @@ class AddRulePathDialog : DialogFragment() {
 
         registerAddCondition()
 
-        val dialog = AddRuleConditionDialog()
-
-        dialog.show(
-            parentFragmentManager,
-            AddRuleConditionDialog.TAG
-        )
+        AddRuleConditionDialog().apply {
+            show(parentFragmentManager, AddRuleConditionDialog.TAG)
+        }
     }
 
-    private fun registerAddCondition() {
+    private fun registerAddCondition() =
         setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
             val ruleCondition =
                 bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
@@ -148,7 +145,6 @@ class AddRulePathDialog : DialogFragment() {
                 addCondition(ruleCondition)
             }
         }
-    }
 
     private fun addCondition(ruleCondition: RuleCondition) {
         if (conditions.any { it.property == ruleCondition.property }) {
@@ -188,7 +184,10 @@ class AddRulePathDialog : DialogFragment() {
         setFragmentResult(TAG, result); dismiss()
     }
 
-    private fun validate(path: String, conditions: MutableList<RuleCondition>): Boolean {
+    private fun validate(
+        path: String,
+        conditions: MutableList<RuleCondition>
+    ): Boolean {
 
         if (path.isBlank()) {
             binding.tlPath.error = "Digite o caminho"

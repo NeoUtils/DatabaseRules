@@ -114,7 +114,7 @@ class RulesPathAdapter(
         lateinit var rule: RuleModel
 
         private fun setupRulesConditionAdapter() = lazy {
-            RuleConditionsAdapter({ rule }).apply {
+            RuleConditionsAdapter { rule }.apply {
                 binding.rvConditions.adapter = this
             }
         }
@@ -128,12 +128,6 @@ class RulesPathAdapter(
             configBottomMargin(isLastItem)
         }
 
-        private fun configBottomMargin(lastItem: Boolean) =
-            with(itemView.layoutParams as ViewGroup.MarginLayoutParams) {
-                bottomMargin = context.dp(if (lastItem) 6 else 0)
-                itemView.layoutParams = this
-            }
-
         fun setupHighlight() {
             Highlight().apply {
                 addScheme(
@@ -146,6 +140,12 @@ class RulesPathAdapter(
                 setSpan(binding.tvPath)
             }
         }
+
+        private fun configBottomMargin(lastItem: Boolean) =
+            with(itemView.layoutParams as ViewGroup.MarginLayoutParams) {
+                bottomMargin = context.dp(if (lastItem) 6 else 0)
+                itemView.layoutParams = this
+            }
     }
 
     interface RulesPathListener {

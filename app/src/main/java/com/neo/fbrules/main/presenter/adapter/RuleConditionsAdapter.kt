@@ -19,8 +19,8 @@ import java.util.regex.Pattern
 private typealias RuleConditionView = ItemRuleConditionBinding
 
 class RuleConditionsAdapter(
-    private val getRule : () -> RuleModel,
-    private val onRuleClickListener: OnRuleClickListener? = null
+    private val onRuleClickListener: OnRuleClickListener? = null,
+    private val getRule : () -> RuleModel
 ) : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
 
     private val rule get() = getRule()
