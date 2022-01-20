@@ -20,7 +20,7 @@ private typealias RuleConditionView = ItemRuleConditionBinding
 
 class RuleConditionsAdapter(
     private val onRuleClickListener: OnRuleClickListener? = null,
-    private val getRule : () -> RuleModel
+    private val getRule: () -> RuleModel
 ) : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
 
     private val rule get() = getRule()
@@ -29,7 +29,12 @@ class RuleConditionsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            RuleConditionView.inflate(LayoutInflater.from(parent.context), parent, false)
+            RuleConditionView
+                .inflate(
+                    LayoutInflater.from(
+                        parent.context
+                    ), parent, false
+                )
         )
     }
 

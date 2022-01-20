@@ -34,6 +34,12 @@ class AddRuleConditionDialog : DialogFragment() {
     private val propertiesAutocompleteAdapter: ArrayAdapter<String> by setupPropertiesAdapter()
     private val conditionAutocompleteAdapter: ArrayAdapter<String> by setupConditionAdapter()
 
+    private val conditionsAutocomplete
+        get() = binding.tlCondition.editText as AutoCompleteTextView
+
+    private val propertiesAutocomplete
+        get() = binding.tlProperty.editText as AutoCompleteTextView
+
     private val conditions = arrayListOf(
         "Nenhum" to "false",
         "Usuário logado" to "auth.uid == \$uid",
@@ -68,6 +74,7 @@ class AddRuleConditionDialog : DialogFragment() {
 
         isCancelable = false
 
+        setupArguments()
         setupListener()
         setupView()
         setupHighlight()
@@ -81,25 +88,19 @@ class AddRuleConditionDialog : DialogFragment() {
 
         binding.head.ibCloseBtn.visibility(false)
 
-        val propertiesAutocomplete = binding.tlProperty.editText as AutoCompleteTextView
-
         propertiesAutocomplete.setAdapter(propertiesAutocompleteAdapter)
-
-        val conditionsAutocomplete = binding.tlCondition.editText as AutoCompleteTextView
 
         conditionsAutocomplete.setAdapter(conditionAutocompleteAdapter)
     }
 
     private fun setupListener() {
 
-        val propertiesAutocomplete = binding.tlProperty.editText as AutoCompleteTextView
         propertiesAutocomplete.setAdapter(propertiesAutocompleteAdapter)
 
         binding.optionsProperty.ibExpandBtn.setOnClickListener {
             propertiesAutocomplete.showDropDown()
         }
 
-        val conditionsAutocomplete = binding.tlCondition.editText as AutoCompleteTextView
         conditionsAutocomplete.setAdapter(conditionAutocompleteAdapter)
 
         binding.optionsConditions.ibExpandBtn.setOnClickListener {
@@ -151,6 +152,17 @@ class AddRuleConditionDialog : DialogFragment() {
             dismiss()
         }
 
+    }
+
+    private fun setupArguments() {
+        arguments?.run {
+            getSerializable(RuleCondition::class.java.simpleName)?.also {
+                val ruleCondition = it as RuleCondition
+
+                propertiesAutocomplete.setText(ruleCondition.property, false)
+                conditionsAutocomplete.setText(ruleCondition.condition, false)
+            }
+        }
     }
 
     private fun setupHighlight() {

@@ -25,7 +25,7 @@ import java.util.regex.Pattern
 
 private typealias AddRulePathView = DialogAddPathBinding
 
-class AddRulePathDialog : DialogFragment() {
+class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
 
     private lateinit var binding: AddRulePathView
 
@@ -36,7 +36,7 @@ class AddRulePathDialog : DialogFragment() {
     private val path get() = ruleModel.path
 
     private fun setupRulesConditions() = lazy {
-        RuleConditionsAdapter { ruleModel }.apply {
+        RuleConditionsAdapter(this) { ruleModel }.apply {
             binding.rvRuleConditions.adapter = this
         }
     }
@@ -127,12 +127,26 @@ class AddRulePathDialog : DialogFragment() {
         }
     }
 
-    private fun showAddRuleCondition() {
+    private fun showAddRuleCondition(
+        rule: RuleCondition? = null,
+        position: Int? = null
+    ) {
 
         registerAddCondition()
 
         AddRuleConditionDialog().apply {
-            show(parentFragmentManager, AddRuleConditionDialog.TAG)
+
+            if (rule != null && position != null) {
+                arguments = Bundle().apply {
+                    putSerializable(RuleCondition::class.java.simpleName, rule)
+                    putInt("position", position)
+                }
+            }
+
+            show(
+                this@AddRulePathDialog.parentFragmentManager,
+                AddRuleConditionDialog.TAG
+            )
         }
     }
 
@@ -206,5 +220,13 @@ class AddRulePathDialog : DialogFragment() {
 
     companion object {
         val TAG: String = AddRulePathDialog::class.java.simpleName
+    }
+
+    override fun edit(rule: RuleCondition, position: Int) {
+        showAddRuleCondition(rule, position)
+    }
+
+    override fun remove(rule: RuleCondition, position: Int) {
+        TODO("Not yet implemented")
     }
 }

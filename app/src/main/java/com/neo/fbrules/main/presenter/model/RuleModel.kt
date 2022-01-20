@@ -25,4 +25,4 @@ data class RuleModel(
 data class RuleCondition(
     val property: String,
     var condition: String
-) : Parcelable
+) : Parcelable, Serializable
