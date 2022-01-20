@@ -156,9 +156,19 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
                 bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
 
             ruleCondition?.let {
-                addCondition(ruleCondition)
+                val position = bundle.getInt("position", -1)
+                if (position != -1) {
+                    editCondition(ruleCondition, position)
+                } else {
+                    addCondition(ruleCondition)
+                }
             }
         }
+
+    private fun editCondition(ruleCondition: RuleCondition, position: Int) {
+        conditions[position] = ruleCondition
+        ruleConditionsAdapter.updateAll()
+    }
 
     private fun addCondition(ruleCondition: RuleCondition) {
         if (conditions.any { it.property == ruleCondition.property }) {
