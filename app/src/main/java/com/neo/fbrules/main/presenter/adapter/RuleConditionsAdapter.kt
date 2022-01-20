@@ -18,22 +18,14 @@ import java.util.regex.Pattern
 
 private typealias RuleConditionView = ItemRuleConditionBinding
 
-class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
+class RuleConditionsAdapter(
+    private val getRule : () -> RuleModel,
+    private val onRuleClickListener: OnRuleClickListener? = null
+) : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
 
-    private var conditions = mutableListOf<RuleCondition>()
-    private var path = ""
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setConditions(conditions: MutableList<RuleCondition>) {
-        this.conditions = conditions
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setConditions(conditions: MutableList<RuleCondition>, path: String) {
-        this.path = path
-        setConditions(conditions)
-    }
+    private val rule get() = getRule()
+    private val conditions get() = rule.conditions
+    private val path get() = rule.path
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
@@ -48,8 +40,23 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
         val isLastItem = lastItemPosition == position
         holder.bind(condition, isLastItem)
         holder.setupHighlight(path)
+
+        setupListeners(holder)
     }
 
+    private fun setupListeners(holder: Holder) {
+        holder.itemView.setOnClickListener {
+            val position = holder.adapterPosition
+            val rule = conditions[position]
+            onRuleClickListener?.edit(rule, position)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            val position = holder.adapterPosition
+            val rule = conditions[position]
+            onRuleClickListener?.remove(rule, position)?.let { true } ?: false
+        }
+    }
 
     class Holder(private val binding: RuleConditionView) : RecyclerView.ViewHolder(binding.root) {
 
@@ -99,31 +106,15 @@ class RuleConditionsAdapter : RecyclerView.Adapter<RuleConditionsAdapter.Holder>
             }
     }
 
+    interface OnRuleClickListener {
+        fun edit(rule: RuleCondition, position: Int)
+        fun remove(rule: RuleCondition, position: Int)
+    }
 
     override fun getItemCount() = conditions.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addCondition(ruleCondition: RuleCondition) {
-        this.conditions.add(ruleCondition)
-        notifyDataSetChanged()
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setPath(value: String) {
-        this.path = value
-        notifyDataSetChanged()
-    }
-
-    fun getPath(): String {
-        return path
-    }
-
-    fun getConditions() = conditions
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setRulePath(rulePath: RuleModel) {
-        this.conditions = rulePath.conditions
-        this.path = rulePath.path.substringAfter("rules/")
+    fun updateAll() {
         notifyDataSetChanged()
     }
 }

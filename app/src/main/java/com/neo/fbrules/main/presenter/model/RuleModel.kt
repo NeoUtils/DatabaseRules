@@ -6,7 +6,7 @@ import java.io.Serializable
 
 @Parcelize
 data class RuleModel(
-    val path: String = "",
+    var path: String = "",
     val conditions: MutableList<RuleCondition> = mutableListOf()
 ) : Parcelable, Serializable {
 

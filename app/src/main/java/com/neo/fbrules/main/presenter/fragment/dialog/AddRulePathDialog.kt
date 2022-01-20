@@ -30,11 +30,13 @@ class AddRulePathDialog : DialogFragment() {
     private lateinit var binding: AddRulePathView
 
     private val ruleConditionsAdapter: RuleConditionsAdapter by setupRulesConditions()
-    private val conditions get() = ruleConditionsAdapter.getConditions()
-    private val path get() = ruleConditionsAdapter.getPath()
+
+    private lateinit var ruleModel: RuleModel
+    private val conditions get() = ruleModel.conditions
+    private val path get() = ruleModel.path
 
     private fun setupRulesConditions() = lazy {
-        RuleConditionsAdapter().apply {
+        RuleConditionsAdapter({ ruleModel }).apply {
             binding.rvRuleConditions.adapter = this
         }
     }
@@ -63,7 +65,8 @@ class AddRulePathDialog : DialogFragment() {
             val value = it?.toString()
 
             if (value != null) {
-                ruleConditionsAdapter.setPath(value)
+                ruleModel.path = value
+                ruleConditionsAdapter.updateAll()
             }
 
             binding.tlPath.isErrorEnabled = false
@@ -93,16 +96,18 @@ class AddRulePathDialog : DialogFragment() {
 
         binding.tlPath.editText?.setText(path)
 
-        ruleConditionsAdapter.setConditions(conditions)
+        ruleConditionsAdapter.updateAll()
 
         binding.head.ibBackBtn.visibility(false)
     }
 
     private fun setupArguments() {
         arguments?.let { it ->
-            it.getSerializable<RuleModel>(RuleModel::class.java.simpleName)?.also {
-                ruleConditionsAdapter.setRulePath(it)
+            it.getSerializable(RuleModel::class.java.simpleName)?.also {
+                ruleModel = it as RuleModel
             }
+        } ?: run {
+            ruleModel = RuleModel()
         }
     }
 
@@ -153,7 +158,8 @@ class AddRulePathDialog : DialogFragment() {
             return
         }
 
-        ruleConditionsAdapter.addCondition(ruleCondition)
+        conditions.add(ruleCondition)
+        ruleConditionsAdapter.updateAll()
     }
 
     private fun confirm() {
@@ -164,7 +170,10 @@ class AddRulePathDialog : DialogFragment() {
         val result = Bundle().apply {
 
             val ruleModel =
-                RuleModel("rules/$path".replace("//", "/"), conditions)
+                RuleModel(
+                    "rules/${path.substringAfter("rules/")}"
+                        .replace("//", "/"), conditions
+                )
 
             putParcelable(
                 RuleModel::class.java.simpleName,

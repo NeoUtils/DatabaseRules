@@ -111,15 +111,19 @@ class RulesPathAdapter(
         private val ruleConditionAdapter: RuleConditionsAdapter
                 by setupRulesConditionAdapter()
 
+        lateinit var rule: RuleModel
+
         private fun setupRulesConditionAdapter() = lazy {
-            RuleConditionsAdapter().apply {
+            RuleConditionsAdapter({ rule }).apply {
                 binding.rvConditions.adapter = this
             }
         }
 
         fun bind(rule: RuleModel, isLastItem: Boolean) {
+            this.rule = rule
+
+            ruleConditionAdapter.updateAll()
             binding.tvPath.text = rule.path.replaceFirst("rules/", "/")
-            ruleConditionAdapter.setConditions(rule.conditions, rule.path)
 
             configBottomMargin(isLastItem)
         }
