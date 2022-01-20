@@ -11,6 +11,7 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
+import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
@@ -26,22 +27,15 @@ import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
-class VisualEditorFragment : Fragment(), RulesEditor {
+class VisualEditorFragment : Fragment(), RulesEditor,
+    RulesPathAdapter.RulesPathListener {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
     private val rules get() = rulesPathAdapter.getRules()
 
     private fun setupVisualRulesAdapter() = lazy {
-        RulesPathAdapter(object : RulesPathAdapter.RulesPathListener {
-            override fun onAddCondition(position: Int) {
-                showAddConditionDialog(position)
-            }
-
-            override fun onEditPath(rule: RuleModel, position: Int) {
-                showAddPathDialog(rule, position)
-            }
-        }).apply {
+        RulesPathAdapter(this).apply {
             binding.rvRules.adapter = this
         }
     }
@@ -64,6 +58,18 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         setupListeners()
     }
 
+    override fun onAddCondition(position: Int) {
+        showRuleConditionDialog(position, null)
+    }
+
+    override fun onEditPath(rule: RuleModel, position: Int) {
+        showAddPathDialog(rule, position)
+    }
+
+    override fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int) {
+        showRuleConditionDialog(pathPosition, rule, rulePosition)
+    }
+
     private fun setupListeners() {
         binding.fbAddPathBtn.setOnClickListener {
             showAddPathDialog()
@@ -74,14 +80,23 @@ class VisualEditorFragment : Fragment(), RulesEditor {
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
-    private fun showAddConditionDialog(position: Int) {
+    private fun showRuleConditionDialog(
+        pathPosition: Int,
+        rule: RuleCondition? = null,
+        rulePosition: Int = -1
+    ) {
 
         registerAddConditionListener()
 
         val dialog = AddRuleConditionDialog()
 
         dialog.arguments = Bundle().apply {
-            putInt("position", position)
+            putInt("path_position", pathPosition)
+            putInt("rule_position", rulePosition)
+
+            rule?.let {
+                putSerializable(RuleCondition::class.java.simpleName, rule)
+            }
         }
 
         dialog.show(
@@ -95,12 +110,28 @@ class VisualEditorFragment : Fragment(), RulesEditor {
             val condition =
                 bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
 
-            val position = bundle.getInt("position", -1)
+            val pathPosition = bundle.getInt("path_position", -1)
 
-            if (condition != null && position != -1) {
-                addRuleCondition(condition, position)
+            if (condition != null && pathPosition != -1) {
+
+                val rulePosition = bundle.getInt("rule_position", -1)
+
+                if (rulePosition != -1) {
+                    editRuleCondition(condition, pathPosition, rulePosition)
+                } else {
+                    addRuleCondition(condition, pathPosition)
+                }
             }
         }
+    }
+
+    private fun editRuleCondition(
+        condition: RuleCondition,
+        pathPosition: Int,
+        rulePosition: Int
+    ) {
+        rules[pathPosition].conditions[rulePosition] = condition
+        rulesPathAdapter.updateAll()
     }
 
     private fun addRuleCondition(

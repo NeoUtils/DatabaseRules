@@ -129,17 +129,17 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
 
     private fun showAddRuleCondition(
         rule: RuleCondition? = null,
-        position: Int? = null
+        rulePosition: Int? = null
     ) {
 
         registerAddCondition()
 
         AddRuleConditionDialog().apply {
 
-            if (rule != null && position != null) {
+            if (rule != null && rulePosition != null) {
                 arguments = Bundle().apply {
                     putSerializable(RuleCondition::class.java.simpleName, rule)
-                    putInt("position", position)
+                    putInt("rule_position", rulePosition)
                 }
             }
 
@@ -156,9 +156,10 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
                 bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
 
             ruleCondition?.let {
-                val position = bundle.getInt("position", -1)
-                if (position != -1) {
-                    editCondition(ruleCondition, position)
+                val rulePosition = bundle.getInt("rule_position", -1)
+
+                if (rulePosition != -1) {
+                    editCondition(ruleCondition, rulePosition)
                 } else {
                     addCondition(ruleCondition)
                 }

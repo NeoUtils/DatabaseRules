@@ -8,6 +8,7 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.ItemPathRulesBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
+import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
@@ -22,16 +23,17 @@ import org.json.JSONObject
 private typealias PathRulesView = ItemPathRulesBinding
 
 class RulesPathAdapter(
-    private val pathListener: RulesPathListener
+    private val pathListener: RulesPathListener? = null
 ) : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
     private var rules: MutableList<RuleModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            PathRulesView.inflate(
+            binding = PathRulesView.inflate(
                 LayoutInflater.from(parent.context), parent, false
             ),
+            onRulePathListener = pathListener
         )
     }
 
@@ -44,11 +46,11 @@ class RulesPathAdapter(
         holder.setupHighlight()
 
         holder.addConditionBtn.setOnClickListener {
-            pathListener.onAddCondition(position)
+            pathListener?.onAddCondition(position)
         }
 
         holder.itemView.setOnClickListener {
-            pathListener.onEditPath(rule, position)
+            pathListener?.onEditPath(rule, position)
         }
     }
 
@@ -57,23 +59,19 @@ class RulesPathAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun setRules(rules: MutableList<RuleModel>) {
         this.rules = rules
-        notifyDataSetChanged()
+        updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun addRule(rule: RuleModel) {
         rules.add(rule)
-        notifyDataSetChanged()
-
-        jsonFormat()
+        updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun editRule(rule: RuleModel, position: Int) {
         rules[position] = rule
-        notifyDataSetChanged()
-
-        jsonFormat()
+        updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -100,8 +98,15 @@ class RulesPathAdapter(
         notifyDataSetChanged()
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateAll() {
+        notifyDataSetChanged()
+        jsonFormat()
+    }
+
     class Holder(
-        private val binding: PathRulesView
+        private val binding: PathRulesView,
+        private var onRulePathListener: RulesPathListener? = null
     ) : RecyclerView.ViewHolder(binding.root) {
 
         val addConditionBtn = binding.mbAddConditionBtn
@@ -111,16 +116,26 @@ class RulesPathAdapter(
         private val ruleConditionAdapter: RuleConditionsAdapter
                 by setupRulesConditionAdapter()
 
-        lateinit var rule: RuleModel
+        lateinit var ruleModel: RuleModel
 
         private fun setupRulesConditionAdapter() = lazy {
-            RuleConditionsAdapter { rule }.apply {
+            RuleConditionsAdapter(onRulePathListener?.let {
+                object : RuleConditionsAdapter.OnRuleClickListener{
+                    override fun edit(rule: RuleCondition, position: Int) {
+                        it.onEditRule(rule, adapterPosition, position)
+                    }
+
+                    override fun remove(rule: RuleCondition, position: Int) {
+                        TODO("Not yet implemented")
+                    }
+                }
+            }) { ruleModel }.apply {
                 binding.rvConditions.adapter = this
             }
         }
 
         fun bind(rule: RuleModel, isLastItem: Boolean) {
-            this.rule = rule
+            this.ruleModel = rule
 
             ruleConditionAdapter.updateAll()
             binding.tvPath.text = rule.path.replaceFirst("rules/", "/")
@@ -151,5 +166,6 @@ class RulesPathAdapter(
     interface RulesPathListener {
         fun onAddCondition(position: Int)
         fun onEditPath(rule: RuleModel, position: Int)
+        fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int)
     }
 }

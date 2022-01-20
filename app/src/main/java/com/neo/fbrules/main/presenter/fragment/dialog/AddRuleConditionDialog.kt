@@ -225,9 +225,16 @@ class AddRuleConditionDialog : DialogFragment() {
             )
 
             arguments?.let {
-                val position = it.getInt("position", -1)
-                if (position != -1) {
-                    putInt("position", position)
+                val pathPosition = it.getInt("path_position", -1)
+
+                if (pathPosition != -1) {
+                    putInt("path_position", pathPosition)
+                }
+
+                val rulePosition = it.getInt("rule_position", -1)
+
+                if (rulePosition != -1) {
+                    putInt("rule_position", rulePosition)
                 }
             }
         }
