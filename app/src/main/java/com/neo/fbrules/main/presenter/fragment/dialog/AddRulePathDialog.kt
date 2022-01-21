@@ -33,7 +33,7 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
 
     private lateinit var ruleModel: RuleModel
     private val conditions get() = ruleModel.conditions
-    private val path get() = ruleModel.path
+    private val path get() = ruleModel.rootPath
 
     private fun setupRulesConditions() = lazy {
         RuleConditionsAdapter(this) { ruleModel }.apply {
@@ -65,7 +65,7 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
             val value = it?.toString()
 
             if (value != null) {
-                ruleModel.path = value
+                ruleModel.rootPath = value
                 ruleConditionsAdapter.updateAll()
             }
 

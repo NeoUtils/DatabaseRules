@@ -73,7 +73,7 @@ class VisualEditorFragment : Fragment(), RulesEditor,
         val path = rules[pathPosition]
         showAlertDialog(
             "Remove rule",
-            "Deseja realmente remover essa regra do path ${path.path}?"
+            "Deseja realmente remover essa regra do path ${path.rootPath}?"
         ) {
             positiveButton("Remover") {
                 path.conditions.removeAt(rulePosition)
@@ -84,10 +84,17 @@ class VisualEditorFragment : Fragment(), RulesEditor,
     }
 
     override fun onRemovePath(pathPosition: Int) {
-        showAlertDialog("Remove path", "Deseja realmente remover esse path?") {
+
+        val path = rules[pathPosition].rootPath
+        val allRules = rules.filter { it.rootPath.startsWith(path) }
+        val paths = allRules.joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
+
+        showAlertDialog("Remove paths", "Deseja realmente remover esses paths?\n$paths") {
             positiveButton("Remover") {
-                rules.removeAt(pathPosition)
+
+                rules.removeAll { allRules.contains(it) }
                 rulesPathAdapter.updateAll()
+
             }
             negativeButton("Cancelar")
         }
@@ -211,7 +218,7 @@ class VisualEditorFragment : Fragment(), RulesEditor,
 
     private fun addRulePath(rule: RuleModel) {
 
-        if (rules.any { it.path == rule.path }) {
+        if (rules.any { it.rootPath == rule.rootPath }) {
             showAlertDialog("Error", "Esse path já existe")
             return
         }

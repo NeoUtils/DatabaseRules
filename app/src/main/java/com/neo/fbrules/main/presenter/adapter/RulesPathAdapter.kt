@@ -146,7 +146,7 @@ class RulesPathAdapter(
             this.ruleModel = rule
 
             ruleConditionAdapter.updateAll()
-            binding.tvPath.text = rule.path.replaceFirst("rules/", "/")
+            binding.tvPath.text = rule.rootPath.replaceFirst("rules/", "/")
 
             configBottomMargin(isLastItem)
         }

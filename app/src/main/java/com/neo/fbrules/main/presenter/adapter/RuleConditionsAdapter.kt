@@ -25,7 +25,7 @@ class RuleConditionsAdapter(
 
     private val rule get() = getRule()
     private val conditions get() = rule.conditions
-    private val path get() = rule.path
+    private val path get() = rule.rootPath
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(

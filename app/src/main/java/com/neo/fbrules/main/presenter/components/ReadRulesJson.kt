@@ -40,7 +40,7 @@ class ReadRulesJson {
                 is JSONObject -> {
 
                     mapRules(
-                        RuleModel(rule.path + "/$key"),
+                        RuleModel(rule.rootPath + "/$key"),
                         rules,
                         value
                     )
@@ -67,7 +67,7 @@ class ReadRulesJson {
         val result = JSONObject()
 
         for (rule in rules) {
-            val jsonPath = getJsonPath(result, rule.path)
+            val jsonPath = getJsonPath(result, rule.rootPath)
             jsonPath.apply {
                 rule.conditions.forEach {
                     if (it.condition.isBoolean()) {
