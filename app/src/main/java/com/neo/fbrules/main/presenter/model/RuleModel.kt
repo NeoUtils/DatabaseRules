@@ -7,9 +7,14 @@ import java.io.Serializable
 @Parcelize
 data class RuleModel(
     var rootPath: String = "",
-    val conditions: MutableList<RuleCondition> = mutableListOf()
+    var conditions: MutableList<RuleCondition> = mutableListOf()
 ) : Parcelable, Serializable {
     val relativePath get() = rootPath.substringAfter("rules/")
+
+    val parentPath get() = if (rootPath.contains("/"))
+        rootPath.substringBeforeLast("/") else ""
+
+    val actualPath get() = rootPath.substringAfterLast("/")
 }
 
 @Parcelize

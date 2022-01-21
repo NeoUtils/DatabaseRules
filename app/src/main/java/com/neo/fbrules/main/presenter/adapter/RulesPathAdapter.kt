@@ -75,7 +75,20 @@ class RulesPathAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     fun editRule(rule: RuleModel, position: Int) {
-        rules[position] = rule
+        val oldPath = rules[position].rootPath
+
+        rules[position].conditions = rule.conditions
+        rules[position].rootPath = rule.rootPath
+
+        if (oldPath != rule.rootPath) {
+
+            val newPath = rule.rootPath
+
+            rules.filter { it.rootPath.startsWith(oldPath) }.forEach {
+                it.rootPath = it.rootPath.replaceFirst(oldPath, newPath)
+            }
+        }
+
         updateAll()
     }
 

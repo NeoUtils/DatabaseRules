@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
 import com.neo.fbrules.R
 import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.handlerError
@@ -191,7 +192,7 @@ class VisualEditorFragment : Fragment(), RulesEditor,
 
         if (rule != null && position != null) {
             dialog.arguments = Bundle().apply {
-                putSerializable(RuleModel::class.java.simpleName, rule)
+                putString(RuleModel::class.java.simpleName, Gson().toJson(rule))
                 putInt("position", position)
             }
         }

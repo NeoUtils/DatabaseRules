@@ -9,6 +9,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import com.google.gson.Gson
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.DialogAddPathBinding
@@ -65,8 +66,17 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
             val value = it?.toString()
 
             if (value != null) {
-                ruleModel.rootPath = value
-                ruleConditionsAdapter.updateAll()
+
+                if (
+                    ruleModel.parentPath.isEmpty() ||
+                    value.startsWith("${ruleModel.parentPath}/")
+                ) {
+                    ruleModel.rootPath = value
+                    ruleConditionsAdapter.updateAll()
+                } else {
+                    binding.tlPath.editText?.setText(ruleModel.rootPath)
+                    binding.tlPath.editText?.setSelection(ruleModel.rootPath.length)
+                }
             }
 
             binding.tlPath.isErrorEnabled = false
@@ -94,7 +104,13 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
 
         binding.head.tvTitle.text = "Adicionar Regra"
 
-        binding.tlPath.editText?.setText(path)
+        if (path.isNotEmpty()) {
+            binding.tlPath.editText?.setText(path)
+
+            if (path == "rules") {
+                binding.tlPath.isEnabled = false
+            }
+        }
 
         ruleConditionsAdapter.updateAll()
 
@@ -102,13 +118,15 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
     }
 
     private fun setupArguments() {
-        arguments?.let { it ->
-            it.getSerializable(RuleModel::class.java.simpleName)?.also {
-                ruleModel = it as RuleModel
+        ruleModel = arguments?.let { it ->
+
+            it.getString(
+                RuleModel::class.java.simpleName
+            )?.let {
+                Gson().fromJson(it, RuleModel::class.java)
             }
-        } ?: run {
-            ruleModel = RuleModel()
-        }
+
+        } ?: RuleModel()
     }
 
     private fun setupHighlight() {
