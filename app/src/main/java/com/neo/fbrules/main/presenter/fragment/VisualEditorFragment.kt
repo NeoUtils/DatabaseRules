@@ -11,7 +11,6 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
-import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
@@ -58,8 +57,8 @@ class VisualEditorFragment : Fragment(), RulesEditor,
         setupListeners()
     }
 
-    override fun onAddCondition(position: Int) {
-        showRuleConditionDialog(position, null)
+    override fun onAddRule(pathPosition: Int) {
+        showRuleConditionDialog(pathPosition, null)
     }
 
     override fun onEditPath(rule: RuleModel, position: Int) {
@@ -68,6 +67,30 @@ class VisualEditorFragment : Fragment(), RulesEditor,
 
     override fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int) {
         showRuleConditionDialog(pathPosition, rule, rulePosition)
+    }
+
+    override fun onRemoveRule(pathPosition: Int, rulePosition: Int) {
+        val path = rules[pathPosition]
+        showAlertDialog(
+            "Remove rule",
+            "Deseja realmente remover essa regra do path ${path.path}?"
+        ) {
+            positiveButton("Remover") {
+                path.conditions.removeAt(rulePosition)
+                rulesPathAdapter.updateAll()
+            }
+            negativeButton("Cancelar")
+        }
+    }
+
+    override fun onRemovePath(pathPosition: Int) {
+        showAlertDialog("Remove path", "Deseja realmente remover esse path?") {
+            positiveButton("Remover") {
+                rules.removeAt(pathPosition)
+                rulesPathAdapter.updateAll()
+            }
+            negativeButton("Cancelar")
+        }
     }
 
     private fun setupListeners() {

@@ -46,11 +46,16 @@ class RulesPathAdapter(
         holder.setupHighlight()
 
         holder.addConditionBtn.setOnClickListener {
-            pathListener?.onAddCondition(position)
+            pathListener?.onAddRule(position)
         }
 
         holder.itemView.setOnClickListener {
             pathListener?.onEditPath(rule, position)
+        }
+
+        holder.itemView.setOnLongClickListener {
+            pathListener?.onRemovePath(position)
+            true
         }
     }
 
@@ -76,6 +81,9 @@ class RulesPathAdapter(
 
     @SuppressLint("NotifyDataSetChanged")
     private fun jsonFormat() {
+
+        if (rules.isEmpty()) return
+
         CoroutineScope(Dispatchers.IO).launch {
             val readRulesJson = ReadRulesJson()
             val rulesString = readRulesJson.getRulesString(rules)
@@ -126,7 +134,7 @@ class RulesPathAdapter(
                     }
 
                     override fun remove(rule: RuleCondition, position: Int) {
-                        TODO("Not yet implemented")
+                        it.onRemoveRule(adapterPosition, position)
                     }
                 }
             }) { ruleModel }.apply {
@@ -164,8 +172,10 @@ class RulesPathAdapter(
     }
 
     interface RulesPathListener {
-        fun onAddCondition(position: Int)
+        fun onAddRule(pathPosition: Int)
         fun onEditPath(rule: RuleModel, position: Int)
         fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int)
+        fun onRemoveRule(pathPosition: Int, rulePosition: Int)
+        fun onRemovePath(pathPosition: Int)
     }
 }
