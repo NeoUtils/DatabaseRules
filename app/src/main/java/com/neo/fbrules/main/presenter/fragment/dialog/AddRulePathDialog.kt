@@ -119,7 +119,7 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
                     Color.CYAN
                 ),
                 ColorScheme(
-                    Expression.variable,
+                    Expression.variableInProperty,
                     requestColor(R.color.syntax_variable)
                 )
             )

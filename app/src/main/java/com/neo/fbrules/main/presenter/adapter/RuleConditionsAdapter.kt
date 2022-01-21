@@ -89,7 +89,7 @@ class RuleConditionsAdapter(
 
                 schemes = highlighting.conditionSyntax
 
-                val matcher = Expression.variable.matcher(path)
+                val matcher = Expression.variableInProperty.matcher(path)
                 while (matcher.find()) {
                     val variable = matcher.group()
                     addScheme(

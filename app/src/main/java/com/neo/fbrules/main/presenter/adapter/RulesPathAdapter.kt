@@ -147,7 +147,7 @@ class RulesPathAdapter(
             Highlight().apply {
                 addScheme(
                     ColorScheme(
-                        Expression.variable,
+                        Expression.variableInProperty,
                         context.requestColor(R.color.syntax_variable)
                     )
                 )

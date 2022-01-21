@@ -203,8 +203,8 @@ class AddRuleConditionDialog : DialogFragment() {
                     Color.GRAY
                 ),
                 ColorScheme(
-                    Expression.variable,
-                    requireContext().theme.requestColor(R.attr.colorAccent)
+                    Expression.variableInCondition,
+                    requestColor(R.color.syntax_variable)
                 )
             )
 
