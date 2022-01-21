@@ -256,6 +256,11 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
     }
 
     override fun remove(rule: RuleCondition, position: Int) {
-        TODO("Not yet implemented")
+        showAlertDialog("Remover regra", "Deseja realmente remover essa regra?") {
+            positiveButton("Remover") {
+                ruleModel.conditions.removeAt(position)
+                ruleConditionsAdapter.updateAll()
+            }
+        }
     }
 }
