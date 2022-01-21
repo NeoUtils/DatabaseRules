@@ -19,6 +19,29 @@ class RulesEditorFragment : Fragment(), RulesEditor {
     private lateinit var binding: RulesEditorView
     private val rulesEditorsAdapter: RulesEditorsAdapter by setupRulesEditorsAdapter()
 
+    private fun setupRulesEditorsAdapter() = lazy {
+        RulesEditorsAdapter(
+            childFragmentManager,
+            lifecycle,
+            object : RulesEditorsAdapter.OnCreateFragmentListener {
+                override fun createFragment(position: Int, fragment: Fragment) {
+                    val oldPosition = 1 - position
+
+                    val oldFragment = childFragmentManager
+                        .findFragmentByTag("f$oldPosition")
+                            as? RulesEditor
+
+                    oldFragment?.let {
+                        fragment.arguments = Bundle().apply {
+                            putString("rules", oldFragment.getRules())
+                        }
+                    }
+                }
+
+            }
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -64,6 +87,7 @@ class RulesEditorFragment : Fragment(), RulesEditor {
 
     private fun setupView() = with(binding) {
         vpRulesEditors.adapter = rulesEditorsAdapter
+        vpRulesEditors.isUserInputEnabled = false
 
         TabLayoutMediator(tlTabs, vpRulesEditors) { tab, position ->
             tab.text = when (position) {
@@ -87,29 +111,6 @@ class RulesEditorFragment : Fragment(), RulesEditor {
                 as RulesEditor
 
         myFragment.setRules(rules)
-    }
-
-    private fun setupRulesEditorsAdapter() = lazy {
-        RulesEditorsAdapter(
-            childFragmentManager,
-            lifecycle,
-            object : RulesEditorsAdapter.OnCreateFragmentListener {
-                override fun createFragment(position: Int, fragment: Fragment) {
-                    val oldPosition = 1 - position
-
-                    val oldFragment = childFragmentManager
-                        .findFragmentByTag("f$oldPosition")
-                            as? RulesEditor
-
-                    oldFragment?.let {
-                        fragment.arguments = Bundle().apply {
-                            putString("rules", oldFragment.getRules())
-                        }
-                    }
-                }
-
-            }
-        )
     }
 
 }
