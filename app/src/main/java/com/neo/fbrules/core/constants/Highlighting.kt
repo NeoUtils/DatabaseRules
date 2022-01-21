@@ -36,7 +36,6 @@ class Highlighting(context: Context) {
     )
 
     val completeSyntax = listOf(
-        propertySyntax[0],
         ColorScheme(
             Pattern.compile("(?<!\\w)(true|false|null)(?!\\w)"),
             context.getCompatColor(R.color.syntax_literal)
@@ -45,10 +44,7 @@ class Highlighting(context: Context) {
             Pattern.compile("\"[^\"]*\""),
             context.getCompatColor(R.color.syntax_string)
         ),
-        ColorScheme(
-            Pattern.compile("[/]{2}.*"),
-            context.getCompatColor(R.color.syntax_comment)
-        ),
+        propertySyntax[0],
         ColorScheme(
             Pattern.compile("(?<=auth\\.)uid|auth"),
             context.theme.requestColor(R.attr.colorAccent)
@@ -60,6 +56,10 @@ class Highlighting(context: Context) {
         ColorScheme(
             Pattern.compile("\\$\\w+"),
             context.requestColor(R.color.syntax_variable)
+        ),
+        ColorScheme(
+            Pattern.compile("[/]{2}.*"),
+            context.getCompatColor(R.color.syntax_comment)
         )
     )
 }
