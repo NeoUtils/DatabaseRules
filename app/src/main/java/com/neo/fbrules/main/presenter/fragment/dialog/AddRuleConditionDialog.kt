@@ -74,10 +74,11 @@ class AddRuleConditionDialog : DialogFragment() {
 
         isCancelable = false
 
+        setupHighlight()
         setupArguments()
+
         setupListener()
         setupView()
-        setupHighlight()
 
         return alert.create()
     }
