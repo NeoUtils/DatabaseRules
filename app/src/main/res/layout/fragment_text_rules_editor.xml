@@ -10,14 +10,21 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <com.neo.fbrules.main.presenter.components.view.TextRulesEditor
-            android:textSize="14sp"
-            android:id="@+id/text_rules_editor"
+        <HorizontalScrollView
+            android:fillViewport="true"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top|start"
-            android:inputType="text|textMultiLine|textNoSuggestions"
-            android:padding="10dp" />
+            android:layout_height="wrap_content">
+
+            <com.neo.fbrules.main.presenter.components.view.TextRulesEditor
+                android:textSize="14sp"
+                android:id="@+id/text_rules_editor"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="top|start"
+                android:inputType="text|textMultiLine|textNoSuggestions"
+                android:padding="10dp" />
+
+        </HorizontalScrollView>
 
     </ScrollView>
 
