@@ -70,6 +70,11 @@
     <string name="text_property">Propriedade</string>
     <string name="text_condition">Condição</string>
 
+    <!-- Handler Errors -->
+
+    <string name="text_visualRules_invalidRulesError">Regra inválida</string>
+    <string name="text_visualRules_unrecognizedRuleError">Regra não reconhecida</string>
+    <string name="text_visualRules_invalidRulesError_invalidJsonError">JSON inválido</string>
 
     <!-- Visual Editor -->
     <string name="text_visualEditor_fixedRules_title">Correções</string>

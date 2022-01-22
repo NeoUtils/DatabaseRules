@@ -18,15 +18,15 @@ fun Context.handlerError(type: ERROR, throwable: Throwable? = null) {
     val errorMessage = when (type) {
 
         ERROR.INVALID_RULES -> {
-            R.string.text_visual_rules_editor_error_invalid_rules
+            R.string.text_visualRules_invalidRulesError
         }
 
         ERROR.UNRECOGNIZED_RULES -> {
-            R.string.text_visual_rules_editor_error_unrecognized_rule
+            R.string.text_visualRules_unrecognizedRuleError
         }
 
         ERROR.INVALID_JSON -> {
-            R.string.text_visual_rules_editor_error_invalid_json
+            R.string.text_visualRules_invalidRulesError_invalidJsonError
         }
     }
 

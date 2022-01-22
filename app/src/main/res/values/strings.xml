@@ -49,9 +49,6 @@
     <string name="credentials_not_found">Unconfigured Access Credentials</string>
     <string name="unknown_error">Unspecified error</string>
 
-    <string name="text_visual_rules_editor_error_invalid_rules">This rule is invalid</string>
-    <string name="text_visual_rules_editor_error_unrecognized_rule">Regra não reconhecida</string>
-    <string name="text_visual_rules_editor_error_invalid_json">Sintaxe não reconhecida como JSON</string>
 
     <!-- all -->
     <string name="btn_cancel">Cancel</string>
@@ -64,6 +61,12 @@
 
     <string name="text_property">Property</string>
     <string name="text_condition">Condition</string>
+
+    <!-- Rules Editor -->
+
+    <string name="text_visualRules_invalidRulesError">Invalid rule</string>
+    <string name="text_visualRules_unrecognizedRuleError">Unrecognized Rule</string>
+    <string name="text_visualRules_invalidRulesError_invalidJsonError">Invalid JSON</string>
 
     <!-- Visual Editor -->
     <string name="text_visualEditor_fixedRules_title">Corrections</string>
