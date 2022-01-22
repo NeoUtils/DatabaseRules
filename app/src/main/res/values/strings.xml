@@ -79,7 +79,7 @@
     <string name="text_visualEditor_onRemovePath_message">Do you want to remove the following paths?\n%s</string>
 
     <string name="text_visualEditor_onRemoveRule_title">Remove rule</string>
-    <string name="text_visualEditor_onRemoveRule_message">Do you want to remove the following rule?\n%s</string>
+    <string name="text_visualEditor_onRemoveRule_message">Do you want to remove the following rule?\n\n%s</string>
 
     <string name="text_visualEditor_addRuleError_hasPropertyError">This property <b>%s</b> already exists!</string>
     <string name="text_visualEditor_addPathError_hasPathError">This path <b>%s</b> already exists!</string>

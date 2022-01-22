@@ -84,7 +84,10 @@ class VisualEditorFragment : Fragment(),
     override fun onRemovePath(pathPosition: Int) {
 
         val pathToRemove = paths[pathPosition].rootPath
-        val allRulesToRemove = paths.filter { it.rootPath.startsWith(pathToRemove) }
+
+        val allRulesToRemove = paths.filter {
+            it.parentPath == pathToRemove || it.rootPath == pathToRemove
+        }
 
         val listedPaths: String = allRulesToRemove
             .joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
