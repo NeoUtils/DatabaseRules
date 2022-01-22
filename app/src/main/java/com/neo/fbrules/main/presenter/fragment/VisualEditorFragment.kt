@@ -101,15 +101,16 @@ class VisualEditorFragment : Fragment(),
 
     override fun onRemoveRule(pathPosition: Int, rulePosition: Int) {
         val path = rules[pathPosition]
+
         showAlertDialog(
-            "Remove rule",
-            "Deseja realmente remover essa regra do path ${path.rootPath}?"
+            getString(R.string.text_visualEditor_onRemoveRule_title),
+            getString(R.string.text_visualEditor_onRemoveRule_message, path)
         ) {
-            positiveButton("Remover") {
+            positiveButton(getString(R.string.btn_remove)) {
                 path.conditions.removeAt(rulePosition)
                 rulesPathAdapter.updateAll()
             }
-            negativeButton("Cancelar")
+            negativeButton(getString(R.string.btn_cancel))
         }
     }
 
