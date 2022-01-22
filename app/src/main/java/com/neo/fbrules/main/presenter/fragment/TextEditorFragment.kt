@@ -12,10 +12,16 @@ import com.neo.fbrules.main.presenter.components.HistoricTextWatcher
 
 private typealias TextEditorView = FragmentTextRulesEditorBinding
 
+/**
+ * Text rule editor
+ * @author Irineu A. Silva
+ */
 class TextEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var historic: HistoricModel
     private lateinit var binding: TextEditorView
+
+    //override Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +54,23 @@ class TextEditorFragment : Fragment(), RulesEditor {
         super.onViewCreated(view, savedInstanceState)
 
         setupHistoric()
+        setupArguments()
 
+    }
+
+    //override RulesEditor
+
+    override fun getRules(): String {
+        return binding.textRulesEditor.text.toString()
+    }
+
+    override fun setRules(rules: String) {
+        binding.textRulesEditor.setText(rules)
+    }
+
+    //members functions
+
+    private fun setupArguments() {
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
@@ -86,14 +108,6 @@ class TextEditorFragment : Fragment(), RulesEditor {
         fab.ibRedoBtn.setOnClickListener {
             historyObserver.redo()
         }
-    }
-
-    override fun getRules(): String {
-        return binding.textRulesEditor.text.toString()
-    }
-
-    override fun setRules(rules: String) {
-        binding.textRulesEditor.setText(rules)
     }
 
 }

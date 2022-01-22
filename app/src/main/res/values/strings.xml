@@ -48,9 +48,13 @@
     <string name="tbn_undo">Undo</string>
     <string name="credentials_not_found">Unconfigured Access Credentials</string>
     <string name="unknown_error">Unspecified error</string>
+
     <string name="text_visual_rules_editor_error_invalid_rules">This rule is invalid</string>
     <string name="text_visual_rules_editor_error_unrecognized_rule">Regra não reconhecida</string>
     <string name="text_visual_rules_editor_error_invalid_json">Sintaxe não reconhecida como JSON</string>
-    <string name="text_visualEditor_fixedRules_rulesFixedMessage">Corrigimos alguns erros comuns no seu JSON, se estiver tudo certo dê um push.</string>
-    <string name="text_visualEditor_fixedRules_rulesFiexTitle">Correções</string>
+
+    <!-- Visual Editor  -->
+    <string name="text_visualEditor_fixedRules_title">Corrections</string>
+    <string name="text_visualEditor_fixedRules_message">Detected and fixed errors that made your JSON invalid.</string>
+
 </resources>

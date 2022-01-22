@@ -57,4 +57,10 @@
     <string name="tbn_undo">Desfazer</string>
     <string name="credentials_not_found">Credenciais de acesso não configuradas</string>
     <string name="unknown_error">Erro não especificado</string>
+
+
+    <!-- showFixedRulesAlert  -->
+    <string name="text_visualEditor_fixedRules_title">Correções</string>
+    <string name="text_visualEditor_fixedRules_message">Detectado e corrigido erros que tornavam seu JSON inválido.</string>
+
 </resources>

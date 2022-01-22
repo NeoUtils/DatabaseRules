@@ -27,18 +27,23 @@ import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
-class VisualEditorFragment : Fragment(), RulesEditor,
+class VisualEditorFragment : Fragment(),
+    RulesEditor,
     RulesPathAdapter.RulesPathListener {
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
     private val rules get() = rulesPathAdapter.getRules()
 
+    //setups
+
     private fun setupVisualRulesAdapter() = lazy {
         RulesPathAdapter(this).apply {
             binding.rvRules.adapter = this
         }
     }
+
+    //override Fragment
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,6 +63,8 @@ class VisualEditorFragment : Fragment(), RulesEditor,
         setupListeners()
     }
 
+    //override RulesPathListener
+
     override fun onAddRule(pathPosition: Int) {
         showRuleConditionDialog(pathPosition, null)
     }
@@ -68,6 +75,23 @@ class VisualEditorFragment : Fragment(), RulesEditor,
 
     override fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int) {
         showRuleConditionDialog(pathPosition, rule, rulePosition)
+    }
+
+    override fun onRemovePath(pathPosition: Int) {
+
+        val path = rules[pathPosition].rootPath
+        val allRules = rules.filter { it.rootPath.startsWith(path) }
+        val paths = allRules.joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
+
+        showAlertDialog("Remover rotas", "Deseja remover a seguintes rotas?\n$paths") {
+            positiveButton("Remover") {
+
+                rules.removeAll { allRules.contains(it) }
+                rulesPathAdapter.updateAll()
+
+            }
+            negativeButton("Cancelar")
+        }
     }
 
     override fun onRemoveRule(pathPosition: Int, rulePosition: Int) {
@@ -84,22 +108,55 @@ class VisualEditorFragment : Fragment(), RulesEditor,
         }
     }
 
-    override fun onRemovePath(pathPosition: Int) {
+    //override RulesEditor
 
-        val path = rules[pathPosition].rootPath
-        val allRules = rules.filter { it.rootPath.startsWith(path) }
-        val paths = allRules.joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
+    override fun getRules(): String? {
 
-        showAlertDialog("Remove paths", "Deseja realmente remover esses paths?\n$paths") {
-            positiveButton("Remover") {
+        if (rules.isEmpty()) return null
 
-                rules.removeAll { allRules.contains(it) }
-                rulesPathAdapter.updateAll()
+        return ReadRulesJson().getRulesString(rules)
+    }
 
+    override fun setRules(rules: String) {
+        var tryFix = false
+
+        runCatching {
+
+            rulesPathAdapter.clear()
+
+            if (rules.isEmpty()) {
+                return@runCatching
             }
-            negativeButton("Cancelar")
+
+            val rulesJson = runCatching {
+                JSONObject(rules)
+            }.getOrElse {
+                tryFix = true
+                tryFixRules(rules)
+            }
+
+            if (!rulesJson.has("rules")) {
+                handlerError(
+                    ERROR.INVALID_RULES,
+                    IllegalArgumentException("rules not found")
+                )
+                return@runCatching
+            }
+
+            if (tryFix) {
+                showFixedRulesAlert()
+            }
+
+            readRulesJson(rulesJson)
+        }.onFailure {
+            handlerError(
+                ERROR.INVALID_JSON,
+                it
+            )
         }
     }
+
+    //member functions
 
     private fun setupListeners() {
         binding.fbAddPathBtn.setOnClickListener {
@@ -239,52 +296,6 @@ class VisualEditorFragment : Fragment(), RulesEditor,
         }
     }
 
-    override fun getRules(): String? {
-
-        if (rules.isEmpty()) return null
-
-        return ReadRulesJson().getRulesString(rules)
-    }
-
-    override fun setRules(rules: String) {
-        var tryFix = false
-
-        runCatching {
-
-            rulesPathAdapter.clear()
-
-            if (rules.isEmpty()) {
-                return@runCatching
-            }
-
-            val rulesJson = runCatching {
-                JSONObject(rules)
-            }.getOrElse {
-                tryFix = true
-                tryFixRules(rules)
-            }
-
-            if (!rulesJson.has("rules")) {
-                handlerError(
-                    ERROR.INVALID_RULES,
-                    IllegalArgumentException("rules not found")
-                )
-                return@runCatching
-            }
-
-            if (tryFix) {
-                showFixedRulesAlert()
-            }
-
-            readRulesJson(rulesJson)
-        }.onFailure {
-            handlerError(
-                ERROR.INVALID_JSON,
-                it
-            )
-        }
-    }
-
     private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
         rulesPathAdapter.clear()
 
@@ -302,8 +313,8 @@ class VisualEditorFragment : Fragment(), RulesEditor,
 
     private fun showFixedRulesAlert() {
         showAlertDialog(
-            getString(R.string.text_visualEditor_fixedRules_rulesFiexTitle),
-            getString(R.string.text_visualEditor_fixedRules_rulesFixedMessage)
+            getString(R.string.text_visualEditor_fixedRules_title),
+            getString(R.string.text_visualEditor_fixedRules_message)
         ) {
             positiveButton()
         }
