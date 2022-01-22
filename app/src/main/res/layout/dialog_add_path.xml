@@ -27,7 +27,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="path">
+            android:hint="@string/text_path">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Regras" />
+            android:text="@string/text_rules" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_rule_conditions"
@@ -56,7 +56,7 @@
             android:id="@+id/mb_add_condition"
             app:icon="@drawable/ic_round_add_24"
             app:iconGravity="textStart"
-            android:text="Adicionar Condição"
+            android:text="@string/btn_visualEditor_addRule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

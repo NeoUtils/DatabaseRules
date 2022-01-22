@@ -135,6 +135,14 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
             getString(R.string.text_visualEditor_pathDialog_addPathTitle)
         }
 
+        binding.confirm.button.text = if (isEdit) {
+            getString(R.string.btn_edit)
+        } else {
+            getString(R.string.btn_add)
+        }
+
+        binding.cancel.button.text = getString(R.string.btn_cancel)
+
         if (path.isNotEmpty()) {
             binding.tlPath.editText?.setText(path)
 
@@ -221,15 +229,18 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     }
 
     private fun addCondition(rule: RuleModel) {
-        if (conditions.any { it.property == rule.property }) {
-            showAlertDialog("Error", "Essa propriedade já existe") {
+        val foundEqualsProperty = conditions.find { it.property == rule.property }
+        foundEqualsProperty?.let {
+            showAlertDialog(
+                "Error",
+                getString(R.string.text_visualEditor_addRuleError_hasPropertyError, it.property)
+            ) {
                 positiveButton()
             }
-            return
+        } ?: run {
+            conditions.add(rule)
+            rulesAdapter.updateAll()
         }
-
-        conditions.add(rule)
-        rulesAdapter.updateAll()
     }
 
     private fun confirm() {
@@ -264,7 +275,8 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     ): Boolean {
 
         if (path.isBlank()) {
-            binding.tlPath.error = "Digite o caminho"
+            binding.tlPath.error =
+                getString(R.string.text_visualEditor_pathDialog_validateError_enterPath)
             return false
         }
 

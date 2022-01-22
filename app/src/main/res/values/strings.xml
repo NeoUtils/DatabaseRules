@@ -56,6 +56,10 @@
     <!-- all -->
     <string name="btn_cancel">Cancel</string>
     <string name="btn_remove">Remove</string>
+    <string name="text_path">Path</string>
+    <string name="text_rules">Rules</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_edit">Edit</string>
 
     <!-- Visual Editor -->
     <string name="text_visualEditor_fixedRules_title">Corrections</string>
@@ -68,11 +72,15 @@
     <string name="text_visualEditor_onRemoveRule_message">Do you want to remove the following rule?\n%s</string>
 
     <string name="text_visualEditor_addRuleError_hasPropertyError">This property <b>%s</b> already exists!</string>
-
     <string name="text_visualEditor_addPathError_hasPathError">This path <b>%s</b> already exists!</string>
 
     <string name="text_visualEditor_pathDialog_addPathTitle">Add path</string>
     <string name="text_visualEditor_pathDialog_editPathTitle">Edit path</string>
+    
+    <string name="text_visualEditor_pathDialog_validateError_enterPath">Enter the path</string>
+
+    <string name="btn_visualEditor_addRule">Add rule</string>
+
     <!-- Tabs -->
     <string name="text_rulesEditor_visualEditor">Visual Editor</string>
     <string name="text_rulesEditor_textEditor">Text Editor</string>

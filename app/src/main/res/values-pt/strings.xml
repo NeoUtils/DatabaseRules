@@ -61,6 +61,10 @@
     <!-- all -->
     <string name="btn_cancel">Cancelar</string>
     <string name="btn_remove">Remover</string>
+    <string name="text_path">Rota</string>
+    <string name="text_rules">Regras</string>
+    <string name="btn_add">Adicionar</string>
+    <string name="btn_edit">Editar</string>
 
     <!-- Visual Editor -->
     <string name="text_visualEditor_fixedRules_title">Correções</string>
@@ -73,11 +77,14 @@
     <string name="text_visualEditor_onRemoveRule_message">Deseja remover a seguinte regra?\n%s</string>
 
     <string name="text_visualEditor_addRuleError_hasPropertyError">Essa propriedade <b>%s</b> já existe!</string>
-
     <string name="text_visualEditor_addPathError_hasPathError">Esse path <b>%s</b> já existe!</string>
 
     <string name="text_visualEditor_pathDialog_addPathTitle">Adicionar rota</string>
     <string name="text_visualEditor_pathDialog_editPathTitle">Editar rota</string>
+
+    <string name="text_visualEditor_pathDialog_validateError_enterPath">Digite a rota</string>
+
+    <string name="btn_visualEditor_addRule">Adicionar regra</string>
 
     <!-- Tabs -->
     <string name="text_rulesEditor_visualEditor">Editor visual</string>
