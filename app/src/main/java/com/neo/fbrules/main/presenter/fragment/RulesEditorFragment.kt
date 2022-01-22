@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayoutMediator
+import com.neo.fbrules.R
 import com.neo.fbrules.databinding.FragmentRulesEditorBinding
 import com.neo.fbrules.main.presenter.adapter.RulesEditorsAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
@@ -99,7 +100,7 @@ class RulesEditorFragment : Fragment(), RulesEditor {
                             as? RulesEditor
 
                     val newFragment = childFragmentManager
-                        .findFragmentByTag("f" +  position.absoluteValue)
+                        .findFragmentByTag("f" + position.absoluteValue)
                             as? RulesEditor
 
                     oldFragment?.let {
@@ -118,8 +119,9 @@ class RulesEditorFragment : Fragment(), RulesEditor {
 
         TabLayoutMediator(tlTabs, vpRulesEditors) { tab, position ->
             tab.text = when (position) {
-                0 -> "Visual Editor"
-                else -> "Text Editor"
+                0 -> getString(R.string.text_rulesEditor_visualEditor)
+                1 -> getString(R.string.text_rulesEditor_textEditor)
+                else -> throw IllegalArgumentException("invalid tab $position")
             }
         }.attach()
     }

@@ -76,4 +76,8 @@
 
     <string name="text_visualEditor_addPathError_hasPathError">Esse path <b>%s</b> já existe!</string>
 
+    <!-- Tabs -->
+    <string name="text_rulesEditor_visualEditor">Editor visual</string>
+    <string name="text_rulesEditor_textEditor">Editor de Texto</string>
+
 </resources>
