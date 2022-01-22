@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    app:cardBackgroundColor="@color/bg_path_rules"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginTop="6dp"
+    app:cardCornerRadius="2dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="4dp">
+
+        <TextView
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="4dp"
+            android:textSize="16sp"
+            android:id="@+id/tv_path"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            tools:text="Path" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_marginHorizontal="4dp"
+            android:id="@+id/rv_rules"
+            tools:itemCount="2"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_rule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_margin="4dp"
+            android:backgroundTint="?attr/colorAccent"
+            android:id="@+id/mb_add_rule_btn"
+            app:icon="@drawable/ic_round_add_24"
+            app:iconGravity="textStart"
+            android:text="Adicionar Condição"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

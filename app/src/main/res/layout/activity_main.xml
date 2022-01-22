@@ -17,6 +17,7 @@
             app:menu="@menu/update">
 
             <TextView
+                android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -35,13 +36,16 @@
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
-        <include
-            android:id="@+id/content"
-            layout="@layout/content_main" />
+        <fragment
+            tools:layout="@layout/fragment_rules_editor"
+            android:name="com.neo.fbrules.main.presenter.fragment.RulesEditorFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rules_editor" />
 
         <include
             layout="@layout/content_main_drawer"
-            android:id="@+id/nav_bar"
+            android:id="@+id/drawer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"/>

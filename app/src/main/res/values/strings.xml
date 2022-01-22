@@ -15,7 +15,7 @@
     <string name="text_config_encrypt_title">Save credentials</string>
     <string name="text_config_decrypt_title">Retrieve credentials</string>
     <string name="text_config_password">Password</string>
-    <string name="text_drawer_open">Oepn</string>
+    <string name="text_drawer_open">Open</string>
     <string name="text_drawer_close">Close</string>
     <string name="text_drawer_click_to_update">Click to update</string>
     <string name="text_drawer_has_update">A new version is available!</string>
@@ -41,4 +41,62 @@
     <string name="text_digite_password">Type the password</string>
     <string name="text_error_little_password">Password too small</string>
     <string name="text_error_password_different">Password does not match</string>
+    <string name="text_is_open_source"><b>Database Rules</b> is <i>Open Source </i></string>
+    <string name="url_github_repository" translatable="false">https://github.com/Irineu333/DatabaseRules</string>
+    <string name="by_neo_utils_irineu_a_silva" translatable="false">By Neo Utils | Irineu A. Silva</string>
+    <string name="btn_redo">Redo</string>
+    <string name="tbn_undo">Undo</string>
+    <string name="credentials_not_found">Unconfigured Access Credentials</string>
+    <string name="unknown_error">Unspecified error</string>
+
+
+    <!-- all -->
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_remove">Remove</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_edit">Edit</string>
+
+    <string name="text_path">Path</string>
+    <string name="text_rules">Rules</string>
+
+    <string name="text_property">Property</string>
+    <string name="text_condition">Condition</string>
+
+    <string name="text_recovery">Recovery</string>
+    <string name="text_save">Save</string>
+
+    <!-- Rules Editor -->
+
+    <string name="text_visualRules_invalidRulesError">Invalid rule</string>
+    <string name="text_visualRules_unrecognizedRuleError">Unrecognized Rule</string>
+    <string name="text_visualRules_invalidRulesError_invalidJsonError">Invalid JSON</string>
+
+    <!-- Visual Editor -->
+    <string name="text_visualEditor_fixedRules_title">Corrections</string>
+    <string name="text_visualEditor_fixedRules_message">Detected and fixed errors that made your JSON invalid.</string>
+
+    <string name="text_visualEditor_onRemovePath_title">Remove paths</string>
+    <string name="text_visualEditor_onRemovePath_message">Do you want to remove the following paths?\n%s</string>
+
+    <string name="text_visualEditor_onRemoveRule_title">Remove rule</string>
+    <string name="text_visualEditor_onRemoveRule_message">Do you want to remove the following rule?\n\n%s</string>
+
+    <string name="text_visualEditor_addRuleError_hasPropertyError">This property <b>%s</b> already exists!</string>
+    <string name="text_visualEditor_addPathError_hasPathError">This path <b>%s</b> already exists!</string>
+
+    <string name="text_visualEditor_pathDialog_addPathTitle">Add path</string>
+    <string name="text_visualEditor_pathDialog_editPathTitle">Edit path</string>
+
+    <string name="text_visualEditor_pathDialog_validateError_enterPath">Enter the path</string>
+
+    <string name="text_visualEditor_ruleDialog_validateError_enterProperty">Enter the property</string>
+    <string name="text_visualEditor_ruleDialog_validateError_enterCondition">Enter the condition</string>
+
+    <string name="text_visualEditor_addRule">Add rule</string>
+    <string name="text_visualEditor_editRule">Edit rule</string>
+
+    <!-- Tabs -->
+    <string name="text_rulesEditor_visualEditor">Visual Editor</string>
+    <string name="text_rulesEditor_textEditor">Text Editor</string>
+
 </resources>

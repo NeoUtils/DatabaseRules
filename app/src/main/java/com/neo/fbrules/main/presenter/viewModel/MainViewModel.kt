@@ -7,10 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.neo.fbrules.R
 import com.neo.fbrules.core.*
 import com.neo.fbrules.main.domain.model.DomainCredential
-import com.neo.fbrules.main.domain.model.HistoricModel
+import com.neo.fbrules.main.presenter.components.IntegratedAppsManager
+import com.neo.fbrules.main.presenter.components.UpdateManager
 import com.neo.fbrules.main.domain.useCase.*
-import com.neo.fbrules.main.presenter.model.NeoUtilsApp
-import com.neo.fbrules.main.presenter.model.Update
+import com.neo.fbrules.main.presenter.model.IntegratedApp
+import com.neo.fbrules.main.presenter.model.UpdateModel
 import com.neo.fbrules.util.environment
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -36,17 +37,13 @@ class MainViewModel @Inject constructor(
 
     val message = MutableSingleLiveData<Message>()
 
-    private val _update = MutableLiveData(Update())
-    val update: LiveData<Update> = _update
+    private val _update = MutableLiveData(UpdateModel())
+    val update: LiveData<UpdateModel> = _update
 
-    private val _apps = MutableLiveData(listOf<NeoUtilsApp>())
-    val apps: LiveData<List<NeoUtilsApp>> = _apps
+    private val _apps = MutableLiveData(listOf<IntegratedApp>())
+    val apps: LiveData<List<IntegratedApp>> = _apps
 
     val loading = MutableLiveData(false)
-
-    val historic: HistoricModel = HistoricModel(
-        list = mutableListOf(0 to "")
-    )
 
     //especial
     val configBottomSheet = MutableSingleLiveData<() -> Unit>()
@@ -162,7 +159,7 @@ class MainViewModel @Inject constructor(
     fun checkUpdate() {
         UpdateManager(object : UpdateManager.UpdateListener {
             override fun updated() {
-                _update.value = Update(
+                _update.value = UpdateModel(
                     hasUpdate = false
                 )
             }
@@ -173,7 +170,7 @@ class MainViewModel @Inject constructor(
                 downloadLink: String,
                 force: Boolean
             ) {
-                _update.value = Update(
+                _update.value = UpdateModel(
                     hasUpdate = true,
                     lastVersionCode = lastVersionCode,
                     lastVersionName = lastVersionName,
@@ -185,8 +182,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun loadNeoUtilsApps() {
-        NeoUtilsAppsManager(object : NeoUtilsAppsManager.AppsListener {
-            override fun change(apps: List<NeoUtilsApp>) {
+        IntegratedAppsManager(object : IntegratedAppsManager.AppsListener {
+            override fun change(apps: List<IntegratedApp>) {
                 this@MainViewModel._apps.value = apps
             }
         })

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!-- tipo_feature_event_content -->
+    <!-- text_config_error_insert_password -->
+
+    <!-- tipo_feature_content -->
+    <!-- button_config_confirm -->
+
     <!--    config-->
     <string name="text_config_confirm_key_title">Confirme a key</string>
     <string name="text_config_confirm_key_message">Parece que você forneceu a url do banco invés de apenas o id. Esse é o id do seu banco de dados?</string>
@@ -25,7 +32,7 @@
     <string name="text_drawer_has_update">Uma nova versão está disponível!</string>
     <string name="text_drawer_updated">Você está atualizado!</string>
 
-    <!--    ccomum-->
+    <!--   comum-->
     <string name="text_confirm">Confirmar</string>
     <string name="button_update">Atualizar</string>
     <string name="button_push">Enviar</string>
@@ -45,4 +52,59 @@
     <string name="text_config_digite_private_key">Digite a chave privada</string>
     <string name="button_config_is_wrong">Está errada</string>
     <string name="text_digite_password">Digite a senha</string>
+    <string name="text_is_open_source"><b>Database Rules</b> é <i>Open Source </i></string>
+    <string name="btn_redo">Refazer</string>
+    <string name="tbn_undo">Desfazer</string>
+    <string name="credentials_not_found">Credenciais de acesso não configuradas</string>
+    <string name="unknown_error">Erro não especificado</string>
+
+    <!-- all -->
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_remove">Remover</string>
+    <string name="btn_add">Adicionar</string>
+    <string name="btn_edit">Editar</string>
+
+    <string name="text_path">Rota</string>
+    <string name="text_rules">Regras</string>
+
+    <string name="text_property">Propriedade</string>
+    <string name="text_condition">Condição</string>
+
+    <string name="text_recovery">Recuperar</string>
+    <string name="text_save">Salvar</string>
+
+    <!-- Handler Errors -->
+
+    <string name="text_visualRules_invalidRulesError">Regra inválida</string>
+    <string name="text_visualRules_unrecognizedRuleError">Regra não reconhecida</string>
+    <string name="text_visualRules_invalidRulesError_invalidJsonError">JSON inválido</string>
+
+    <!-- Visual Editor -->
+    <string name="text_visualEditor_fixedRules_title">Correções</string>
+    <string name="text_visualEditor_fixedRules_message">Detectado e corrigido erros que tornavam seu JSON inválido.</string>
+
+    <string name="text_visualEditor_onRemovePath_title">Remover rotas</string>
+    <string name="text_visualEditor_onRemovePath_message">Deseja remover a seguintes rotas?\n%s</string>
+
+    <string name="text_visualEditor_onRemoveRule_title">Remover regra</string>
+    <string name="text_visualEditor_onRemoveRule_message">Deseja remover a seguinte regra?\n\n%s</string>
+
+    <string name="text_visualEditor_addRuleError_hasPropertyError">Essa propriedade <b>%s</b> já existe!</string>
+    <string name="text_visualEditor_addPathError_hasPathError">Esse path <b>%s</b> já existe!</string>
+
+    <string name="text_visualEditor_pathDialog_addPathTitle">Adicionar rota</string>
+    <string name="text_visualEditor_pathDialog_editPathTitle">Editar rota</string>
+
+    <string name="text_visualEditor_pathDialog_validateError_enterPath">Digite a rota</string>
+
+    <string name="text_visualEditor_ruleDialog_validateError_enterProperty">Digite a propriedade</string>
+    <string name="text_visualEditor_ruleDialog_validateError_enterCondition">Digite a condição</string>
+
+    <string name="text_visualEditor_addRule">Adicionar regra</string>
+    <string name="text_visualEditor_editRule">Editar regra</string>
+
+    <!-- Tabs -->
+    <string name="text_rulesEditor_visualEditor">Editor visual</string>
+    <string name="text_rulesEditor_textEditor">Editor de Texto</string>
+
 </resources>

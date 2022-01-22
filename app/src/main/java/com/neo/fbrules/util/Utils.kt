@@ -19,6 +19,8 @@ import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import org.json.JSONObject
 import androidx.core.content.ContextCompat.startActivity
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 
 //ALERT DIALOG
@@ -183,3 +185,9 @@ fun goToApp(context: Context, packageName: String) {
 }
 
 fun Activity.goToUrl(url: String) = goToUrl(this, url)
+
+fun String.isBoolean() : Boolean {
+    val queryLangPattern: Pattern = Pattern.compile("true|false", Pattern.CASE_INSENSITIVE)
+    val matcher: Matcher = queryLangPattern.matcher(this)
+    return matcher.matches()
+}
