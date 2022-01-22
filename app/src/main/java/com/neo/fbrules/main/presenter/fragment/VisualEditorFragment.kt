@@ -235,7 +235,12 @@ class VisualEditorFragment : Fragment(),
         val rule = rules[position]
 
         if (rule.conditions.any { it.property == condition.property }) {
-            showAlertDialog("Error", "Esse property já existe")
+            showAlertDialog(
+                "Error",
+                getString(R.string.text_visualEditor_addRuleError_hasPropertyError)
+            ) {
+                positiveButton()
+            }
             return
         }
 
