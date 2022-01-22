@@ -5,20 +5,25 @@ import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 @Parcelize
-data class RuleModel(
+data class PathModel(
     var rootPath: String = "",
-    var conditions: MutableList<RuleCondition> = mutableListOf()
+    var rules: MutableList<RuleModel> = mutableListOf()
 ) : Parcelable, Serializable {
     val relativePath get() = rootPath.substringAfter("rules/")
 
-    val parentPath get() = if (rootPath.contains("/"))
-        rootPath.substringBeforeLast("/") else ""
+    val parentPath
+        get() = if (rootPath.contains("/"))
+            rootPath.substringBeforeLast("/") else ""
 
     val actualPath get() = rootPath.substringAfterLast("/")
 }
 
 @Parcelize
-data class RuleCondition(
+data class RuleModel(
     val property: String,
     var condition: String
-) : Parcelable, Serializable
+) : Parcelable, Serializable {
+    override fun toString(): String {
+        return "$property:$condition"
+    }
+}

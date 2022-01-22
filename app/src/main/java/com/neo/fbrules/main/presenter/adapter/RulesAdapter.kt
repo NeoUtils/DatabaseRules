@@ -8,8 +8,8 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.databinding.ItemRuleConditionBinding
-import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.core.Highlight
@@ -18,13 +18,13 @@ import java.util.regex.Pattern
 
 private typealias RuleConditionView = ItemRuleConditionBinding
 
-class RuleConditionsAdapter(
+class RulesAdapter(
     private val onRuleClickListener: OnRuleClickListener? = null,
-    private val getRule: () -> RuleModel
-) : RecyclerView.Adapter<RuleConditionsAdapter.Holder>() {
+    private val getPath: () -> PathModel
+) : RecyclerView.Adapter<RulesAdapter.Holder>() {
 
-    private val rule get() = getRule()
-    private val conditions get() = rule.conditions
+    private val rule get() = getPath()
+    private val conditions get() = rule.rules
     private val path get() = rule.rootPath
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
@@ -53,13 +53,13 @@ class RuleConditionsAdapter(
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
             val rule = conditions[position]
-            onRuleClickListener?.edit(rule, position)
+            onRuleClickListener?.onRuleEdit(rule, position)
         }
 
         holder.itemView.setOnLongClickListener {
             val position = holder.adapterPosition
             val rule = conditions[position]
-            onRuleClickListener?.remove(rule, position)?.let { true } ?: false
+            onRuleClickListener?.onRuleRemove(rule, position)?.let { true } ?: false
         }
     }
 
@@ -67,9 +67,9 @@ class RuleConditionsAdapter(
 
         private val context get() = itemView.context
 
-        fun bind(condition: RuleCondition, isLastItem: Boolean) {
-            binding.tvProperty.text = condition.property.substringAfter("rules/")
-            binding.tvCondition.text = condition.condition
+        fun bind(rule: RuleModel, isLastItem: Boolean) {
+            binding.tvProperty.text = rule.property.substringAfter("rules/")
+            binding.tvCondition.text = rule.condition
 
             configBottomMargin(isLastItem)
         }
@@ -112,8 +112,8 @@ class RuleConditionsAdapter(
     }
 
     interface OnRuleClickListener {
-        fun edit(rule: RuleCondition, position: Int)
-        fun remove(rule: RuleCondition, position: Int)
+        fun onRuleEdit(rule: RuleModel, position: Int)
+        fun onRuleRemove(rule: RuleModel, position: Int)
     }
 
     override fun getItemCount() = conditions.size

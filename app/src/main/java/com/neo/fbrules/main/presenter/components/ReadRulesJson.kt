@@ -1,16 +1,16 @@
 package com.neo.fbrules.main.presenter.components
 
-import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.isBoolean
 import org.json.JSONObject
 import java.lang.IllegalArgumentException
 
 class ReadRulesJson {
 
-    private val rules = mutableListOf<RuleModel>()
+    private val rules = mutableListOf<PathModel>()
 
-    fun getRulesModel(rulesJson: JSONObject): MutableList<RuleModel> {
+    fun getRulesModel(rulesJson: JSONObject): MutableList<PathModel> {
 
         rules.clear()
 
@@ -19,7 +19,7 @@ class ReadRulesJson {
         }
 
         mapRules(
-            RuleModel("rules"),
+            PathModel("rules"),
             rules,
             rulesJson.getJSONObject("rules")
         )
@@ -28,9 +28,9 @@ class ReadRulesJson {
 
     }
 
-    private fun mapRules(rule: RuleModel, rules: MutableList<RuleModel>, jsonObject: JSONObject) {
+    private fun mapRules(path: PathModel, paths: MutableList<PathModel>, jsonObject: JSONObject) {
 
-        rules.add(rule)
+        paths.add(path)
 
         for (key in jsonObject.keys()) {
 
@@ -40,20 +40,20 @@ class ReadRulesJson {
                 is JSONObject -> {
 
                     mapRules(
-                        RuleModel(rule.rootPath + "/$key"),
-                        rules,
+                        PathModel(path.rootPath + "/$key"),
+                        paths,
                         value
                     )
                 }
 
                 //condition
                 is String -> {
-                    rule.conditions.add(RuleCondition(key, value))
+                    path.rules.add(RuleModel(key, value))
                 }
 
                 //condition
                 is Boolean -> {
-                    rule.conditions.add(RuleCondition(key, value.toString()))
+                    path.rules.add(RuleModel(key, value.toString()))
                 }
 
                 else -> {
@@ -63,13 +63,13 @@ class ReadRulesJson {
         }
     }
 
-    fun getRulesString(rules: MutableList<RuleModel>): String {
+    fun getRulesString(paths: MutableList<PathModel>): String {
         val result = JSONObject()
 
-        for (rule in rules) {
+        for (rule in paths) {
             val jsonPath = getJsonPath(result, rule.rootPath)
             jsonPath.apply {
-                rule.conditions.forEach {
+                rule.rules.forEach {
                     if (it.condition.isBoolean()) {
                         jsonPath.put(it.property, it.condition.toBoolean())
                     } else {

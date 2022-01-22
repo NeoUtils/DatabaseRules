@@ -15,10 +15,10 @@ import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
-import com.neo.fbrules.main.presenter.fragment.dialog.AddRuleConditionDialog
+import com.neo.fbrules.main.presenter.fragment.dialog.RuleDialog
 import com.neo.fbrules.main.presenter.fragment.dialog.PathDialog
-import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.showAlertDialog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class VisualEditorFragment : Fragment(),
 
     private lateinit var binding: VisualEditorView
     private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
-    private val rules get() = rulesPathAdapter.getRules()
+    private val paths get() = rulesPathAdapter.getRules()
 
     //setups
 
@@ -73,18 +73,18 @@ class VisualEditorFragment : Fragment(),
         showRuleConditionDialog(pathPosition, null)
     }
 
-    override fun onEditPath(rule: RuleModel, position: Int) {
-        showPathDialog(rule, position)
+    override fun onEditPath(path: PathModel, position: Int) {
+        showPathDialog(path, position)
     }
 
-    override fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int) {
+    override fun onEditRule(rule: RuleModel, pathPosition: Int, rulePosition: Int) {
         showRuleConditionDialog(pathPosition, rule, rulePosition)
     }
 
     override fun onRemovePath(pathPosition: Int) {
 
-        val pathToRemove = rules[pathPosition].rootPath
-        val allRulesToRemove = rules.filter { it.rootPath.startsWith(pathToRemove) }
+        val pathToRemove = paths[pathPosition].rootPath
+        val allRulesToRemove = paths.filter { it.rootPath.startsWith(pathToRemove) }
 
         val listedPaths: String = allRulesToRemove
             .joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
@@ -95,7 +95,7 @@ class VisualEditorFragment : Fragment(),
         ) {
             positiveButton(getString(R.string.btn_remove)) {
 
-                rules.removeAll { allRulesToRemove.contains(it) }
+                paths.removeAll { allRulesToRemove.contains(it) }
                 rulesPathAdapter.updateAll()
 
             }
@@ -104,14 +104,14 @@ class VisualEditorFragment : Fragment(),
     }
 
     override fun onRemoveRule(pathPosition: Int, rulePosition: Int) {
-        val path = rules[pathPosition]
-
+        val path = paths[pathPosition]
+        val rule = path.rules[rulePosition]
         showAlertDialog(
             getString(R.string.text_visualEditor_onRemoveRule_title),
-            getString(R.string.text_visualEditor_onRemoveRule_message, path)
+            getString(R.string.text_visualEditor_onRemoveRule_message, rule)
         ) {
             positiveButton(getString(R.string.btn_remove)) {
-                path.conditions.removeAt(rulePosition)
+                path.rules.removeAt(rulePosition)
                 rulesPathAdapter.updateAll()
             }
             negativeButton(getString(R.string.btn_cancel))
@@ -122,9 +122,9 @@ class VisualEditorFragment : Fragment(),
 
     override fun getRules(): String? {
 
-        if (rules.isEmpty()) return null
+        if (paths.isEmpty()) return null
 
-        return ReadRulesJson().getRulesString(rules)
+        return ReadRulesJson().getRulesString(paths)
     }
 
     override fun setRules(rules: String) {
@@ -180,33 +180,33 @@ class VisualEditorFragment : Fragment(),
 
     private fun showRuleConditionDialog(
         pathPosition: Int,
-        rule: RuleCondition? = null,
+        rule: RuleModel? = null,
         rulePosition: Int = -1
     ) {
 
         registerAddConditionListener()
 
-        val dialog = AddRuleConditionDialog()
+        val dialog = RuleDialog()
 
         dialog.arguments = Bundle().apply {
             putInt("path_position", pathPosition)
             putInt("rule_position", rulePosition)
 
             rule?.let {
-                putSerializable(RuleCondition::class.java.simpleName, rule)
+                putSerializable(RuleModel::class.java.simpleName, rule)
             }
         }
 
         dialog.show(
             parentFragmentManager,
-            AddRuleConditionDialog.TAG
+            RuleDialog.TAG
         )
     }
 
     private fun registerAddConditionListener() {
-        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
+        setFragmentResultListener(RuleDialog.TAG) { _, bundle ->
             val condition =
-                bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
+                bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
 
             val pathPosition = bundle.getInt("path_position", -1)
 
@@ -224,20 +224,20 @@ class VisualEditorFragment : Fragment(),
     }
 
     private fun editRule(
-        condition: RuleCondition,
+        rule: RuleModel,
         pathPosition: Int,
         rulePosition: Int
     ) {
-        rules[pathPosition].conditions[rulePosition] = condition
+        paths[pathPosition].rules[rulePosition] = rule
         rulesPathAdapter.updateAll()
     }
 
     private fun addRule(
-        condition: RuleCondition,
+        rule: RuleModel,
         position: Int
     ) {
-        val rule = rules[position]
-        val foundEqualsProperty = rule.conditions.find { it.property == condition.property }
+        val path = paths[position]
+        val foundEqualsProperty = path.rules.find { it.property == rule.property }
 
         foundEqualsProperty?.let {
             showAlertDialog(
@@ -247,14 +247,14 @@ class VisualEditorFragment : Fragment(),
                 positiveButton()
             }
         } ?: run {
-            rule.conditions.add(condition)
-            rulesPathAdapter.setRules(rules)
+            path.rules.add(rule)
+            rulesPathAdapter.setRules(paths)
         }
     }
 
 
     private fun showPathDialog(
-        rule: RuleModel? = null,
+        path: PathModel? = null,
         position: Int? = null
     ) {
 
@@ -262,9 +262,9 @@ class VisualEditorFragment : Fragment(),
 
         val dialog = PathDialog()
 
-        if (rule != null && position != null) {
+        if (path != null && position != null) {
             dialog.arguments = Bundle().apply {
-                putString(RuleModel::class.java.simpleName, Gson().toJson(rule))
+                putString(PathModel::class.java.simpleName, Gson().toJson(path))
                 putInt("position", position)
             }
         }
@@ -277,7 +277,7 @@ class VisualEditorFragment : Fragment(),
 
     private fun registerAddPathListener() {
         setFragmentResultListener(PathDialog.TAG) { _, bundle ->
-            val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
+            val rule = bundle.getParcelable<PathModel>(PathModel::class.java.simpleName)
             rule?.let {
                 val position = bundle.getInt("position", -1)
                 if (position != -1) {
@@ -289,9 +289,9 @@ class VisualEditorFragment : Fragment(),
         }
     }
 
-    private fun addPath(rule: RuleModel) {
+    private fun addPath(path: PathModel) {
 
-        val foundEqualsPath = rules.find { it.rootPath == rule.rootPath }
+        val foundEqualsPath = paths.find { it.rootPath == path.rootPath }
 
         foundEqualsPath?.let {
             showAlertDialog(
@@ -301,15 +301,15 @@ class VisualEditorFragment : Fragment(),
                 positiveButton()
             }
         } ?: runCatching {
-            rulesPathAdapter.addRule(rule)
+            rulesPathAdapter.addRule(path)
         }.onFailure {
             handlerError(ERROR.INVALID_JSON, it)
         }
     }
 
-    private fun editPath(rule: RuleModel, position: Int) {
+    private fun editPath(path: PathModel, position: Int) {
         runCatching {
-            rulesPathAdapter.editRule(rule, position)
+            rulesPathAdapter.editRule(path, position)
         }.onFailure {
             handlerError(ERROR.INVALID_JSON, it)
         }

@@ -76,6 +76,9 @@
 
     <string name="text_visualEditor_addPathError_hasPathError">Esse path <b>%s</b> já existe!</string>
 
+    <string name="text_visualEditor_pathDialog_addPathTitle">Adicionar rota</string>
+    <string name="text_visualEditor_pathDialog_editPathTitle">Editar rota</string>
+
     <!-- Tabs -->
     <string name="text_rulesEditor_visualEditor">Editor visual</string>
     <string name="text_rulesEditor_textEditor">Editor de Texto</string>

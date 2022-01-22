@@ -16,7 +16,7 @@ import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.DialogRuleConditionsBinding
-import com.neo.fbrules.main.presenter.model.RuleCondition
+import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
 import com.neo.highlight.util.listener.HighlightTextWatcher
@@ -27,7 +27,7 @@ import java.util.regex.Pattern
 
 private typealias AddRuleConditionView = DialogRuleConditionsBinding
 
-class AddRuleConditionDialog : DialogFragment() {
+class RuleDialog : DialogFragment() {
 
     private lateinit var binding: AddRuleConditionView
 
@@ -157,8 +157,8 @@ class AddRuleConditionDialog : DialogFragment() {
 
     private fun setupArguments() {
         arguments?.run {
-            getSerializable(RuleCondition::class.java.simpleName)?.also {
-                val ruleCondition = it as RuleCondition
+            getSerializable(RuleModel::class.java.simpleName)?.also {
+                val ruleCondition = it as RuleModel
 
                 propertiesAutocomplete.setText(ruleCondition.property, false)
                 conditionsAutocomplete.setText(ruleCondition.condition, false)
@@ -221,8 +221,8 @@ class AddRuleConditionDialog : DialogFragment() {
 
         val result = Bundle().apply {
             putParcelable(
-                RuleCondition::class.java.simpleName,
-                RuleCondition(property, condition)
+                RuleModel::class.java.simpleName,
+                RuleModel(property, condition)
             )
 
             arguments?.let {
@@ -275,6 +275,6 @@ class AddRuleConditionDialog : DialogFragment() {
     }
 
     companion object {
-        val TAG = AddRuleConditionDialog::class.java.simpleName
+        val TAG = RuleDialog::class.java.simpleName
     }
 }

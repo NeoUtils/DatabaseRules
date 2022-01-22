@@ -8,8 +8,8 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.ItemPathRulesBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
-import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.core.Highlight
@@ -26,7 +26,7 @@ class RulesPathAdapter(
     private val pathListener: RulesPathListener? = null
 ) : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
 
-    private var rules: MutableList<RuleModel> = mutableListOf()
+    private var paths: MutableList<PathModel> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
@@ -38,7 +38,7 @@ class RulesPathAdapter(
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        val rule = rules[position]
+        val rule = paths[position]
 
         val lastItemPosition = itemCount - 1
 
@@ -59,32 +59,32 @@ class RulesPathAdapter(
         }
     }
 
-    override fun getItemCount() = rules.size
+    override fun getItemCount() = paths.size
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setRules(rules: MutableList<RuleModel>) {
-        this.rules = rules
+    fun setRules(paths: MutableList<PathModel>) {
+        this.paths = paths
         updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addRule(rule: RuleModel) {
-        rules.add(rule)
+    fun addRule(path: PathModel) {
+        paths.add(path)
         updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun editRule(rule: RuleModel, position: Int) {
-        val oldPath = rules[position].rootPath
+    fun editRule(path: PathModel, position: Int) {
+        val oldPath = paths[position].rootPath
 
-        rules[position].conditions = rule.conditions
-        rules[position].rootPath = rule.rootPath
+        paths[position].rules = path.rules
+        paths[position].rootPath = path.rootPath
 
-        if (oldPath != rule.rootPath) {
+        if (oldPath != path.rootPath) {
 
-            val newPath = rule.rootPath
+            val newPath = path.rootPath
 
-            rules.filter { it.rootPath.startsWith(oldPath) }.forEach {
+            paths.filter { it.rootPath.startsWith(oldPath) }.forEach {
                 it.rootPath = it.rootPath.replaceFirst(oldPath, newPath)
             }
         }
@@ -95,13 +95,13 @@ class RulesPathAdapter(
     @SuppressLint("NotifyDataSetChanged")
     private fun jsonFormat() {
 
-        if (rules.isEmpty()) return
+        if (paths.isEmpty()) return
 
         CoroutineScope(Dispatchers.IO).launch {
             val readRulesJson = ReadRulesJson()
-            val rulesString = readRulesJson.getRulesString(rules)
+            val rulesString = readRulesJson.getRulesString(paths)
 
-            rules = readRulesJson.getRulesModel(JSONObject(rulesString))
+            paths = readRulesJson.getRulesModel(JSONObject(rulesString))
 
             withContext(Dispatchers.Main) {
                 notifyDataSetChanged()
@@ -109,13 +109,13 @@ class RulesPathAdapter(
         }
     }
 
-    fun getRules(): MutableList<RuleModel> {
-        return rules
+    fun getRules(): MutableList<PathModel> {
+        return paths
     }
 
     @SuppressLint("NotifyDataSetChanged")
     fun clear() {
-        rules.clear()
+        paths.clear()
         notifyDataSetChanged()
     }
 
@@ -134,32 +134,32 @@ class RulesPathAdapter(
 
         private val context get() = itemView.context
 
-        private val ruleConditionAdapter: RuleConditionsAdapter
+        private val ruleConditionAdapter: RulesAdapter
                 by setupRulesConditionAdapter()
 
-        lateinit var ruleModel: RuleModel
+        lateinit var pathModel: PathModel
 
         private fun setupRulesConditionAdapter() = lazy {
-            RuleConditionsAdapter(onRulePathListener?.let {
-                object : RuleConditionsAdapter.OnRuleClickListener{
-                    override fun edit(rule: RuleCondition, position: Int) {
+            RulesAdapter(onRulePathListener?.let {
+                object : RulesAdapter.OnRuleClickListener{
+                    override fun onRuleEdit(rule: RuleModel, position: Int) {
                         it.onEditRule(rule, adapterPosition, position)
                     }
 
-                    override fun remove(rule: RuleCondition, position: Int) {
+                    override fun onRuleRemove(rule: RuleModel, position: Int) {
                         it.onRemoveRule(adapterPosition, position)
                     }
                 }
-            }) { ruleModel }.apply {
+            }) { pathModel }.apply {
                 binding.rvConditions.adapter = this
             }
         }
 
-        fun bind(rule: RuleModel, isLastItem: Boolean) {
-            this.ruleModel = rule
+        fun bind(path: PathModel, isLastItem: Boolean) {
+            this.pathModel = path
 
             ruleConditionAdapter.updateAll()
-            binding.tvPath.text = rule.rootPath.replaceFirst("rules/", "/")
+            binding.tvPath.text = path.rootPath.replaceFirst("rules/", "/")
 
             configBottomMargin(isLastItem)
         }
@@ -186,8 +186,8 @@ class RulesPathAdapter(
 
     interface RulesPathListener {
         fun onAddRule(pathPosition: Int)
-        fun onEditPath(rule: RuleModel, position: Int)
-        fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int)
+        fun onEditPath(path: PathModel, position: Int)
+        fun onEditRule(rule: RuleModel, pathPosition: Int, rulePosition: Int)
         fun onRemoveRule(pathPosition: Int, rulePosition: Int)
         fun onRemovePath(pathPosition: Int)
     }

@@ -13,9 +13,9 @@ import com.google.gson.Gson
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.databinding.DialogAddPathBinding
-import com.neo.fbrules.main.presenter.adapter.RuleConditionsAdapter
-import com.neo.fbrules.main.presenter.model.RuleCondition
+import com.neo.fbrules.main.presenter.adapter.RulesAdapter
 import com.neo.fbrules.main.presenter.model.RuleModel
+import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.showAlertDialog
 import com.neo.fbrules.util.visibility
@@ -26,21 +26,26 @@ import java.util.regex.Pattern
 
 private typealias AddRulePathView = DialogAddPathBinding
 
-class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
+class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
     private lateinit var binding: AddRulePathView
 
-    private val ruleConditionsAdapter: RuleConditionsAdapter by setupRulesConditions()
+    private val rulesAdapter: RulesAdapter by setupRulesConditions()
 
-    private lateinit var ruleModel: RuleModel
-    private val conditions get() = ruleModel.conditions
-    private val path get() = ruleModel.rootPath
+    private lateinit var pathModel: PathModel
+    private val conditions get() = pathModel.rules
+    private val path get() = pathModel.rootPath
+    private val isEdit get() = arguments?.let { it["position"] != null } ?: false
+
+    //setup
 
     private fun setupRulesConditions() = lazy {
-        RuleConditionsAdapter(this) { ruleModel }.apply {
+        RulesAdapter(this) { pathModel }.apply {
             binding.rvRuleConditions.adapter = this
         }
     }
+
+    //override DialogFragment
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -68,14 +73,14 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
             if (value != null) {
 
                 if (
-                    ruleModel.parentPath.isEmpty() ||
-                    value.startsWith("${ruleModel.parentPath}/")
+                    pathModel.parentPath.isEmpty() ||
+                    value.startsWith("${pathModel.parentPath}/")
                 ) {
-                    ruleModel.rootPath = value
-                    ruleConditionsAdapter.updateAll()
+                    pathModel.rootPath = value
+                    rulesAdapter.updateAll()
                 } else {
-                    binding.tlPath.editText?.setText(ruleModel.rootPath)
-                    binding.tlPath.editText?.setSelection(ruleModel.rootPath.length)
+                    binding.tlPath.editText?.setText(pathModel.rootPath)
+                    binding.tlPath.editText?.setSelection(pathModel.rootPath.length)
                 }
             }
 
@@ -83,7 +88,7 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
         }
 
         binding.mbAddCondition.setOnClickListener {
-            showAddRuleCondition()
+            showRuleDialog()
         }
 
         binding.head.ibCloseBtn.setOnClickListener {
@@ -99,10 +104,36 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
         }
     }
 
+    //override OnRuleClickListener
+
+    override fun onRuleEdit(rule: RuleModel, position: Int) {
+        showRuleDialog(rule, position)
+    }
+
+    override fun onRuleRemove(rule: RuleModel, position: Int) {
+
+        showAlertDialog(
+            getString(R.string.text_visualEditor_onRemoveRule_title),
+            getString(R.string.text_visualEditor_onRemoveRule_message, rule)
+        ) {
+            positiveButton(getString(R.string.btn_remove)) {
+                pathModel.rules.removeAt(position)
+                rulesAdapter.updateAll()
+            }
+
+            negativeButton(getString(R.string.btn_cancel))
+        }
+    }
+
+    //member functions
 
     private fun setupView() {
 
-        binding.head.tvTitle.text = "Adicionar Regra"
+        binding.head.tvTitle.text = if (isEdit) {
+            getString(R.string.text_visualEditor_pathDialog_editPathTitle)
+        } else {
+            getString(R.string.text_visualEditor_pathDialog_addPathTitle)
+        }
 
         if (path.isNotEmpty()) {
             binding.tlPath.editText?.setText(path)
@@ -112,21 +143,21 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
             }
         }
 
-        ruleConditionsAdapter.updateAll()
+        rulesAdapter.updateAll()
 
         binding.head.ibBackBtn.visibility(false)
     }
 
     private fun setupArguments() {
-        ruleModel = arguments?.let { it ->
+        pathModel = arguments?.let { it ->
 
             it.getString(
-                RuleModel::class.java.simpleName
+                PathModel::class.java.simpleName
             )?.let {
-                Gson().fromJson(it, RuleModel::class.java)
+                Gson().fromJson(it, PathModel::class.java)
             }
 
-        } ?: RuleModel()
+        } ?: PathModel()
     }
 
     private fun setupHighlight() {
@@ -145,60 +176,60 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
         }
     }
 
-    private fun showAddRuleCondition(
-        rule: RuleCondition? = null,
+    private fun showRuleDialog(
+        rule: RuleModel? = null,
         rulePosition: Int? = null
     ) {
 
         registerAddCondition()
 
-        AddRuleConditionDialog().apply {
+        RuleDialog().apply {
 
             if (rule != null && rulePosition != null) {
                 arguments = Bundle().apply {
-                    putSerializable(RuleCondition::class.java.simpleName, rule)
+                    putSerializable(RuleModel::class.java.simpleName, rule)
                     putInt("rule_position", rulePosition)
                 }
             }
 
             show(
                 this@PathDialog.parentFragmentManager,
-                AddRuleConditionDialog.TAG
+                RuleDialog.TAG
             )
         }
     }
 
     private fun registerAddCondition() =
-        setFragmentResultListener(AddRuleConditionDialog.TAG) { _, bundle ->
-            val ruleCondition =
-                bundle.getParcelable<RuleCondition>(RuleCondition::class.java.simpleName)
+        setFragmentResultListener(RuleDialog.TAG) { _, bundle ->
+            val rules =
+                bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
 
-            ruleCondition?.let {
+            rules?.let {
                 val rulePosition = bundle.getInt("rule_position", -1)
 
                 if (rulePosition != -1) {
-                    editCondition(ruleCondition, rulePosition)
+                    editRule(rules, rulePosition)
                 } else {
-                    addCondition(ruleCondition)
+                    addCondition(rules)
                 }
             }
         }
 
-    private fun editCondition(ruleCondition: RuleCondition, position: Int) {
-        conditions[position] = ruleCondition
-        ruleConditionsAdapter.updateAll()
+    private fun editRule(rule: RuleModel, position: Int) {
+        conditions[position] = rule
+        rulesAdapter.updateAll()
     }
 
-    private fun addCondition(ruleCondition: RuleCondition) {
-        if (conditions.any { it.property == ruleCondition.property }) {
+    private fun addCondition(rule: RuleModel) {
+        if (conditions.any { it.property == rule.property }) {
             showAlertDialog("Error", "Essa propriedade já existe") {
                 positiveButton()
             }
             return
         }
 
-        conditions.add(ruleCondition)
-        ruleConditionsAdapter.updateAll()
+        conditions.add(rule)
+        rulesAdapter.updateAll()
     }
 
     private fun confirm() {
@@ -209,13 +240,13 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
         val result = Bundle().apply {
 
             val ruleModel =
-                RuleModel(
+                PathModel(
                     "rules/${path.substringAfter("rules/")}"
                         .replace("//", "/"), conditions
                 )
 
             putParcelable(
-                RuleModel::class.java.simpleName,
+                PathModel::class.java.simpleName,
                 ruleModel
             )
 
@@ -229,7 +260,7 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
 
     private fun validate(
         path: String,
-        conditions: MutableList<RuleCondition>
+        rule: MutableList<RuleModel>
     ): Boolean {
 
         if (path.isBlank()) {
@@ -239,7 +270,7 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
 
         return runCatching {
             JSONObject().put(path, JSONObject().apply {
-                conditions.forEach {
+                rule.forEach {
                     put(it.property, it.condition)
                 }
             })
@@ -249,18 +280,5 @@ class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
 
     companion object {
         val TAG: String = PathDialog::class.java.simpleName
-    }
-
-    override fun edit(rule: RuleCondition, position: Int) {
-        showAddRuleCondition(rule, position)
-    }
-
-    override fun remove(rule: RuleCondition, position: Int) {
-        showAlertDialog("Remover regra", "Deseja realmente remover essa regra?") {
-            positiveButton("Remover") {
-                ruleModel.conditions.removeAt(position)
-                ruleConditionsAdapter.updateAll()
-            }
-        }
     }
 }
