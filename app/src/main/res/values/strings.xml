@@ -62,6 +62,9 @@
     <string name="text_property">Property</string>
     <string name="text_condition">Condition</string>
 
+    <string name="text_recovery">Recovery</string>
+    <string name="text_save">Save</string>
+
     <!-- Rules Editor -->
 
     <string name="text_visualRules_invalidRulesError">Invalid rule</string>

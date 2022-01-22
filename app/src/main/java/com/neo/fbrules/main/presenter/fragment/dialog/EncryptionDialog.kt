@@ -54,8 +54,8 @@ class EncryptionDialog(
         }
 
         binding.confirmBtn.text = when (mode) {
-            MODE.DECRYPT -> "Recuperar"
-            MODE.ENCRYPT -> "Salvar"
+            MODE.DECRYPT -> getString(R.string.text_recovery)
+            MODE.ENCRYPT -> getString(R.string.text_save)
         }
 
         binding.confirmBtn.setOnClickListener {

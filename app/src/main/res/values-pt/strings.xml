@@ -70,6 +70,9 @@
     <string name="text_property">Propriedade</string>
     <string name="text_condition">Condição</string>
 
+    <string name="text_recovery">Recuperar</string>
+    <string name="text_save">Salvar</string>
+
     <!-- Handler Errors -->
 
     <string name="text_visualRules_invalidRulesError">Regra inválida</string>
