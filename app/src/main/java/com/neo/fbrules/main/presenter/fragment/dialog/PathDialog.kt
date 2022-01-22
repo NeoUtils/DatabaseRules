@@ -1,5 +1,6 @@
 package com.neo.fbrules.main.presenter.fragment.dialog
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.graphics.Color
@@ -69,6 +70,7 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
         return alert.create()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupListeners() {
 
         binding.tlPath.editText?.addTextChangedListener {
@@ -76,14 +78,16 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
             if (value != null) {
 
+                val toRulePath = value.toRulePath()
+
                 if (
                     pathModel.parentPath.isEmpty() ||
-                    value.startsWith("${pathModel.parentPath}/")
+                    toRulePath.startsWith("${pathModel.parentPath}/")
                 ) {
-                    pathModel.rootPath = value
+                    pathModel.rootPath = toRulePath
                     rulesAdapter.updateAll()
                 } else {
-                    binding.tlPath.editText?.setText(pathModel.rootPath)
+                    binding.tlPath.editText?.setText("${pathModel.actualPath}/")
                     binding.tlPath.editText?.setSelection(pathModel.rootPath.length)
                 }
             }
@@ -148,7 +152,7 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
         binding.cancel.button.text = getString(R.string.btn_cancel)
 
         if (path.isNotEmpty()) {
-            binding.tlPath.editText?.setText(path)
+            binding.tlPath.editText?.setText(path.substringAfter("rules/"))
 
             if (path == "rules") {
                 binding.tlPath.isEnabled = false
@@ -256,8 +260,7 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
             val ruleModel =
                 PathModel(
-                    if (path != "rules") "rules/${path.substringAfter("rules/")}"
-                        .replace("//", "/") else path, conditions
+                    path.toRulePath(), conditions
                 )
 
             putParcelable(
@@ -272,6 +275,9 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
         setFragmentResult(TAG, result); dismiss()
     }
+
+    private fun String.toRulePath() = if (this != "rules")
+        "rules/${this.substringAfter("rules/")}" else this
 
     private fun validate(
         path: String,
