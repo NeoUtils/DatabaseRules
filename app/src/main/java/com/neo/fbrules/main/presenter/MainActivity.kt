@@ -310,7 +310,7 @@ class MainActivity : BaseActivity<MainActivityView>() {
         val configBottomSheet = ConfigBottomSheet(viewModel.credential) { credential ->
             viewModel.credential = credential
             request.invoke()
-            showSnackbar("Sucesso!!")
+            showSnackbar(getString(R.string.text_alert_success))
         }
 
         configBottomSheet.show(supportFragmentManager, "config_dialog")

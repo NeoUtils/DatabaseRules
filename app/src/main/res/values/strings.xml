@@ -15,7 +15,7 @@
     <string name="text_config_encrypt_title">Save credentials</string>
     <string name="text_config_decrypt_title">Retrieve credentials</string>
     <string name="text_config_password">Password</string>
-    <string name="text_drawer_open">Oepn</string>
+    <string name="text_drawer_open">Open</string>
     <string name="text_drawer_close">Close</string>
     <string name="text_drawer_click_to_update">Click to update</string>
     <string name="text_drawer_has_update">A new version is available!</string>
@@ -86,7 +86,7 @@
 
     <string name="text_visualEditor_pathDialog_addPathTitle">Add path</string>
     <string name="text_visualEditor_pathDialog_editPathTitle">Edit path</string>
-    
+
     <string name="text_visualEditor_pathDialog_validateError_enterPath">Enter the path</string>
 
     <string name="text_visualEditor_ruleDialog_validateError_enterProperty">Enter the property</string>
