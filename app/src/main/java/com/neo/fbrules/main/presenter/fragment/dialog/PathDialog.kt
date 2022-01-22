@@ -35,7 +35,10 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     private lateinit var pathModel: PathModel
     private val conditions get() = pathModel.rules
     private val path get() = pathModel.rootPath
-    private val isEdit get() = arguments?.let { it["position"] != null } ?: false
+
+    private val isEdit get() = arguments?.let {
+        it.getInt("position", -1) != -1
+    } ?: false
 
     //setup
 

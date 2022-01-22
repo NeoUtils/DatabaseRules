@@ -55,7 +55,9 @@ class RuleDialog : DialogFragment() {
 
     private val propertiesFirst get() = properties.map { it.first }
 
-    private val isEdit get() = arguments?.let { it["rule_position"] != null } ?: false
+    private val isEdit get() = arguments?.let {
+        it.getInt("rule_position", -1) != -1
+    } ?: false
 
     //setup
 

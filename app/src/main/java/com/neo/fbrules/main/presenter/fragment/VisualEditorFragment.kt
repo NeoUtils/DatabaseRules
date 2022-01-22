@@ -70,7 +70,7 @@ class VisualEditorFragment : Fragment(),
     //override RulesPathListener
 
     override fun onAddRule(pathPosition: Int) {
-        showRuleConditionDialog(pathPosition, null)
+        showRuleDialog(pathPosition, null)
     }
 
     override fun onEditPath(path: PathModel, position: Int) {
@@ -78,7 +78,7 @@ class VisualEditorFragment : Fragment(),
     }
 
     override fun onEditRule(rule: RuleModel, pathPosition: Int, rulePosition: Int) {
-        showRuleConditionDialog(pathPosition, rule, rulePosition)
+        showRuleDialog(pathPosition, rule, rulePosition)
     }
 
     override fun onRemovePath(pathPosition: Int) {
@@ -178,7 +178,7 @@ class VisualEditorFragment : Fragment(),
         arguments?.getString("rules", null)?.let { setRules(it) }
     }
 
-    private fun showRuleConditionDialog(
+    private fun showRuleDialog(
         pathPosition: Int,
         rule: RuleModel? = null,
         rulePosition: Int = -1
