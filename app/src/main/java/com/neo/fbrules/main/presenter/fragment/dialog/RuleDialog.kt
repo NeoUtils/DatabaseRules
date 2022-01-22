@@ -40,24 +40,18 @@ class RuleDialog : DialogFragment() {
     private val propertiesAutocomplete
         get() = binding.tlProperty.editText as AutoCompleteTextView
 
-    private val conditions = arrayListOf(
-        "Nenhum" to "false",
-        "Usuário logado" to "auth.uid == \$uid",
-        "Todos" to "true"
-    )
+    private val conditions by setupConditions()
 
     private val conditionsFirst get() = conditions.map { it.first }
 
-    private val properties = arrayListOf(
-        "Leitura" to ".read",
-        "Escrita" to ".write"
-    )
+    private val properties by setupProperties()
 
     private val propertiesFirst get() = properties.map { it.first }
 
-    private val isEdit get() = arguments?.let {
-        it.getInt("rule_position", -1) != -1
-    } ?: false
+    private val isEdit
+        get() = arguments?.let {
+            it.getInt("rule_position", -1) != -1
+        } ?: false
 
     //setup
 
@@ -67,6 +61,39 @@ class RuleDialog : DialogFragment() {
 
     private fun setupPropertiesAdapter() = lazy {
         ArrayAdapter(requireContext(), R.layout.dropdown_item, propertiesFirst)
+    }
+
+    private fun setupConditions() = lazy {
+        if (resources.getBoolean(R.bool.portuguese)) {
+            arrayListOf(
+                "Nenhum" to "false",
+                "Apenas o usuário" to "auth.uid == \$uid",
+                "Apenas autenticado" to "auth != null",
+                "Todos" to "true"
+            )
+        } else {
+            arrayListOf(
+                "None" to "false",
+                "Only user" to "auth.uid == \$uid",
+                "Just authenticated" to "auth != null",
+                "All" to "true"
+            )
+
+        }
+    }
+
+    private fun setupProperties() = lazy {
+        if (resources.getBoolean(R.bool.portuguese)) {
+            arrayListOf(
+                "Leitura" to ".read",
+                "Escrita" to ".write"
+            )
+        } else {
+            arrayListOf(
+                "Read" to ".read",
+                "Write" to ".write"
+            )
+        }
     }
 
     //override DialogFragment
