@@ -27,6 +27,10 @@ import org.json.JSONObject
 
 private typealias VisualEditorView = FragmentVisualRulesEditorBinding
 
+/**
+ * Visual rule editor
+ * @author Irineu A. Silva
+ */
 class VisualEditorFragment : Fragment(),
     RulesEditor,
     RulesPathAdapter.RulesPathListener {

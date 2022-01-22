@@ -14,10 +14,15 @@ import kotlin.math.absoluteValue
 
 private typealias RulesEditorView = FragmentRulesEditorBinding
 
+/**
+ * @author Irineu A. Silva
+ */
 class RulesEditorFragment : Fragment(), RulesEditor {
 
     private lateinit var binding: RulesEditorView
     private val rulesEditorsAdapter: RulesEditorsAdapter by setupRulesEditorsAdapter()
+
+    //setups
 
     private fun setupRulesEditorsAdapter() = lazy {
         RulesEditorsAdapter(
@@ -42,6 +47,8 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         )
     }
 
+    //override Fragment
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +66,26 @@ class RulesEditorFragment : Fragment(), RulesEditor {
         setupView()
         setupListener()
     }
+
+    //override RulesEditor
+
+    override fun getRules(): String? {
+        val myFragment = childFragmentManager
+            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
+                as RulesEditor
+
+        return myFragment.getRules()
+    }
+
+    override fun setRules(rules: String) {
+        val myFragment = childFragmentManager
+            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
+                as RulesEditor
+
+        myFragment.setRules(rules)
+    }
+
+    //member functions
 
     private fun setupListener() {
         binding.vpRulesEditors.registerOnPageChangeCallback(
@@ -95,22 +122,6 @@ class RulesEditorFragment : Fragment(), RulesEditor {
                 else -> "Text Editor"
             }
         }.attach()
-    }
-
-    override fun getRules(): String? {
-        val myFragment = childFragmentManager
-            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
-        as RulesEditor
-
-        return myFragment.getRules()
-    }
-
-    override fun setRules(rules: String) {
-        val myFragment = childFragmentManager
-            .findFragmentByTag("f" + binding.vpRulesEditors.currentItem)
-                as RulesEditor
-
-        myFragment.setRules(rules)
     }
 
 }
