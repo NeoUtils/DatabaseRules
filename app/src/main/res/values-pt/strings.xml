@@ -58,9 +58,15 @@
     <string name="credentials_not_found">Credenciais de acesso não configuradas</string>
     <string name="unknown_error">Erro não especificado</string>
 
+    <!-- all -->
+    <string name="btn_cancel">Cancelar</string>
+    <string name="btn_remove">Remover</string>
 
     <!-- showFixedRulesAlert  -->
     <string name="text_visualEditor_fixedRules_title">Correções</string>
     <string name="text_visualEditor_fixedRules_message">Detectado e corrigido erros que tornavam seu JSON inválido.</string>
+
+    <string name="text_visualEditor_onRemovePath_title">Remover rotas</string>
+    <string name="text_visualEditor_onRemovePath_message">Deseja remover a seguintes rotas?\n%s</string>
 
 </resources>

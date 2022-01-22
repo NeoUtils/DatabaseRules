@@ -79,18 +79,23 @@ class VisualEditorFragment : Fragment(),
 
     override fun onRemovePath(pathPosition: Int) {
 
-        val path = rules[pathPosition].rootPath
-        val allRules = rules.filter { it.rootPath.startsWith(path) }
-        val paths = allRules.joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
+        val pathToRemove = rules[pathPosition].rootPath
+        val allRulesToRemove = rules.filter { it.rootPath.startsWith(pathToRemove) }
 
-        showAlertDialog("Remover rotas", "Deseja remover a seguintes rotas?\n$paths") {
-            positiveButton("Remover") {
+        val listedPaths: String = allRulesToRemove
+            .joinToString(prefix = "\n", separator = ",\n") { it.rootPath }
 
-                rules.removeAll { allRules.contains(it) }
+        showAlertDialog(
+            getString(R.string.text_visualEditor_onRemovePath_title),
+            getString(R.string.text_visualEditor_onRemovePath_message, listedPaths)
+        ) {
+            positiveButton(getString(R.string.btn_remove)) {
+
+                rules.removeAll { allRulesToRemove.contains(it) }
                 rulesPathAdapter.updateAll()
 
             }
-            negativeButton("Cancelar")
+            negativeButton(getString(R.string.btn_cancel))
         }
     }
 

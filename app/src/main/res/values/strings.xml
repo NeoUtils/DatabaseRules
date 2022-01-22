@@ -53,8 +53,15 @@
     <string name="text_visual_rules_editor_error_unrecognized_rule">Regra não reconhecida</string>
     <string name="text_visual_rules_editor_error_invalid_json">Sintaxe não reconhecida como JSON</string>
 
+    <!-- all -->
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_remove">Remove</string>
+
     <!-- Visual Editor  -->
     <string name="text_visualEditor_fixedRules_title">Corrections</string>
     <string name="text_visualEditor_fixedRules_message">Detected and fixed errors that made your JSON invalid.</string>
+
+    <string name="text_visualEditor_onRemovePath_title">Remove paths</string>
+    <string name="text_visualEditor_onRemovePath_message">Do you want to remove the following paths?\n%s</string>
 
 </resources>
