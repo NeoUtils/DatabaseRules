@@ -49,14 +49,14 @@
             android:layout_height="wrap_content"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="2"
-            tools:listitem="@layout/item_rule_condition" />
+            tools:listitem="@layout/item_rule" />
 
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/mb_add_condition"
             app:icon="@drawable/ic_round_add_24"
             app:iconGravity="textStart"
-            android:text="@string/btn_visualEditor_addRule"
+            android:text="@string/text_visualEditor_addRule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

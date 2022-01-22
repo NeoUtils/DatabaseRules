@@ -13,7 +13,7 @@ import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.FragmentVisualRulesEditorBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
-import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
+import com.neo.fbrules.main.presenter.adapter.PathsAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.fragment.dialog.RuleDialog
 import com.neo.fbrules.main.presenter.fragment.dialog.PathDialog
@@ -33,16 +33,16 @@ private typealias VisualEditorView = FragmentVisualRulesEditorBinding
  */
 class VisualEditorFragment : Fragment(),
     RulesEditor,
-    RulesPathAdapter.RulesPathListener {
+    PathsAdapter.RulesPathListener {
 
     private lateinit var binding: VisualEditorView
-    private val rulesPathAdapter: RulesPathAdapter by setupVisualRulesAdapter()
-    private val paths get() = rulesPathAdapter.getRules()
+    private val pathsAdapter: PathsAdapter by setupVisualRulesAdapter()
+    private val paths get() = pathsAdapter.getPaths()
 
     //setups
 
     private fun setupVisualRulesAdapter() = lazy {
-        RulesPathAdapter(this).apply {
+        PathsAdapter(this).apply {
             binding.rvRules.adapter = this
         }
     }
@@ -96,7 +96,7 @@ class VisualEditorFragment : Fragment(),
             positiveButton(getString(R.string.btn_remove)) {
 
                 paths.removeAll { allRulesToRemove.contains(it) }
-                rulesPathAdapter.updateAll()
+                pathsAdapter.updateAll()
 
             }
             negativeButton(getString(R.string.btn_cancel))
@@ -112,7 +112,7 @@ class VisualEditorFragment : Fragment(),
         ) {
             positiveButton(getString(R.string.btn_remove)) {
                 path.rules.removeAt(rulePosition)
-                rulesPathAdapter.updateAll()
+                pathsAdapter.updateAll()
             }
             negativeButton(getString(R.string.btn_cancel))
         }
@@ -132,7 +132,7 @@ class VisualEditorFragment : Fragment(),
 
         runCatching {
 
-            rulesPathAdapter.clear()
+            pathsAdapter.clear()
 
             if (rules.isEmpty()) {
                 return@runCatching
@@ -229,7 +229,7 @@ class VisualEditorFragment : Fragment(),
         rulePosition: Int
     ) {
         paths[pathPosition].rules[rulePosition] = rule
-        rulesPathAdapter.updateAll()
+        pathsAdapter.updateAll()
     }
 
     private fun addRule(
@@ -248,7 +248,7 @@ class VisualEditorFragment : Fragment(),
             }
         } ?: run {
             path.rules.add(rule)
-            rulesPathAdapter.setRules(paths)
+            pathsAdapter.setPaths(paths)
         }
     }
 
@@ -301,7 +301,7 @@ class VisualEditorFragment : Fragment(),
                 positiveButton()
             }
         } ?: runCatching {
-            rulesPathAdapter.addRule(path)
+            pathsAdapter.addPath(path)
         }.onFailure {
             handlerError(ERROR.INVALID_JSON, it)
         }
@@ -309,19 +309,19 @@ class VisualEditorFragment : Fragment(),
 
     private fun editPath(path: PathModel, position: Int) {
         runCatching {
-            rulesPathAdapter.editRule(path, position)
+            pathsAdapter.editPath(path, position)
         }.onFailure {
             handlerError(ERROR.INVALID_JSON, it)
         }
     }
 
     private fun readRulesJson(rulesJson: JSONObject): Result<Any> = runCatching {
-        rulesPathAdapter.clear()
+        pathsAdapter.clear()
 
         lifecycleScope.launch(Dispatchers.IO) {
             val rules = ReadRulesJson().getRulesModel(rulesJson)
             withContext(Dispatchers.Main) {
-                rulesPathAdapter.setRules(rules)
+                pathsAdapter.setPaths(rules)
             }
         }
     }.onFailure {

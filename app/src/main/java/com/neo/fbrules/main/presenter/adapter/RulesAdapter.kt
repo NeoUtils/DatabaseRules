@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
-import com.neo.fbrules.databinding.ItemRuleConditionBinding
+import com.neo.fbrules.databinding.ItemRuleBinding
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.dp
@@ -16,7 +16,7 @@ import com.neo.highlight.core.Highlight
 import com.neo.highlight.util.scheme.ColorScheme
 import java.util.regex.Pattern
 
-private typealias RuleConditionView = ItemRuleConditionBinding
+private typealias RuleConditionView = ItemRuleBinding
 
 class RulesAdapter(
     private val onRuleClickListener: OnRuleClickListener? = null,
@@ -26,6 +26,8 @@ class RulesAdapter(
     private val rule get() = getPath()
     private val conditions get() = rule.rules
     private val path get() = rule.rootPath
+
+    //override RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
@@ -49,6 +51,10 @@ class RulesAdapter(
         setupListeners(holder)
     }
 
+    override fun getItemCount() = conditions.size
+
+    //member functions
+
     private fun setupListeners(holder: Holder) {
         holder.itemView.setOnClickListener {
             val position = holder.adapterPosition
@@ -68,12 +74,11 @@ class RulesAdapter(
         private val context get() = itemView.context
 
         fun bind(rule: RuleModel, isLastItem: Boolean) {
-            binding.tvProperty.text = rule.property.substringAfter("rules/")
+            binding.tvProperty.text = rule.property
             binding.tvCondition.text = rule.condition
 
             configBottomMargin(isLastItem)
         }
-
 
         fun setupHighlight(path: String) {
             val highlighting = Highlighting(context)
@@ -115,8 +120,6 @@ class RulesAdapter(
         fun onRuleEdit(rule: RuleModel, position: Int)
         fun onRuleRemove(rule: RuleModel, position: Int)
     }
-
-    override fun getItemCount() = conditions.size
 
     @SuppressLint("NotifyDataSetChanged")
     fun updateAll() {

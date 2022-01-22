@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
-import com.neo.fbrules.databinding.ItemPathRulesBinding
+import com.neo.fbrules.databinding.ItemPathBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.main.presenter.model.PathModel
@@ -20,13 +20,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 
-private typealias PathRulesView = ItemPathRulesBinding
+private typealias PathRulesView = ItemPathBinding
 
-class RulesPathAdapter(
+class PathsAdapter(
     private val pathListener: RulesPathListener? = null
-) : RecyclerView.Adapter<RulesPathAdapter.Holder>() {
+) : RecyclerView.Adapter<PathsAdapter.Holder>() {
 
     private var paths: MutableList<PathModel> = mutableListOf()
+
+    //override RecyclerView.Adapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
@@ -61,20 +63,22 @@ class RulesPathAdapter(
 
     override fun getItemCount() = paths.size
 
+    //member functions
+
     @SuppressLint("NotifyDataSetChanged")
-    fun setRules(paths: MutableList<PathModel>) {
+    fun setPaths(paths: MutableList<PathModel>) {
         this.paths = paths
         updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addRule(path: PathModel) {
+    fun addPath(path: PathModel) {
         paths.add(path)
         updateAll()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun editRule(path: PathModel, position: Int) {
+    fun editPath(path: PathModel, position: Int) {
         val oldPath = paths[position].rootPath
 
         paths[position].rules = path.rules
@@ -109,7 +113,7 @@ class RulesPathAdapter(
         }
     }
 
-    fun getRules(): MutableList<PathModel> {
+    fun getPaths(): MutableList<PathModel> {
         return paths
     }
 
@@ -130,7 +134,7 @@ class RulesPathAdapter(
         private var onRulePathListener: RulesPathListener? = null
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        val addConditionBtn = binding.mbAddConditionBtn
+        val addConditionBtn = binding.mbAddRuleBtn
 
         private val context get() = itemView.context
 
@@ -138,6 +142,8 @@ class RulesPathAdapter(
                 by setupRulesConditionAdapter()
 
         lateinit var pathModel: PathModel
+
+        //setup
 
         private fun setupRulesConditionAdapter() = lazy {
             RulesAdapter(onRulePathListener?.let {
@@ -151,9 +157,11 @@ class RulesPathAdapter(
                     }
                 }
             }) { pathModel }.apply {
-                binding.rvConditions.adapter = this
+                binding.rvRules.adapter = this
             }
         }
+
+        //members
 
         fun bind(path: PathModel, isLastItem: Boolean) {
             this.pathModel = path

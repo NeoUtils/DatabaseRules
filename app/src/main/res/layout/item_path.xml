@@ -28,17 +28,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginHorizontal="4dp"
-            android:id="@+id/rv_conditions"
+            android:id="@+id/rv_rules"
             tools:itemCount="2"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_rule_condition"
+            tools:listitem="@layout/item_rule"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <com.google.android.material.button.MaterialButton
             android:layout_margin="4dp"
             android:backgroundTint="?attr/colorAccent"
-            android:id="@+id/mb_add_condition_btn"
+            android:id="@+id/mb_add_rule_btn"
             app:icon="@drawable/ic_round_add_24"
             app:iconGravity="textStart"
             android:text="Adicionar Condição"

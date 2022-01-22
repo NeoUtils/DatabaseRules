@@ -15,7 +15,7 @@ import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.core.handlerError
-import com.neo.fbrules.databinding.DialogRuleConditionsBinding
+import com.neo.fbrules.databinding.DialogRuleBinding
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.requestColor
 import com.neo.fbrules.util.visibility
@@ -25,7 +25,7 @@ import com.neo.highlight.util.scheme.ColorScheme
 import org.json.JSONObject
 import java.util.regex.Pattern
 
-private typealias AddRuleConditionView = DialogRuleConditionsBinding
+private typealias AddRuleConditionView = DialogRuleBinding
 
 class RuleDialog : DialogFragment() {
 
@@ -55,6 +55,10 @@ class RuleDialog : DialogFragment() {
 
     private val propertiesFirst get() = properties.map { it.first }
 
+    private val isEdit get() = arguments?.let { it["rule_position"] != null } ?: false
+
+    //setup
+
     private fun setupConditionAdapter() = lazy {
         ArrayAdapter(requireContext(), R.layout.dropdown_item, conditionsFirst)
     }
@@ -63,6 +67,7 @@ class RuleDialog : DialogFragment() {
         ArrayAdapter(requireContext(), R.layout.dropdown_item, propertiesFirst)
     }
 
+    //override DialogFragment
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
@@ -83,9 +88,23 @@ class RuleDialog : DialogFragment() {
         return alert.create()
     }
 
+    //members
+
     private fun setupView() {
 
-        binding.head.tvTitle.text = "Adicionar condição"
+        binding.head.tvTitle.text = if (isEdit) {
+            getString(R.string.text_visualEditor_editRule)
+        } else {
+            getString(R.string.text_visualEditor_addRule)
+        }
+
+        binding.confirm.button.text = if (isEdit) {
+            getString(R.string.btn_edit)
+        } else {
+            getString(R.string.btn_add)
+        }
+
+        binding.cancel.button.text = getString(R.string.btn_cancel)
 
         binding.head.ibCloseBtn.visibility(false)
 
@@ -246,12 +265,14 @@ class RuleDialog : DialogFragment() {
     private fun validate(condition: String, property: String): Boolean {
 
         if (property.isBlank()) {
-            binding.tlProperty.error = "Digite alguma propriedade"
+            binding.tlProperty.error =
+                getString(R.string.text_visualEditor_ruleDialog_validateError_enterProperty)
             return false
         }
 
         if (condition.isBlank()) {
-            binding.tlCondition.error = "Digite alguma condição"
+            binding.tlCondition.error =
+                getString(R.string.text_visualEditor_ruleDialog_validateError_enterCondition)
             return false
         }
 

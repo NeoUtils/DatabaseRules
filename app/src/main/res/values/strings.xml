@@ -56,10 +56,14 @@
     <!-- all -->
     <string name="btn_cancel">Cancel</string>
     <string name="btn_remove">Remove</string>
-    <string name="text_path">Path</string>
-    <string name="text_rules">Rules</string>
     <string name="btn_add">Add</string>
     <string name="btn_edit">Edit</string>
+
+    <string name="text_path">Path</string>
+    <string name="text_rules">Rules</string>
+
+    <string name="text_property">Property</string>
+    <string name="text_condition">Condition</string>
 
     <!-- Visual Editor -->
     <string name="text_visualEditor_fixedRules_title">Corrections</string>
@@ -79,7 +83,11 @@
     
     <string name="text_visualEditor_pathDialog_validateError_enterPath">Enter the path</string>
 
-    <string name="btn_visualEditor_addRule">Add rule</string>
+    <string name="text_visualEditor_ruleDialog_validateError_enterProperty">Enter the property</string>
+    <string name="text_visualEditor_ruleDialog_validateError_enterCondition">Enter the condition</string>
+
+    <string name="text_visualEditor_addRule">Add rule</string>
+    <string name="text_visualEditor_editRule">Edit rule</string>
 
     <!-- Tabs -->
     <string name="text_rulesEditor_visualEditor">Visual Editor</string>

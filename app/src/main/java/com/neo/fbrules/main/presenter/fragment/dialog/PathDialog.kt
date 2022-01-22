@@ -12,7 +12,7 @@ import androidx.fragment.app.setFragmentResultListener
 import com.google.gson.Gson
 import com.neo.fbrules.R
 import com.neo.fbrules.core.Expression
-import com.neo.fbrules.databinding.DialogAddPathBinding
+import com.neo.fbrules.databinding.DialogPathBinding
 import com.neo.fbrules.main.presenter.adapter.RulesAdapter
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.main.presenter.model.PathModel
@@ -24,7 +24,7 @@ import com.neo.highlight.util.scheme.ColorScheme
 import org.json.JSONObject
 import java.util.regex.Pattern
 
-private typealias AddRulePathView = DialogAddPathBinding
+private typealias AddRulePathView = DialogPathBinding
 
 class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 

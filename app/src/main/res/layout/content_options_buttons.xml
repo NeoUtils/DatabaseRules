@@ -4,7 +4,7 @@
     android:gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    tools:showIn="@layout/dialog_rule_conditions">
+    tools:showIn="@layout/dialog_rule">
 
     <ImageButton
         android:id="@+id/ib_code_btn"

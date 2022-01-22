@@ -7,4 +7,4 @@
     android:background="?attr/selectableItemBackground"
     android:text="cancel button"
     android:textColor="?attr/colorOnBackground"
-    tools:showIn="@layout/dialog_rule_conditions" />
+    tools:showIn="@layout/dialog_rule" />

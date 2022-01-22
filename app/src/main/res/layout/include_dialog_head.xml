@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    tools:showIn="@layout/dialog_add_path">
+    tools:showIn="@layout/dialog_path">
 
     <ImageButton
         android:id="@+id/ib_back_btn"
@@ -25,7 +25,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:paddingHorizontal="6dp"
-        android:text="Title"
+        tools:text="Title"
         android:textColor="?attr/colorOnBackground"
         android:textSize="20sp" />
 
