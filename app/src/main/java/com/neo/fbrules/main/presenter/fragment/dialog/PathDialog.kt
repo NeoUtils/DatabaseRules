@@ -26,7 +26,7 @@ import java.util.regex.Pattern
 
 private typealias AddRulePathView = DialogAddPathBinding
 
-class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
+class PathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickListener {
 
     private lateinit var binding: AddRulePathView
 
@@ -162,7 +162,7 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
             }
 
             show(
-                this@AddRulePathDialog.parentFragmentManager,
+                this@PathDialog.parentFragmentManager,
                 AddRuleConditionDialog.TAG
             )
         }
@@ -248,7 +248,7 @@ class AddRulePathDialog : DialogFragment(), RuleConditionsAdapter.OnRuleClickLis
     }
 
     companion object {
-        val TAG: String = AddRulePathDialog::class.java.simpleName
+        val TAG: String = PathDialog::class.java.simpleName
     }
 
     override fun edit(rule: RuleCondition, position: Int) {

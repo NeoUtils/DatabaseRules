@@ -16,7 +16,7 @@ import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.adapter.RulesPathAdapter
 import com.neo.fbrules.main.presenter.contract.RulesEditor
 import com.neo.fbrules.main.presenter.fragment.dialog.AddRuleConditionDialog
-import com.neo.fbrules.main.presenter.fragment.dialog.AddRulePathDialog
+import com.neo.fbrules.main.presenter.fragment.dialog.PathDialog
 import com.neo.fbrules.main.presenter.model.RuleCondition
 import com.neo.fbrules.main.presenter.model.RuleModel
 import com.neo.fbrules.util.showAlertDialog
@@ -70,7 +70,7 @@ class VisualEditorFragment : Fragment(),
     }
 
     override fun onEditPath(rule: RuleModel, position: Int) {
-        showAddPathDialog(rule, position)
+        showPathDialog(rule, position)
     }
 
     override fun onEditRule(rule: RuleCondition, pathPosition: Int, rulePosition: Int) {
@@ -166,7 +166,7 @@ class VisualEditorFragment : Fragment(),
 
     private fun setupListeners() {
         binding.fbAddPathBtn.setOnClickListener {
-            showAddPathDialog()
+            showPathDialog()
         }
     }
 
@@ -211,15 +211,15 @@ class VisualEditorFragment : Fragment(),
                 val rulePosition = bundle.getInt("rule_position", -1)
 
                 if (rulePosition != -1) {
-                    editRuleCondition(condition, pathPosition, rulePosition)
+                    editRule(condition, pathPosition, rulePosition)
                 } else {
-                    addRuleCondition(condition, pathPosition)
+                    addRule(condition, pathPosition)
                 }
             }
         }
     }
 
-    private fun editRuleCondition(
+    private fun editRule(
         condition: RuleCondition,
         pathPosition: Int,
         rulePosition: Int
@@ -228,35 +228,35 @@ class VisualEditorFragment : Fragment(),
         rulesPathAdapter.updateAll()
     }
 
-    private fun addRuleCondition(
+    private fun addRule(
         condition: RuleCondition,
         position: Int
     ) {
         val rule = rules[position]
+        val foundEqualsProperty = rule.conditions.find { it.property == condition.property }
 
-        if (rule.conditions.any { it.property == condition.property }) {
+        foundEqualsProperty?.let {
             showAlertDialog(
                 "Error",
-                getString(R.string.text_visualEditor_addRuleError_hasPropertyError)
+                getString(R.string.text_visualEditor_addRuleError_hasPropertyError, it.property)
             ) {
                 positiveButton()
             }
-            return
+        } ?: run {
+            rule.conditions.add(condition)
+            rulesPathAdapter.setRules(rules)
         }
-
-        rule.conditions.add(condition)
-        rulesPathAdapter.setRules(rules)
     }
 
 
-    private fun showAddPathDialog(
+    private fun showPathDialog(
         rule: RuleModel? = null,
         position: Int? = null
     ) {
 
         registerAddPathListener()
 
-        val dialog = AddRulePathDialog()
+        val dialog = PathDialog()
 
         if (rule != null && position != null) {
             dialog.arguments = Bundle().apply {
@@ -267,39 +267,43 @@ class VisualEditorFragment : Fragment(),
 
         dialog.show(
             parentFragmentManager,
-            AddRulePathDialog.TAG
+            PathDialog.TAG
         )
     }
 
     private fun registerAddPathListener() {
-        setFragmentResultListener(AddRulePathDialog.TAG) { _, bundle ->
+        setFragmentResultListener(PathDialog.TAG) { _, bundle ->
             val rule = bundle.getParcelable<RuleModel>(RuleModel::class.java.simpleName)
             rule?.let {
                 val position = bundle.getInt("position", -1)
                 if (position != -1) {
-                    editRulePath(rule, position)
+                    editPath(rule, position)
                 } else {
-                    addRulePath(rule)
+                    addPath(rule)
                 }
             }
         }
     }
 
-    private fun addRulePath(rule: RuleModel) {
+    private fun addPath(rule: RuleModel) {
 
-        if (rules.any { it.rootPath == rule.rootPath }) {
-            showAlertDialog("Error", "Esse path já existe")
-            return
-        }
+        val foundEqualsPath = rules.find { it.rootPath == rule.rootPath }
 
-        runCatching {
+        foundEqualsPath?.let {
+            showAlertDialog(
+                "Error",
+                getString(R.string.text_visualEditor_addPathError_hasPathError, it.actualPath)
+            ) {
+                positiveButton()
+            }
+        } ?: runCatching {
             rulesPathAdapter.addRule(rule)
         }.onFailure {
             handlerError(ERROR.INVALID_JSON, it)
         }
     }
 
-    private fun editRulePath(rule: RuleModel, position: Int) {
+    private fun editPath(rule: RuleModel, position: Int) {
         runCatching {
             rulesPathAdapter.editRule(rule, position)
         }.onFailure {

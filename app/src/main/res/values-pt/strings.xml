@@ -72,7 +72,8 @@
     <string name="text_visualEditor_onRemoveRule_title">Remover regra</string>
     <string name="text_visualEditor_onRemoveRule_message">Deseja remover a seguinte regra?\n%s</string>
 
-    <string name="text_visualEditor_addRuleError_hasPropertyError">Essa propriedade já existe!</string>
+    <string name="text_visualEditor_addRuleError_hasPropertyError">Essa propriedade <b>%s</b> já existe!</string>
 
+    <string name="text_visualEditor_addPathError_hasPathError">Esse path <b>%s</b> já existe!</string>
 
 </resources>
