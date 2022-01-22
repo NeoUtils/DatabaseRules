@@ -36,9 +36,10 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     private val conditions get() = pathModel.rules
     private val path get() = pathModel.rootPath
 
-    private val isEdit get() = arguments?.let {
-        it.getInt("position", -1) != -1
-    } ?: false
+    private val isEdit
+        get() = arguments?.let {
+            it.getInt("position", -1) != -1
+        } ?: false
 
     //setup
 
@@ -255,8 +256,8 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
             val ruleModel =
                 PathModel(
-                    "rules/${path.substringAfter("rules/")}"
-                        .replace("//", "/"), conditions
+                    if (path != "rules") "rules/${path.substringAfter("rules/")}"
+                        .replace("//", "/") else path, conditions
                 )
 
             putParcelable(
@@ -278,6 +279,12 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     ): Boolean {
 
         if (path.isBlank()) {
+            binding.tlPath.error =
+                getString(R.string.text_visualEditor_pathDialog_validateError_enterPath)
+            return false
+        }
+
+        if (path.substringAfterLast("/").isEmpty()) {
             binding.tlPath.error =
                 getString(R.string.text_visualEditor_pathDialog_validateError_enterPath)
             return false

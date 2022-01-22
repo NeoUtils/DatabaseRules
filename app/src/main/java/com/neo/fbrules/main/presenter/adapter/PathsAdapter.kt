@@ -82,7 +82,6 @@ class PathsAdapter(
         val oldPath = paths[position].rootPath
 
         paths[position].rules = path.rules
-        paths[position].rootPath = path.rootPath
 
         if (oldPath != path.rootPath) {
 
@@ -93,6 +92,7 @@ class PathsAdapter(
             }
         }
 
+        paths[position].rootPath = path.rootPath
         updateAll()
     }
 
