@@ -30,6 +30,7 @@ private typealias AddRulePathView = DialogPathBinding
 class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
     private lateinit var binding: AddRulePathView
+    private lateinit var oldPath: String
 
     private val rulesAdapter: RulesAdapter by setupRulesConditions()
 
@@ -78,17 +79,16 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
             if (value != null) {
 
-                val toRulePath = value.toRulePath()
+                val rulePath = value.toRulePath()
 
-                if (
-                    pathModel.parentPath.isEmpty() ||
-                    toRulePath.startsWith("${pathModel.parentPath}/")
-                ) {
-                    pathModel.rootPath = toRulePath
+                if (oldPath.length == 1 || rulePath.startsWith(oldPath)) {
+                    pathModel.rootPath = rulePath
                     rulesAdapter.updateAll()
                 } else {
-                    binding.tlPath.editText?.setText("${pathModel.actualPath}/")
-                    binding.tlPath.editText?.setSelection(pathModel.rootPath.length)
+                    binding.tlPath.editText?.apply {
+                        setText(oldPath.fromRulePath())
+                        setSelection(this.length())
+                    }
                 }
             }
 
@@ -174,6 +174,8 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
             }
 
         } ?: PathModel()
+
+        oldPath = "${pathModel.parentPath}/"
     }
 
     private fun setupHighlight() {
@@ -276,8 +278,15 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
         setFragmentResult(TAG, result); dismiss()
     }
 
-    private fun String.toRulePath() = if (this != "rules")
-        "rules/${this.substringAfter("rules/")}" else this
+    private fun String.toRulePath() : String {
+        val hasRulesPath = this.substringBefore("/") == "rules"
+        return if (hasRulesPath) this else "rules/$this"
+    }
+
+    private fun String.fromRulePath() : String {
+        val hasRulesPath = this.substringBefore("/") == "rules"
+        return if (hasRulesPath) this.substringAfter("rules/") else this
+    }
 
     private fun validate(
         path: String,

@@ -124,6 +124,10 @@ dependencies {
     //hilt unit tests
     testImplementation 'com.google.dagger:hilt-android-testing:2.40'
     kaptTest 'com.google.dagger:hilt-compiler:2.40'
+
+    //mockk
+    testImplementation "io.mockk:mockk:1.12.2"
+    testImplementation "io.mockk:mockk-agent-jvm:1.12.2"
 }
 
 kapt {
