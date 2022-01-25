@@ -174,11 +174,27 @@ class RuleDialog : DialogFragment() {
 
     private fun setupArguments() {
         arguments?.run {
-            getSerializable(RuleModel::class.java.simpleName)?.also {
-                val ruleCondition = it as RuleModel
+            getSerializable(RuleModel::class.java.simpleName)?.also { bundle ->
+                val ruleCondition = bundle as RuleModel
 
-                propertiesAutocomplete.setText(ruleCondition.property, false)
-                conditionsAutocomplete.setText(ruleCondition.condition, false)
+                fun getProperty() : String {
+
+                    return properties.find {
+                        it.second == ruleCondition.property.trim()
+                    }?.first ?: ruleCondition.property
+                }
+
+                fun getCondition() : String {
+
+                    return conditions.find {
+                        it.second.replace(" ", "") ==
+                                ruleCondition.condition.replace(" ", "")
+                    }?.first ?: ruleCondition.condition
+                }
+
+
+                propertiesAutocomplete.setText(getProperty(), false)
+                conditionsAutocomplete.setText(getCondition(), false)
             }
         }
     }
