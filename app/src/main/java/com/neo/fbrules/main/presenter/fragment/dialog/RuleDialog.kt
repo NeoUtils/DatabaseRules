@@ -14,6 +14,8 @@ import com.neo.fbrules.R
 import com.neo.fbrules.core.ERROR
 import com.neo.fbrules.core.Expression
 import com.neo.fbrules.core.constants.Highlighting
+import com.neo.fbrules.core.constants.setupConditions
+import com.neo.fbrules.core.constants.setupProperties
 import com.neo.fbrules.core.handlerError
 import com.neo.fbrules.databinding.DialogRuleBinding
 import com.neo.fbrules.main.presenter.model.RuleModel
@@ -40,11 +42,11 @@ class RuleDialog : DialogFragment() {
     private val propertiesAutocomplete
         get() = binding.tlProperty.editText as AutoCompleteTextView
 
-    private val conditions by setupConditions()
+    private val conditions by setupConditions { resources.getBoolean(R.bool.portuguese)}
 
     private val conditionsFirst get() = conditions.map { it.first }
 
-    private val properties by setupProperties()
+    private val properties by setupProperties { resources.getBoolean(R.bool.portuguese) }
 
     private val propertiesFirst get() = properties.map { it.first }
 
@@ -61,39 +63,6 @@ class RuleDialog : DialogFragment() {
 
     private fun setupPropertiesAdapter() = lazy {
         ArrayAdapter(requireContext(), R.layout.dropdown_item, propertiesFirst)
-    }
-
-    private fun setupConditions() = lazy {
-        if (resources.getBoolean(R.bool.portuguese)) {
-            arrayListOf(
-                "Nenhum" to "false",
-                "Apenas o usuário" to "auth.uid == \$uid",
-                "Apenas autenticado" to "auth != null",
-                "Todos" to "true"
-            )
-        } else {
-            arrayListOf(
-                "None" to "false",
-                "Only user" to "auth.uid == \$uid",
-                "Just authenticated" to "auth != null",
-                "All" to "true"
-            )
-
-        }
-    }
-
-    private fun setupProperties() = lazy {
-        if (resources.getBoolean(R.bool.portuguese)) {
-            arrayListOf(
-                "Leitura" to ".read",
-                "Escrita" to ".write"
-            )
-        } else {
-            arrayListOf(
-                "Read" to ".read",
-                "Write" to ".write"
-            )
-        }
     }
 
     //override DialogFragment

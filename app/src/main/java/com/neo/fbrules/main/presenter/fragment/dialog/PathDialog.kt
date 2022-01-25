@@ -38,6 +38,8 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     private val conditions get() = pathModel.rules
     private val path get() = pathModel.rootPath
 
+    private var showCode = false
+
     private val isEdit
         get() = arguments?.let {
             it.getInt("position", -1) != -1
@@ -46,7 +48,11 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     //setup
 
     private fun setupRulesConditions() = lazy {
-        RulesAdapter(this) { pathModel }.apply {
+        RulesAdapter(
+            onRuleClickListener = this,
+            getPath = { pathModel },
+            getShowCode = { showCode }
+        ).apply {
             binding.rvRuleConditions.adapter = this
         }
     }
@@ -109,6 +115,11 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
         binding.confirm.button.setOnClickListener {
             confirm()
+        }
+
+        binding.ibCodeBtn.setOnClickListener {
+            showCode = !showCode
+            rulesAdapter.updateAll()
         }
     }
 
@@ -278,12 +289,12 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
         setFragmentResult(TAG, result); dismiss()
     }
 
-    private fun String.toRulePath() : String {
+    private fun String.toRulePath(): String {
         val hasRulesPath = this.substringBefore("/") == "rules"
         return if (hasRulesPath) this else "rules/$this"
     }
 
-    private fun String.fromRulePath() : String {
+    private fun String.fromRulePath(): String {
         val hasRulesPath = this.substringBefore("/") == "rules"
         return if (hasRulesPath) this.substringAfter("rules/") else this
     }

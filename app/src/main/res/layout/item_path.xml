@@ -17,14 +17,36 @@
         android:orientation="vertical"
         android:padding="4dp">
 
-        <TextView
-            android:layout_marginBottom="4dp"
-            android:layout_marginStart="4dp"
-            android:textSize="16sp"
-            android:id="@+id/tv_path"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:text="Path" />
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginStart="4dp"
+                android:textSize="16sp"
+                android:id="@+id/tv_path"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Path" />
+
+            <Space
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
+
+            <ImageButton
+                android:layout_margin="4dp"
+                android:id="@+id/ib_code_btn"
+                android:scaleType="fitCenter"
+                android:padding="4dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_round_code_24" />
+
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_marginHorizontal="4dp"

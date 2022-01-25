@@ -1,6 +1,7 @@
 package com.neo.fbrules.main.presenter.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -13,17 +14,19 @@ import com.neo.fbrules.main.presenter.model.PathModel
 import com.neo.fbrules.util.dp
 import com.neo.fbrules.util.requestColor
 import com.neo.highlight.core.Highlight
+import com.neo.highlight.util.scheme.BackgroundScheme
 import com.neo.highlight.util.scheme.ColorScheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 private typealias PathRulesView = ItemPathBinding
 
 class PathsAdapter(
-    private val pathListener: RulesPathListener? = null
+    private val pathListener: RulesPathListener
 ) : RecyclerView.Adapter<PathsAdapter.Holder>() {
 
     private var paths: MutableList<PathModel> = mutableListOf()
@@ -48,15 +51,15 @@ class PathsAdapter(
         holder.setupHighlight()
 
         holder.addConditionBtn.setOnClickListener {
-            pathListener?.onAddRule(position)
+            pathListener.onAddRule(position)
         }
 
         holder.itemView.setOnClickListener {
-            pathListener?.onEditPath(rule, position)
+            pathListener.onEditPath(rule, position)
         }
 
         holder.itemView.setOnLongClickListener {
-            pathListener?.onRemovePath(position)
+            pathListener.onRemovePath(position)
             true
         }
     }
@@ -131,23 +134,42 @@ class PathsAdapter(
 
     class Holder(
         private val binding: PathRulesView,
-        private var onRulePathListener: RulesPathListener? = null
+        private var onRulePathListener: RulesPathListener
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        val addConditionBtn = binding.mbAddRuleBtn
-
         private val context get() = itemView.context
+
+        val addConditionBtn get() = binding.mbAddRuleBtn
+        private val codeBtn get() = binding.ibCodeBtn
 
         private val ruleConditionAdapter: RulesAdapter
                 by setupRulesConditionAdapter()
 
         lateinit var pathModel: PathModel
 
+        private var showCode = false
+
+        private val pathHighlight = Highlight().apply {
+            addScheme(
+                ColorScheme(
+                    Expression.variableInProperty,
+                    context.requestColor(R.color.syntax_variable)
+                )
+            )
+
+            addScheme(
+                BackgroundScheme(
+                    Pattern.compile("\\b(TODOS|ALL)\\b"),
+                    Color.GRAY
+                )
+            )
+        }
+
         //setup
 
         private fun setupRulesConditionAdapter() = lazy {
-            RulesAdapter(onRulePathListener?.let {
-                object : RulesAdapter.OnRuleClickListener{
+            val onRuleClickListener = onRulePathListener.let {
+                object : RulesAdapter.OnRuleClickListener {
                     override fun onRuleEdit(rule: RuleModel, position: Int) {
                         it.onEditRule(rule, adapterPosition, position)
                     }
@@ -156,7 +178,13 @@ class PathsAdapter(
                         it.onRemoveRule(adapterPosition, position)
                     }
                 }
-            }) { pathModel }.apply {
+            }
+
+            RulesAdapter(
+                onRuleClickListener = onRuleClickListener,
+                getPath = { pathModel },
+                getShowCode = { showCode }
+            ).apply {
                 binding.rvRules.adapter = this
             }
         }
@@ -167,22 +195,33 @@ class PathsAdapter(
             this.pathModel = path
 
             ruleConditionAdapter.updateAll()
-            binding.tvPath.text = path.rootPath.replaceFirst("rules/", "/")
+            binding.tvPath.text = getPath()
 
+            setupListeners()
             configBottomMargin(isLastItem)
         }
 
-        fun setupHighlight() {
-            Highlight().apply {
-                addScheme(
-                    ColorScheme(
-                        Expression.variableInProperty,
-                        context.requestColor(R.color.syntax_variable)
-                    )
-                )
-
-                setSpan(binding.tvPath)
+        private fun getPath(): CharSequence {
+            return if (showCode || pathModel.rootPath != "rules") {
+                pathModel.rootPath.replaceFirst("rules/", "/")
+            } else if (context.resources.getBoolean(R.bool.portuguese)) {
+                "TODOS"
+            } else {
+                "ALL"
             }
+        }
+
+        private fun setupListeners() {
+            codeBtn.setOnClickListener {
+                showCode = !showCode
+                ruleConditionAdapter.updateAll()
+                binding.tvPath.text = getPath()
+                setupHighlight()
+            }
+        }
+
+        fun setupHighlight() {
+            pathHighlight.setSpan(binding.tvPath)
         }
 
         private fun configBottomMargin(lastItem: Boolean) =
