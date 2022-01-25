@@ -16,6 +16,8 @@ data class PathModel(
             rootPath.substringBeforeLast("/") else ""
 
     val actualPath get() = rootPath.substringAfterLast("/")
+
+    var showCode = false
 }
 
 @Parcelize

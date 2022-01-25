@@ -30,12 +30,15 @@ private typealias AddRulePathView = DialogPathBinding
 class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
     private lateinit var binding: AddRulePathView
+    private lateinit var oldPath: String
 
     private val rulesAdapter: RulesAdapter by setupRulesConditions()
 
     private lateinit var pathModel: PathModel
     private val conditions get() = pathModel.rules
     private val path get() = pathModel.rootPath
+
+    private var showCode = false
 
     private val isEdit
         get() = arguments?.let {
@@ -45,7 +48,10 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     //setup
 
     private fun setupRulesConditions() = lazy {
-        RulesAdapter(this) { pathModel }.apply {
+        RulesAdapter(
+            onRuleClickListener = this,
+            getPath = { pathModel }
+        ).apply {
             binding.rvRuleConditions.adapter = this
         }
     }
@@ -78,17 +84,16 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
             if (value != null) {
 
-                val toRulePath = value.toRulePath()
+                val rulePath = value.toRulePath()
 
-                if (
-                    pathModel.parentPath.isEmpty() ||
-                    toRulePath.startsWith("${pathModel.parentPath}/")
-                ) {
-                    pathModel.rootPath = toRulePath
+                if (oldPath.length == 1 || rulePath.startsWith(oldPath)) {
+                    pathModel.rootPath = rulePath
                     rulesAdapter.updateAll()
                 } else {
-                    binding.tlPath.editText?.setText("${pathModel.actualPath}/")
-                    binding.tlPath.editText?.setSelection(pathModel.rootPath.length)
+                    binding.tlPath.editText?.apply {
+                        setText(oldPath.fromRulePath())
+                        setSelection(this.length())
+                    }
                 }
             }
 
@@ -109,6 +114,11 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
 
         binding.confirm.button.setOnClickListener {
             confirm()
+        }
+
+        binding.ibCodeBtn.setOnClickListener {
+            showCode = !showCode
+            rulesAdapter.updateAll()
         }
     }
 
@@ -174,6 +184,8 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
             }
 
         } ?: PathModel()
+
+        oldPath = "${pathModel.parentPath}/"
     }
 
     private fun setupHighlight() {
@@ -276,8 +288,15 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
         setFragmentResult(TAG, result); dismiss()
     }
 
-    private fun String.toRulePath() = if (this != "rules")
-        "rules/${this.substringAfter("rules/")}" else this
+    private fun String.toRulePath(): String {
+        val hasRulesPath = this.substringBefore("/") == "rules"
+        return if (hasRulesPath) this else "rules/$this"
+    }
+
+    private fun String.fromRulePath(): String {
+        val hasRulesPath = this.substringBefore("/") == "rules"
+        return if (hasRulesPath) this.substringAfter("rules/") else this
+    }
 
     private fun validate(
         path: String,

@@ -28,8 +28,8 @@ android {
         applicationId "com.neo.fbrules"
         minSdk 21
         targetSdk 31
-        versionCode 5
-        versionName "1.0.4"
+        versionCode 6
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -124,6 +124,10 @@ dependencies {
     //hilt unit tests
     testImplementation 'com.google.dagger:hilt-android-testing:2.40'
     kaptTest 'com.google.dagger:hilt-compiler:2.40'
+
+    //mockk
+    testImplementation "io.mockk:mockk:1.12.2"
+    testImplementation "io.mockk:mockk-agent-jvm:1.12.2"
 }
 
 kapt {
