@@ -50,8 +50,7 @@ class PathDialog : DialogFragment(), RulesAdapter.OnRuleClickListener {
     private fun setupRulesConditions() = lazy {
         RulesAdapter(
             onRuleClickListener = this,
-            getPath = { pathModel },
-            getShowCode = { showCode }
+            getPath = { pathModel }
         ).apply {
             binding.rvRuleConditions.adapter = this
         }

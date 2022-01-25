@@ -147,8 +147,6 @@ class PathsAdapter(
 
         lateinit var pathModel: PathModel
 
-        private var showCode = false
-
         private val pathHighlight = Highlight().apply {
             addScheme(
                 ColorScheme(
@@ -182,8 +180,7 @@ class PathsAdapter(
 
             RulesAdapter(
                 onRuleClickListener = onRuleClickListener,
-                getPath = { pathModel },
-                getShowCode = { showCode }
+                getPath = { pathModel }
             ).apply {
                 binding.rvRules.adapter = this
             }
@@ -202,7 +199,7 @@ class PathsAdapter(
         }
 
         private fun getPath(): CharSequence {
-            return if (showCode || pathModel.rootPath != "rules") {
+            return if (pathModel.showCode || pathModel.rootPath != "rules") {
                 pathModel.rootPath.replaceFirst("rules/", "/")
             } else if (context.resources.getBoolean(R.bool.portuguese)) {
                 "TODOS"
@@ -213,7 +210,7 @@ class PathsAdapter(
 
         private fun setupListeners() {
             codeBtn.setOnClickListener {
-                showCode = !showCode
+                pathModel.showCode = !pathModel.showCode
                 ruleConditionAdapter.updateAll()
                 binding.tvPath.text = getPath()
                 setupHighlight()

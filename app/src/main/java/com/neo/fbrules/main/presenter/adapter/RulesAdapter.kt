@@ -25,7 +25,6 @@ private typealias RuleConditionView = ItemRuleBinding
 class RulesAdapter(
     private val onRuleClickListener: OnRuleClickListener,
     private val getPath: () -> PathModel,
-    private val getShowCode: () -> Boolean
 ) : RecyclerView.Adapter<RulesAdapter.Holder>() {
 
     private val rule get() = getPath()
@@ -36,13 +35,13 @@ class RulesAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         return Holder(
-            RuleConditionView
+            binding = RuleConditionView
                 .inflate(
                     LayoutInflater.from(
                         parent.context
                     ), parent, false
                 ),
-            getShowCode = getShowCode
+            getShowCode = { rule.showCode }
         )
     }
 
