@@ -12,7 +12,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.neo.fbrules.R
 import com.neo.fbrules.core.ERROR
-import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.core.constants.setupConditions
 import com.neo.fbrules.core.constants.setupProperties

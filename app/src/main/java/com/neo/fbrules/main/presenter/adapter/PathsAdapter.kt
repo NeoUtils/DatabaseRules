@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
-import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Expression
 import com.neo.fbrules.databinding.ItemPathBinding
 import com.neo.fbrules.main.presenter.components.ReadRulesJson
 import com.neo.fbrules.main.presenter.model.RuleModel

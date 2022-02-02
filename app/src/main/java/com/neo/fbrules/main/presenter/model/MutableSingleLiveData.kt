@@ -1,4 +1,4 @@
-package com.neo.fbrules.core
+package com.neo.fbrules.main.presenter.model
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData

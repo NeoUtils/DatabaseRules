@@ -1,6 +1,6 @@
 package com.neo.fbrules.main.data.api
 
-import com.neo.fbrules.core.Constants.FIREBASE_RULES
+import com.neo.fbrules.core.constants.Constants.FIREBASE_RULES
 import okhttp3.RequestBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

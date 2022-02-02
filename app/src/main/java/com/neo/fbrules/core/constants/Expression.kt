@@ -1,4 +1,4 @@
-package com.neo.fbrules.core
+package com.neo.fbrules.core.constants
 
 import java.util.regex.Pattern
 

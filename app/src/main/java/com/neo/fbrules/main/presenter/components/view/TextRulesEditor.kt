@@ -6,10 +6,7 @@ import androidx.appcompat.widget.AppCompatEditText
 import com.neo.fbrules.R
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.util.getCompatColor
-import com.neo.fbrules.util.requestColor
 import com.neo.highlight.util.listener.HighlightTextWatcher
-import com.neo.highlight.util.scheme.ColorScheme
-import java.util.regex.Pattern
 
 
 class TextRulesEditor(

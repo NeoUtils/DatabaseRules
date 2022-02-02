@@ -3,6 +3,7 @@ package com.neo.fbrules.core
 import android.content.Context
 import androidx.annotation.StringRes
 import com.neo.fbrules.R
+import com.neo.fbrules.core.constants.Constants
 
 sealed class Result<out R> {
 

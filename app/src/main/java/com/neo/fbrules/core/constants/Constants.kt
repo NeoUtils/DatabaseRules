@@ -1,4 +1,4 @@
-package com.neo.fbrules.core
+package com.neo.fbrules.core.constants
 
 import androidx.annotation.StringRes
 import com.neo.fbrules.R

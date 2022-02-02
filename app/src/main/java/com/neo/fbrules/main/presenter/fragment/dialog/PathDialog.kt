@@ -12,7 +12,7 @@ import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import com.google.gson.Gson
 import com.neo.fbrules.R
-import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Expression
 import com.neo.fbrules.databinding.DialogPathBinding
 import com.neo.fbrules.main.presenter.adapter.RulesAdapter
 import com.neo.fbrules.main.presenter.model.RuleModel

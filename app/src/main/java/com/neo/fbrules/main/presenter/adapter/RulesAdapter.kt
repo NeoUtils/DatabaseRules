@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.neo.fbrules.R
-import com.neo.fbrules.core.Expression
+import com.neo.fbrules.core.constants.Expression
 import com.neo.fbrules.core.constants.Highlighting
 import com.neo.fbrules.core.constants.setupConditions
 import com.neo.fbrules.core.constants.setupProperties
