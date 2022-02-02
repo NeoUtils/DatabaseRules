@@ -38,6 +38,38 @@ class ConfigBottomSheet(
 
     private val regex = Pattern.compile(".*(http)[s]?:[/]{2}|.firebaseio.com[/]?.*")
 
+    private val helpListeners = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+
+            if (snapshot.exists()) {
+
+                val highlight = Highlight(
+                    listOf(
+                        OnClickScheme(
+                            Pattern.compile("(Obter ajuda)|(Get help)")
+                        ) { _, _, _ ->
+                            runCatching {
+                                goToUrl(requireContext(), snapshot.value as String)
+                            }.onFailure {
+                                Firebase.crashlytics.recordException(it)
+                            }
+                        }.apply {
+                            setPainTextUnderline(true)
+                            setPainText(true)
+                        }
+                    )
+                )
+
+                binding.configHelp.visibility(true)
+
+                binding.configHelpMessage.text =
+                    highlight.getSpannable(getString(R.string.text_config_get_help))
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) = Unit
+    }
+
     override fun getTheme(): Int {
         return R.style.Theme_NeoFirebase_BottomSheet
     }
@@ -68,6 +100,16 @@ class ConfigBottomSheet(
         setupViews(saveCredentials, privateKeyEncrypted == null)
         setupClicks(privateKeyEncrypted, databaseKey)
         setupListeners()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        firebaseEnvironment.child("config")
+            .removeEventListener(helpListeners)
+
+        firebaseEnvironment.child("config-pt")
+            .removeEventListener(helpListeners)
     }
 
     private fun setupClicks(privateKeyEncrypted: String?, databaseKey: String?) {
@@ -119,37 +161,7 @@ class ConfigBottomSheet(
             if (requireContext().resources.getBoolean(R.bool.english)) "config" else "config-pt"
 
         firebaseEnvironment.child(languageConfigHelp)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-
-                    if (snapshot.exists()) {
-
-                        val highlight = Highlight(
-                            listOf(
-                                OnClickScheme(
-                                    Pattern.compile("(Obter ajuda)|(Get help)")
-                                ) { _, _, _ ->
-                                    runCatching {
-                                        goToUrl(requireContext(), snapshot.value as String)
-                                    }.onFailure {
-                                        Firebase.crashlytics.recordException(it)
-                                    }
-                                }.apply {
-                                    setPainTextUnderline(true)
-                                    setPainText(true)
-                                }
-                            )
-                        )
-
-                        binding.configHelp.visibility(true)
-
-                        binding.configHelpMessage.text =
-                            highlight.getSpannable(getString(R.string.text_config_get_help))
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) = Unit
-            })
+            .addListenerForSingleValueEvent(helpListeners)
 
 
         binding.configHelpMessage.movementMethod = LinkMovementMethod.getInstance()
